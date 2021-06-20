@@ -1,0 +1,185 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Nuevo cliente</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Nuevo cliente</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+                    <h4 class="card-title">Incorporar un cliente a la BBDD</h4>
+                    <h6 class="card-subtitle">Complete el formulario</h6>
+                    
+
+                    <div class="row d-flex justify-content-center">
+                        <div class="col col-md-12 col-lg-6">
+                            <div class="row">
+                                <div class="col bg-light border rounded p-4 ">
+
+                                    {% if mensaje %}
+                                    <h6 class="text-danger">{{mensaje}}</h6>
+                                    {% endif %}
+
+                                    <form method="POST">
+
+                                        {% csrf_token %}
+
+                                        <div class="campoctacte">
+
+                                            <div class="campo">
+
+                                                <div>
+                                                    <label for="nombre">
+                                                        <h6>Nombre</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="nombre" required type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="apellido">
+                                                        <h6>Apellido</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="apellido" required type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="cuil">
+                                                        <h6>CUIL</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="cuil" required type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                placeholder="Sin guiones, ejemplo 20377258305">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="telefono">
+                                                        <h6>Telefono de contacto</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="telefono" type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                placeholder="Sin +54, ejemplo 3813540261">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="direccion">
+                                                        <h6>Dirección</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="direccion" type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="score">
+                                                        <h6>Score</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center mt-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div class="input-group mb-3">
+                                                            <div class="input-group-prepend">
+
+                                                                <span class="input-group-text">Puntos</span>
+
+                                                            </div>
+
+                                                            <input name="score" required type="number" 
+                                                                class="form-control form-control" aria-label="Amount">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="row d-flex justify-content-center mt-4">
+                                                <div class="col-lg-6 text-center">
+
+                                                    <button type="submit" class="btn btn-primary">Cargar cliente</button>
+
+                                                </div>
+                                            </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

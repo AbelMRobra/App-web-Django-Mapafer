@@ -1,0 +1,102 @@
+{% extends "home.html" %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Cartera activa</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Cartera</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <h4 class="card-title">Avance de los creditos</h4>
+                    <h6 class="card-subtitle">Información sobre el estado de los creditos otorgados</h6>
+
+                    <div class="table-responsive">
+
+                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Regimen</th>
+                                    <th>Monto</th>
+                                    <th>N°c</th>
+                                    <th>Mora</th>
+                                    <th>Pagado</th>
+                                    <th>Saldo</th>
+                                    <th>Fecha</th>
+                                    <th>Prox. Ven*</th>
+
+
+                                </tr>
+                            </thead>
+
+                            <tbody style="font-size: 14px;">
+
+                                {% for i in data %}
+                                <tr>
+                                    <td>{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</td>
+                                    <td>{{i.0.regimen|lower|capfirst}}</td>
+                                    <td>$ {{i.0.monto|floatformat:0|intcomma}}</td>
+                                    <td>{{i.0.cuotas}}</td>
+                                    <td class="text-danger"><b>$ {{i.4|floatformat:0|intcomma}}</b></td>
+                                    <td>$ {{i.1|floatformat:0|intcomma}}</td>
+                                    <td>$ {{i.2|floatformat:0|intcomma}}</td>
+                                    <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
+                                    <td>{{i.3|date:"d/m/Y"}}</td>
+
+
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "paging": false,
+            "info": false,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'BBDD clientes'
+            },
+            ]   
+        });
+    });
+</script>
+
+
+{% endblock %}

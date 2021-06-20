@@ -1,0 +1,139 @@
+{% extends "home.html" %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Clientes</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Clientes</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <h4 class="card-title">Base de clientes</h4>
+                    <h6 class="card-subtitle">Información</h6>
+
+                    <div class="table-responsive">
+
+                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+
+                            <thead>
+                                <tr>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Estado</th>
+                                    <th>Score</th>
+                                    <th>Cuil</th>
+                                    <th>Telefono</th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody style="font-size: 14px;">
+
+                                {% for i in data %}
+                                <tr>
+                                    <td> {{i.apellido}}</td>
+                                    <td>{{i.nombre}}</td>
+                                    <td {% if i.estado == 'Activo' %} class = "text-success" 
+                                    {% elif i.estado == 'Potencial' %} class = "text-warning"
+                                    {% elif i.estado == 'Moroso' %} class = "text-danger" 
+                                    {% else %} class = "text-dark" {% endif %}><b>{{i.estado}}</b></td>
+                                    <td {% if i.score < 300 %} class = "text-danger" {% else %} class = "text-success" {% endif %}><b>{{i.score}}</b></td>
+                                    <td>{{i.cuil|floatformat:0}} </td>
+                                    {% if i.telefono %}
+                                    <td>{{i.telefono|floatformat:0}}</td>
+                                    {% else %}
+                                    <td>-</td>
+                                    {% endif %}
+                                    <td style="text-align: right;"><a href="#" data-toggle="modal" data-target="#ModalOtrosDatos{{i.id}}"><i class="fa fa-plus text-primary"></i></a> <a href="{% url 'Perfil del cliente' i.id %}"><i class="fa fa-user text-primary"></i></a></td>
+
+                                    <!-- Modal otros datos -->
+                                    <div class="modal fade" id="ModalOtrosDatos{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalOtrosDatos"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header"
+                                                style="background: rgb(225, 43, 211);
+                                                            background: linear-gradient(315deg, rgba(225, 43, 211,1) 0%, rgba(139, 44, 140,1) 22%, rgba(243, 95, 232,1) 100%);">
+                                                <h5 class="modal-title text-light" id="exampleModalLongTitle">{{i.apellido}}, {{i.nombre}}</h5>
+                                                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6>C.U.I.L</h6>
+                                                <p>{{i.cuil|floatformat:0}}</p>
+                                                <h6>Telefono</h6>
+                                                <p>{{i.telefono|floatformat:0}}</p>
+                                                <h6>Dirección</h6>
+                                                <p>{{i.direccion}}</p>
+                                                <h6>Estado civil</h6>
+                                                <p>Soltero/a</p>
+                                                <h6>Estado en sistema</h6>
+                                                <p>{{i.estado}}</p>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            {% if i.estado == "Potencial" or i.estado == "Cliente" %}
+                                            <button class="btn btn-danger" type="submit">Rechazar</button>
+                                            {% endif %}
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "paging": false,
+            "info": false,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'BBDD clientes'
+            },
+            ]   
+        });
+    });
+</script>
+
+
+{% endblock %}

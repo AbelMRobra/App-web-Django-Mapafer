@@ -1,0 +1,95 @@
+{% extends "home.html" %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Aclaraciones del soft</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Aclaraciones</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <h4 class="card-title">Aclaraciones</h4>
+                    <h6 class="card-subtitle">Explicación de criterios, calculos y metodos utilizados</h6>
+                    <hr>
+
+                    <div class="profiletimeline">
+                        <div class="sl-item">
+                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
+                            <div class="sl-right">
+                                <div><a href="#" class="link">Clientes</a>
+                                    <p>Sobre los caracteristicas asociadas</p>
+                                    <div class="row">
+                                        <p class="m-t-10"> Al momento de cargar un cliente se pedira completar un formulario basico, el cual sera obligatorio completar al menos con <b>nombre, apellido, cuil y un score</b>, en la BBDD se podra completar mas caracteristicas sobre el mismo.</p>
+                                        <p class="m-t-10"> El sistema rechazada el pedido de ingreso de un cliente si el <u>cuil ya se encuentra registrado</u></p>
+                                        <p class="m-t-10"> Todos los aspectos del cliente son editable menos el <b>estado</b>, los cuales se completa de la siguiente manera:</p>
+                                        <p class="m-t-10"><b class="text-warning">Potencial</b> es el estado que se coloca por defecto</p>
+                                        <p class="m-t-10"><b class="text-danger">Moroso</b> este estado el sistema lo coloca cuando el cliente tiene una deuda morosa de mas del 50% de lo que debio pagar y ya supero el 50% de su plan de pago. A estos clientes el sistema <u>no los cuenta</u> para hacer el flujo de ingresos</p>
+                                        <p class="m-t-10"><b class="text-success">Activo</b> este estado es automatico cuando el cliente asume un credito</p>
+                                        <p class="m-t-10"><b class="text-primary">Cliente</b> este estado es automatico cuando el cliente tiene todos sus creditos finalizados</p>
+                                        <p class="m-t-10"><b>Rechazado</b> es el unico estado que se coloca manualmente siempre y cuando el estado previo sea cliente o potencial</p>
+                                    </div>
+                                    <div class="like-comm"> <a href="#" class="link m-r-10">¿Tienes sugerencias?</a> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profiletimeline">
+                        <div class="sl-item">
+                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
+                            <div class="sl-right">
+                                <div><a href="#" class="link">Cashflow (Flujo de ingresos)</a>
+                                    <p>Sobre consideraciones al momento de hacer calculos</p>
+                                    <div class="row">
+                                        <p class="m-t-10">Los flujos de ingresos se calculan a partir de la información cargada en los <u>prestamos</u>. El mismo solo se compone por los clientes que no se encuentren en estado <u class="text-danger">moroso</u> y no considera el pago de deudas morosas anteriores.</p>
+                                    </div>
+                                    <div class="like-comm"> <a href="#" class="link m-r-10">¿Tienes sugerencias?</a> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profiletimeline">
+                        <div class="sl-item">
+                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
+                            <div class="sl-right">
+                                <div><a href="#" class="link">Dashboard principal</a>
+                                    <p>Sobre su funcionamiento</p>
+                                    <div class="row">
+                                        <p class="m-t-10">Todos los datos y graficos se completan de forma automatica con los datos de las distintas BBDD. </p>
+                                        <p class="m-t-10"><b class="text-primary">Grafico del historico de creditos</b> este grafico se crea a partir de la sumatoria de los montos de los creditos y <u>la fecha</u> que se crea, sin importar la fecha de la primera cuota</p>
+                                    </div>
+                                    <div class="like-comm"> <a href="#" class="link m-r-10">¿Tienes sugerencias?</a> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

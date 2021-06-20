@@ -1,0 +1,334 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="{% static 'img/logosinergia.ico' %}" />
+    <title>Sinergia</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'adminpro/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- page css -->
+    <link href="{% static 'adminpro/main/css/pages/login-register-lock.css' %}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'adminpro/main/css/style.css' %}" rel="stylesheet">
+    
+    <!-- You can change the theme colors from here -->
+    <link href="{% static 'adminpro/main/css/colors/default-dark.css' %}" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Sinergia</p>
+        </div>
+    </div>
+
+        <div class="container-fluid" style="background-image:url({% static 'adminpro/assets/images/background/tree2.jpg' %}); background-size: cover;">
+            <div class="row">
+                <!-- Column -->
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <center class="m-t-30"> <img src="{% static 'img/anonimo2.png' %}" class="img-circle" width="150" />
+                                <h4 class="card-title m-t-10">{{data.nombre}},  {{data.apellido}}</h4>
+
+                            </center>
+                        </div>
+                        <div>
+                            <hr> </div>
+                        <div class="card-body"> <small class="text-muted">Email address </small>
+                            <h6>{{data.email}}</h6> <small class="text-muted p-t-30 db">Phone</small>
+                            <h6>+{{data.telefono}}</h6> <small class="text-muted p-t-30 db">Address</small>
+                            <h6>{{data.direccion}}</h6>
+        
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="col-lg-8 col-xlg-9 col-md-7">
+                    <div class="card">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs profile-tab" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#actividad" role="tab">Creditos</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#perfil" role="tab">Historial de pagos</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab">Editar</a> </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="actividad" role="tabpanel">
+                                <div class="card-body">
+                                    <div class="profiletimeline">
+                                        {% if data_credite_complete %}
+                                        {% for d in data_credite_complete %}
+                                        <div class="sl-item">
+                                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
+                                            <div class="sl-right">
+                                                <div><a href="#" class="link">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a> 
+                                                    <p><span class="sl-date"> Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></p>
+                                                    <p>Pagado: ${{d.1|floatformat:2|intcomma}}</p>
+                                                    <p>Ultimo pago: {{d.2|date:"d/m/Y"}}</p>
+                                                    <p>Avance: {{d.3|floatformat:2|intcomma}}%</p>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{d.3|floatformat:0|intcomma}}" aria-valuemin="0" aria-valuemax="100" style="width:{{d.3|floatformat:0|intcomma}}%; height:6px;"></div>
+                                                    </div>
+                                                    
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        {% endfor %}
+        
+                                        {% else %}
+        
+                                        <div class="sl-item">
+                                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
+                                            <div class="sl-right">
+                                                <div><a href="#" class="link">No tiene creditos otorgados</a> 
+                                                    <p><span class="sl-date"> -</span></p>
+                                                    <p>Sin información</p>
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+        
+                                        {% endif %}
+                                        
+        
+                                    </div>
+                                </div>
+                            </div>
+                            <!--second tab-->
+                            <div class="tab-pane" id="perfil" role="tabpanel">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3 col-xs-6 b-r"> <strong>Empresa</strong>
+                                            <br>
+                                            <p class="text-muted">{{data.empresa}}</p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"> <strong>Empleador</strong>
+                                            <br>
+                                            <p class="text-muted">{{data.empleador}}</p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"> <strong>CUIL</strong>
+                                            <br>
+                                            <p class="text-muted">{{data.cuil}}</p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6"> <strong>Dirección</strong>
+                                            <br>
+                                            <p class="text-muted">{{data.direccion}}</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p class="m-t-30">{{data.otros_datos}}</p>
+        
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="editar" role="tabpanel">
+                                <div class="card-body">
+                                    <form method="POST">
+        
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="col-md-12">Nombre</label>
+                                            <div class="col-md-12">
+                                                <input type="text" name="nombre" value="{{data.nombre}}" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12">Apellido</label>
+                                            <div class="col-md-12">
+                                                <input type="text" name="apellido" value="{{data.apellido}}" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="example-email" class="col-md-12">Cuil</label>
+                                            <div class="col-md-12">
+                                                <input type="number" value="{{data.cuil}}" class="form-control form-control-line" name="cuil">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="example-email" class="col-md-12">Score</label>
+                                            <div class="col-md-12">
+                                                <input type="number" value="{{data.score}}" class="form-control form-control-line" name="score">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="example-email" class="col-md-12">Email</label>
+                                            <div class="col-md-12">
+                                                <input type="text" value="{{data.email}}" class="form-control form-control-line" name="email">
+                                            </div>
+                                        </div>
+        
+                                        <div class="form-group">
+                                            <label for="example-email" class="col-md-12">Dirección</label>
+                                            <div class="col-md-12">
+                                                <input type="text" value="{{data.direccion}}" class="form-control form-control-line" name="direccion">
+                                            </div>
+                                        </div>
+        
+                                        <div class="form-group">
+                                            <label class="col-md-12">Numero de celular</label>
+                                            <div class="col-md-12">
+                                                <input type="text" name="telefono" value="{{data.telefono}}" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12">Empleador</label>
+                                            <div class="col-md-12">
+                                                <input type="text" name="empleador" value="{{data.empleador}}" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-12">Empresa</label>
+                                            <div class="col-sm-12">
+                                                <select name="empresa" class="form-control form-control-line">
+                                                    {% for i in empresas %}
+                                                    <option {% if data.empresa == i%} selected {% endif %}>{{i.nombre}}</option>
+                                                    {% endfor %}
+        
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12">Otros datos</label>
+                                            <div class="col-md-12">
+                                                <textarea rows="5" name="otros_datos" class="form-control form-control-line">{{data.otros_datos}}</textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <button class="btn btn-success">Cargar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+            </div>
+        </div>
+
+    
+    
+
+    {% for d in data_credito %}
+    <!-- Modal otros datos
+    
+    <section id="wrapper" class="login-register" style="background-image:url({% static 'adminpro/assets/images/background/tree2.jpg' %});">
+        <div class="login-box card" style="background-color: rgba(91, 46, 90, 0.8);">
+            <div class="card-body">
+                <a href="#" class="text-left db"><img src="{% static 'img/trabajo-en-equipo.png' %}" alt="log" style="width: 50px;"/><br/></a>
+                <hr></hr>  
+                <h3 class="box-title m-b-20 text-center text-light">Hola <b>{{data.nombre}}</b>!</h3>
+                <h4 class="box-title m-b-20 text-center text-light">Este es el estados de tus creditos</h4>
+
+                {% for d in data_credito %}
+ 
+                <div class="sl-item">
+                    <div class="sl-right">
+                        <div><a href="#" data-toggle="modal" data-target="#ModalOtrosDatos{{d.id}}" class="link text-light">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a> <span class="sl-date text-light"> Otorgado el {{d.0.fecha|date:"d/m/Y"}}</span>
+                            <p style="font-size: 12px;" class="text-light">Avance: {{d.2|floatformat:2}}% - Monto adeudado: ${{d.6|floatformat:2|intcomma}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+        
+
+    </section>-->
+    <div class="modal fade" id="ModalOtrosDatos{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalOtrosDatos"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="background: rgb(225, 43, 211);
+                            background: linear-gradient(315deg, rgba(225, 43, 211,1) 0%, rgba(139, 44, 140,1) 22%, rgba(243, 95, 232,1) 100%);">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">{{d.0.cliente.apellido}}, {{d.0.cliente.nombre}}</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6>Monto total del credito</h6>
+                <p>${{d.0.monto|floatformat:2|intcomma}}</p>
+                <h6>Total adeudado a la fecha</h6>
+                <p>${{d.6|floatformat:2|intcomma}} - Cuotas: {{d.7|floatformat:0}}</p>
+                <h6>Proximo vencimiento</h6>
+                <p>{{d.4|date:"d/m/Y"}} - ${{d.5|floatformat:2|intcomma}}</p>
+                <h6>Ultimo pago:</h6>
+                <p>{% if d.3 %}{{d.3|date:"d/m/Y"}}{% else %}No se registraron pagos{% endif %}</p>
+
+        </div>
+
+        <div class="modal-footer">
+            {% if i.estado == "Potencial" or i.estado == "Cliente" %}
+            <button class="btn btn-danger" type="submit">Rechazar</button>
+            {% endif %}
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endfor %}
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="{% static 'adminpro/assets/plugins/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static 'adminpro/assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'adminpro/assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--Custom JavaScript -->
+    <script type="text/javascript">
+        $(function() {
+            $(".preloader").fadeOut();
+        });
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+        // ============================================================== 
+        // Login and Recover Password 
+        // ============================================================== 
+        $('#to-recover').on("click", function() {
+            $("#loginform").slideUp();
+            $("#recoverform").fadeIn();
+        });
+    </script>
+    
+</body>
+
+</html>

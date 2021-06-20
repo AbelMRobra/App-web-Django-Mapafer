@@ -1,0 +1,97 @@
+{% extends "home.html" %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Flujo de ingresos</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Cashflow</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <h4 class="card-title">Flujo estimado de ingresos</h4>
+                    <h6 class="card-subtitle">Este flujo supone el saldo (sin mora) de clientes no "Morosos" hasta el fin de su plan</h6>
+
+                    <div class="table-responsive">
+
+                        <table id="example" class="table table-bordered">
+
+                            <thead style="font-size: 12px;">
+                                <tr>
+                                    <th>Cliente</th>
+                                    {% for f in fechas_cash %}
+                                    <th>{{f|date:"m/Y"}}</th>
+                                    {% endfor %}
+
+
+                                </tr>
+                            </thead>
+
+                            <tbody style="font-size: 12px;">
+
+                                {% for i in data %}
+                                <tr>
+                                    <td style="min-width: 80px;">{{i.0.cliente.apellido}}</td>
+                                    {% for data in i.1 %}
+                                    <td style="min-width: 60px;">${{data|floatformat:0|intcomma}}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+
+                                <tr>
+                                    <td><b>Total</b></td>
+                                    {% for data in matriz_resultante %}
+                                    <td style="min-width: 60px;"><b>${{data|floatformat:0|intcomma}}</b></td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "paging": false,
+            "info": false,
+            "ordering": false,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'Flujo ingresos'
+            },
+            ]   
+        });
+    });
+</script>
+
+
+{% endblock %}

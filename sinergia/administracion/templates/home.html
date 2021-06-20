@@ -1,0 +1,597 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/styleabel.css' %}">
+  <link rel="stylesheet" href="extensions/sticky-header/bootstrap-table-sticky-header.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="{% static 'img/logosinergia.ico' %}" />
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+  <!-- Hojas de estilos AdminPro -->
+  <!--  -->
+  <!--  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+  <!--  -->
+  <!--  -->
+
+
+  <link rel="stylesheet" href="{% static 'css/styleabel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/registro_contable.css' %}">
+  <link href="{% static 'adminpro/assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'adminpro/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/assets/plugins/chartist-js/dist/chartist.min.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css' %}"
+    rel="stylesheet">
+  <link href="{% static 'adminpro/assets/plugins/c3-master/c3.min.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/assets/plugins/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/main/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/main/css/pages/dashboard1.css' %}" rel="stylesheet">
+  <!-- Aqui cambiamos el tema -->
+  <link href="{% static 'adminpro/main/css/colors/purple-dark.css' %}" id="theme" rel="stylesheet">
+  <link href="{% static 'adminpro/main/css/pages/chat-app-page.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/main/css/pages/file-upload.css' %}" rel="stylesheet">
+  <link href="{% static 'adminpro/assets/plugins/multiselect/css/multi-select.css' %}" rel="stylesheet"
+    type="text/css" />
+  <link href="{% static 'adminpro/assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"
+    rel="stylesheet" />
+  <link href="{% static 'adminpro/assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css' %}"
+    rel="stylesheet" />
+  <link href="{% static 'adminpro/assets/plugins/multiselect/css/multi-select.css' %}" rel="stylesheet"
+    type="text/css" />
+  <link href="{% static 'adminpro/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet"
+    type="text/css" />
+  <link href="{% static 'adminpro/assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet"
+    type="text/css" />
+  <link href="{% static 'adminpro/assets/plugins/switchery/dist/switchery.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'adminpro/assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+  <title>Sinergia</title>
+
+</head>
+
+<body class="fix-header fix-sidebar card-no-border">
+  <!-- ============================================================== -->
+  <!-- Preloader - style you can find in spinners.css -->
+  <!-- ============================================================== -->
+  <div class="preloader">
+    <div class="loader">
+      <div class="loader__figure" ></div>
+      <p class="loader__label">Sinergia</p>
+    </div>
+  </div>
+  <!-- ============================================================== -->
+  <!-- Main wrapper - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <header class="topbar">
+      <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'Home' %}">
+
+            <!-- Logo icon --><b>
+              <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+              <!-- Dark Logo icon -->
+              <img src="{% static 'img/trabajo-en-equipo.png' %}" style="max-width: 40px; vertical-align: bottom; margin: 5px;" alt="" class="dark-logo" />
+              <!-- Light Logo icon -->
+              <img src="{% static 'img/trabajo-en-equipo.png' %}" style="max-width: 40px; vertical-align: bottom; margin: 10px;" alt="" class="light-logo" />
+            </b>
+            <!--End Logo icon -->
+            <!-- Logo text --><span>
+              <!-- dark Logo text -->
+              <img src="{% static 'img/Linkp.png' %}" style="max-width: 60px; vertical-align: bottom; margin-bottom: 12px;" alt="" class="dark-logo" />
+              <!-- Light Logo text -->
+              <img src="{% static 'img/sinergia2.png' %}" style="max-width: 120px; vertical-align: bottom;" class="light-logo"
+                alt="" />
+            </span>
+          </a>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse">
+          <!-- ============================================================== -->
+          <!-- toggle and nav items -->
+          <!-- ============================================================== -->
+          <ul class="navbar-nav mr-auto">
+            <!-- This is  -->
+            <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
+                href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+            <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark"
+                href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+
+          </ul>
+          <ul class="navbar-nav my-lg-0">
+            <li>
+              <a class="nav-link waves-effect waves-dark" href="{% url 'Logout' %}" ><i class="fa fa-power-off text-light"></i></a>
+              
+            </li>
+          </ul>
+
+        </div>
+
+        
+      </nav>
+    </header>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div class="scroll-sidebar">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+          <ul id="sidebarnav">
+
+
+
+            <li class="nav-small-cap">MENÚ</li>
+            <li class="nav-devider"></li>
+            <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+              class="zmdi zmdi-accounts"></i><span class="hide-menu"> Clientes</span></a>
+            <ul aria-expanded="false" class="collapse">
+                <li><a href="{% url 'Nuevo cliente' %}">Nuevo cliente</a></li>
+                <li><a href="{% url 'BBDD clientes' %}">Base de datos</a></li>
+
+
+            </ul>
+            </li>
+
+            <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                class="fa fa-shopping-basket"></i><span class="hide-menu"> Proveedores</span></a>
+              <ul aria-expanded="false" class="collapse">
+  
+                  <li><a href="#">Nuevo proveedor</a></li>
+                  <li><a href="#">Información</a></li>
+  
+  
+              </ul>
+              </li>
+
+              <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                class="fa fa-money"></i><span class="hide-menu"> Creditos</span></a>
+              <ul aria-expanded="false" class="collapse">
+                <li><a href="{% url 'Nuevo credito' %}">Nuevo credito</a></li>
+                <li><a href="#">Nuevo pago</a></li>
+                    <li><a href="{% url 'Información Prestamos' %}">Información</a></li>
+                  <li><a href="{% url 'Principal Prestamos' %}">Cartera activa</a></li>
+                  <li><a href="{% url 'Cash Flow' %}">Cashflow</a></li>
+  
+  
+              </ul>
+              </li>
+
+              <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                class="fa fa-info"></i><span class="hide-menu"> Info</span></a>
+              <ul aria-expanded="false" class="collapse">
+                <li><a href="{% url 'Aclaraciones' %}">Aclaraciones</a></li>
+
+  
+              </ul>
+              </li>
+
+          </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        {% block content %}
+        <div class="container-fluid">
+            
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-themecolor">Dashboard principal</h3>
+                </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Stats box -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex no-block">
+                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/staff.png' %}" alt="" /></div>
+                                <div class="align-self-center">
+                                    <h6 class="text-muted m-t-10 m-b-0">Usuarios activos</h6>
+                                    <h4 class="m-t-0">{{user_active}}</h4></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex no-block">
+                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/expense.png' %}" alt="" /></div>
+                                <div class="align-self-center">
+                                    <h6 class="text-muted m-t-10 m-b-0">Prestamos</h6>
+                                    <h4 class="m-t-0">{{prestamos}}</h4></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex no-block">
+                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/income.png' %}" alt="" /></div>
+                                <div class="align-self-center">
+                                    <h6 class="text-muted m-t-10 m-b-0">Monto prestado</h6>
+                                    <h4 class="m-t-0">$ {{monto_total|floatformat:0|intcomma}}</h4></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex no-block">
+                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/income.png' %}" alt="" /></div>
+                                <div class="align-self-center">
+                                    <h6 class="text-muted m-t-10 m-b-0">Monto cobrado</h6>
+                                    <h4 class="m-t-0">$ {{pago_total|floatformat:0|intcomma}}</h4></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+            <!-- ============================================================== -->
+            <!-- Sales overview chart -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div>
+                                    <h3 class="card-title m-b-5"><span class="lstick"></span>Historial de creditos otorgados</h3>
+                                </div>
+ 
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <canvas id="myChart2"></canvas>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                            <script>
+        
+                                var ctx = document.getElementById('myChart2').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: [{% for i in datos_grafico %}
+                                            "{{i.0|date:'m/Y'}}",{% endfor %}],
+                                    datasets: [{
+                                        label: 'Monto nominal en el mes',
+                                        data: [{% for i in datos_grafico %}
+                                        "{{i.1|floatformat:0}}",{% endfor %}],
+                                        backgroundColor: 'rgba(175, 23, 171 , 0.2)',
+                                        borderColor: 'rgba(175, 23, 171 )',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                callback: function(label, index, labels) {
+
+                                                    return '$ ' + label;
+                                                }
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+                          
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- visit charts-->
+                <!-- ============================================================== -->
+                <div class="col-lg-3 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title"><span class="lstick"></span>Composición de los creditos</h4>
+                            <canvas id="myChart"></canvas>
+                            <script>
+        
+                                var ctx = document.getElementById('myChart').getContext('2d');
+                                var chart = new Chart(ctx, {
+                                    // The type of chart we want to create
+                                    type: 'doughnut',
+                                    // The data for our dataset
+                                    data: {
+                                    datasets: [{        
+                                        data: [{{total_pago}}, {{mora_total}}, {{total_saldo}}],
+                                        backgroundColor: ['rgba(58, 180, 71, 0.8)', 'rgba(252, 48, 34, 0.8)', 'rgba(175, 23, 171 , 0.8)'],    
+                                    }],
+                          
+                                    labels: ["Pagado", "Moroso", "Saldo"]
+                                  },
+                                    options: {
+                                      legend: false,
+                                    },
+                          
+                                  });
+                          
+                            </script>
+                  
+                            <table class="table vm font-14">
+                                <tr>
+                                    <td class="b-0">Saldo</td>
+                                    <td class="text-right font-medium b-0">{{total_saldo}}%</td>
+                                </tr>
+                                <tr>
+                                    <td>Cobrado</td>
+                                    <td class="text-right font-medium">{{total_pago}}%</td>
+                                </tr>
+                                <tr>
+                                    <td>Moroso</td>
+                                    <td class="text-right font-medium">{{mora_total}}%</td>
+                                </tr>
+
+                            </table>
+
+                            <h6>Total moroso:</h6>
+                            <h6 class="text-danger">${{monto_mora|floatformat:0|intcomma}}</h6>
+                            <hr>
+                            <h6>Total saldo:</h6>
+                            <h6 class="text-primary">${{monto_saldo|floatformat:0|intcomma}}</h6> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-9 col-md-12">
+                  <div class="card">
+                      <div class="card-body">
+                          <div class="d-flex">
+                              <div>
+                                  <h3 class="card-title m-b-5"><span class="lstick"></span>Flujo de ingresos 24 meses</h3>
+                              </div>
+
+                          </div>
+                      </div>
+
+                      <div class="card-body">
+                          <canvas id="myChart3"></canvas>
+                          <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                          <script>
+      
+                              var ctx = document.getElementById('myChart3').getContext('2d');
+                              var myChart = new Chart(ctx, {
+                              type: 'bar',
+                              data: {
+                                  labels: [{% for i in fechas_cash %}
+                                          "{{i|date:'m/Y'}}",{% endfor %}],
+                                  datasets: [{
+                                      label: 'Cuotas a cobrar',
+                                      data: [{% for i in matriz_resultante %}
+                                      "{{i|floatformat:0}}",{% endfor %}],
+                                      backgroundColor: 'rgba(53, 44, 140, 0.2)',
+                                      borderColor: 'rgba(53, 44, 140)',
+                                      borderWidth: 1
+                                  }]
+                              },
+                              options: {
+                                  scales: {
+                                      yAxes: [{
+                                          ticks: {
+                                              beginAtZero: true,
+                                              callback: function(label, index, labels) {
+
+                                                  return '$ ' + label;
+                                              }
+                                          }
+                                      }]
+                                  }
+                              }
+                          });
+                        
+                          </script>
+                      </div>
+                  </div>
+              </div>
+              <!-- ============================================================== -->
+              <!-- visit charts-->
+              <!-- ============================================================== -->
+              <div class="col-lg-3 col-md-12">
+                  <div class="card">
+                      <div class="card-body">
+                          <h4 class="card-title"><span class="lstick"></span>Analisis del interes</h4>
+                          <h6>Monto del interes:</h6>
+                            <h6 class="text-info">${{monto_interes|floatformat:0|intcomma}}</h6>
+                            <hr>
+
+                
+                          <table class="table vm font-14">
+                              <tr>
+                                  <td class="b-0">T.A.E promedio año corriente</td>
+                                  <td class="text-right font-medium b-0">{{prom_tae_year_courrent|floatformat:2}}%</td>
+                              </tr>
+                              <tr>
+                                  <td>T.A.E promedio año pasado</td>
+                                  <td class="text-right font-medium">{{prom_tae_year_last|floatformat:2}}%</td>
+                              </tr>
+ 
+
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        
+        </div>
+        {% endblock %}
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer"> © 2021 Sinergia by Abel Robra </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+</div>
+
+    <!-- PRUEBA IMPORTACIONES -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js" defer></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js" defer></script>
+
+    
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"defer></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"defer></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"defer></script>
+<!--Custom JavaScript -->
+
+<script src="{% static 'adminpro/main/js/custom.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/jquery/jquery.min.js' %}"></script>
+
+<script src="{% static 'adminpro/assets/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap tether Core JavaScript -->
+<script src="{% static 'adminpro/assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'adminpro/main/js/sidebarmenu.js' %}"></script>
+<!--stickey kit -->
+<script src="{% static 'adminpro/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
+<!--Custom JavaScript -->
+<script src="{% static 'adminpro/main/js/custom.min.js' %}"></script>
+<!-- ============================================================== -->
+<!-- Style switcher -->
+<!-- ============================================================== -->
+<script src="{% static 'adminpro/assets/plugins/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+<!-- PRUEBA IMPORTACIONES -->
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+<!-- scripts AdminPro -->
+
+<script src="{% static 'adminpro/assets/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'adminpro/main/js/perfect-scrollbar.jquery.min.js' %}"></script>
+<script src="{% static 'adminpro/main/js/waves.js' %}"></script>
+<script src="{% static 'adminpro/main/js/sidebarmenu.js' %}"></script>
+<script src="{% static 'adminpro/main/js/custom.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/chartist-js/dist/chartist.min.js' %}"></script>
+<script
+    src="{% static 'adminpro/assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/d3/d3.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/c3-master/c3.min.js' %}"></script>
+<script src="{% static 'adminpro/main/js/dashboard1.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/styleswitcher/jQuery.style.switcher.js' %}"></script>
+<script src="{% static 'adminpro/main/js/chat.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/switchery/dist/switchery.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/select2/dist/js/select2.full.min.js' %}"
+    type="text/javascript"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"
+    type="text/javascript"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"
+    type="text/javascript"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js' %}"
+    type="text/javascript"></script>
+<script type="text/javascript"
+    src="{% static 'adminpro/assets/plugins/multiselect/js/jquery.multi-select.js' %}"></script>
+
+</body>
+
+
+</html>
+
+
+<script>
+
+  function count() {
+    var counter = { var: 0 };
+    TweenMax.to(counter, 3, {
+      var: 100,
+      onUpdate: function () {
+        var number = Math.ceil(counter.var);
+        $('.counter').html(number);
+        if (number === counter.var) { count.kill(); }
+      },
+      onComplete: function () {
+        count();
+      },
+      ease: Circ.easeOut
+    });
+  }
+
+  count();
+
+
+</script>
