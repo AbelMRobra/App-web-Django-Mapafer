@@ -45,7 +45,6 @@
                                     <th>Cuota</th>
                                     <th>N°c</th>
                                     <th>Interes</th>
-                                    <th>T.A.E</th>
                                     <th>Avance</th>
                                 </tr>
                             </thead>
@@ -54,9 +53,9 @@
 
                                 {% for i in data %}
                                 <tr>
-                                    <td><h6 style="font-size: 12px;">{{i.0.cliente.apellido}}</h6>
+                                    <td><h6 style="font-size: 12px;"><a href="{% url 'Administrar credito' i.0.id %}">{{i.0.cliente.apellido}}</a></h6>
                                         <h6 class="card-subtitle" style="font-size: 11px;">{{i.0.cliente.nombre}}</h6></td>
-                                        <td>{{i.0.fecha|date:"Y-m-d"}}</td>
+                                        <td>{{i.0.fecha|date:"d/m/Y"}}</td>
                                     <td>{{i.0.regimen.0|lower|capfirst}}</td>
                                     <td>{{i.0.proveedor|lower|capfirst}}</td>
                                     <td>${{i.0.presupuesto_cliente|floatformat:2|intcomma}}</td>
@@ -65,7 +64,6 @@
                                     <td>${{i.3|floatformat:2|intcomma}}</td>
                                     <td>{{i.0.cuotas}}</td>
                                     <td><b>{{i.1|floatformat:2}}%</b></td>
-                                    <td><b>{{i.4|floatformat:2}}%</b></td>
                                     <td><b>{{i.2|floatformat:2}}%</b></td>
 
                                 </tr>

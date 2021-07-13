@@ -4,6 +4,8 @@ from django.db import models
 
 class Empresa(models.Model):
     nombre = models.CharField(max_length=200, verbose_name="Nombre")
+    password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
+    code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
 
     class Meta:
         verbose_name="Empresa"
@@ -35,6 +37,9 @@ class Clientes(models.Model):
     estado = models.CharField(choices=Estado.choices, max_length=20, verbose_name="Estado", default="Potencial")
     otros_datos = models.TextField(verbose_name="Otros datos", blank=True, null=True)
     code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
+    dni = models.FileField(verbose_name="Dni", blank=True, null=True)
+    servicio = models.FileField(verbose_name="Servicio", blank=True, null=True)
+    imagen = models.ImageField(verbose_name="Imagen", blank=True, null=True)
     class Meta:
         verbose_name="Cliente"
         verbose_name_plural="Clientes"
@@ -68,6 +73,7 @@ class Prestamos(models.Model):
     monto = models.FloatField(verbose_name="Monto")
     cuotas = models.IntegerField(verbose_name="Cuotas")
     regimen = models.CharField(choices=Regimen.choices, max_length=20, verbose_name="Regimen")
+    adjunto = models.FileField(verbose_name="Adjunto", blank=True, null=True)
 
     class Meta:
         verbose_name="Prestamo"

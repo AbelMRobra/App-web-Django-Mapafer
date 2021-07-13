@@ -56,7 +56,7 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs profile-tab" role="tablist">
                     <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#actividad" role="tab">Actividad</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#perfil" role="tab">Perfil</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#perfil" role="tab">Datos</a> </li>
                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab">Editar</a> </li>
                 </ul>
                 <!-- Tab panes -->
@@ -128,12 +128,16 @@
                             </div>
                             <hr>
                             <p class="m-t-30">{{data.otros_datos}}</p>
+                            <div>
+                                {% if data.dni %}<a href="{{data.dni.url}}"><i class="fa fa-user"> DNI </i></a>{% endif %}
+                                {% if data.servicio %}<a href="{{data.servicio.url}}"><i class="fa fa-file"> Servicio</i></a>{% endif %}
+                            </div>
 
                         </div>
                     </div>
                     <div class="tab-pane" id="editar" role="tabpanel">
                         <div class="card-body">
-                            <form method="POST">
+                            <form method="POST" enctype="multipart/form-data">
 
                                 {% csrf_token %}
                                 <div class="form-group">
@@ -195,6 +199,30 @@
                                             {% endfor %}
 
                                         </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="imagen">
+                                        <h6>DNI</h6>
+                                    </label>
+                                </div>
+                                <div class="row d-flex justify-content-center mt-3 mb-4">
+                                    <div class="col col-md-12 col-lg-8">
+                                        <input name="dni" class="form-control" type="file" id="formFile">
+
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="imagen">
+                                        <h6>Servicio</h6>
+                                    </label>
+                                </div>
+                                <div class="row d-flex justify-content-center mt-3 mb-4">
+                                    <div class="col col-md-12 col-lg-8">
+                                        <input name="servicio" class="form-control" type="file" id="formFile">
+
+
                                     </div>
                                 </div>
                                 <div class="form-group">

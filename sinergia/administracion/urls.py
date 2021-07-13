@@ -23,11 +23,15 @@ urlpatterns = [
     # URL de Prestamos
     url(r'^principal$', login_required(views.cartera_activa), name = 'Principal Prestamos'),
     url(r'^newcredito$', login_required(views.newcredito), name = 'Nuevo credito'),
+    url(r'^admincredito/(?P<id_credito>\d+)/$', login_required(views.administrar_credito), name = 'Administrar credito'),
     url(r'^infoprestamo$', login_required(views.informacion_prestamos), name = 'Información Prestamos'),
     url(r'^cashflow$', login_required(views.cashflow), name = 'Cash Flow'),
 
     # URL de Info
     url(r'^infoaclaraciones$', login_required(views.aclaraciones), name = 'Aclaraciones'),
+
+    # URL de proveedores
+    url(r'^newproveedores$', login_required(views.newproveedor), name = 'Nuevo proveedor'),
     
 
 ]

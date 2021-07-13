@@ -28,6 +28,21 @@ def login(request):
 
             return redirect('Consulta externo', code_key = cliente.code_key)
 
+        if len(Empresa.objects.filter(nombre = request.POST['username'], password = request.POST['password'])):
+
+            empresa = Empresa.objects.get(nombre = request.POST['username'], password = request.POST['password'])
+
+            code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
+
+            while len(Empresa.objects.filter(code_key = int(code_key_new))) > 0:
+
+                code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
+
+            empresa.code_key = int(code_key_new)
+            empresa.save()
+
+            return redirect('Consulta externo', code_key = empresa.code_key)
+
         # Añadimos los datos recibidos al formulario
         form = AuthenticationForm(data=request.POST)
         # Si el formulario es válido...
@@ -293,86 +308,151 @@ def consulta_usuario_externo(request, code_key):
 
     try:
 
-        data = Clientes.objects.get(code_key = code_key)
+        try:
+            tipo = "PERSONA"
+
+            data = Clientes.objects.get(code_key = code_key)
+
+            code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
+
+            while len(Clientes.objects.filter(code_key = int(code_key_new))) > 0:
+
+                code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
+
+            data.code_key = int(code_key_new)
+            data.save()
+
+            creditos = Prestamos.objects.filter(cliente = data)
+            data_pagos = Pagos.objects.filter(prestamo__cliente = data).order_by("-fecha")
+            
+            if len(creditos) > 0:
+
+                data_credito = []
+
+                for c in creditos:
+                    monto_pagado = sum(Pagos.objects.filter(prestamo = c).values_list("monto", flat = True))
+                    avance = (monto_pagado/c.monto)*100
+                    try:
+                        ultimo_pago = Pagos.objects.filter(prestamo = c).order_by("-fecha")[0].fecha
+                    except:
+                        ultimo_pago = 0
+                    proxima_cuota = 'Aguanta'
+                    monto_proxima = 0
+                    mora = 0
+                    fecha_primer_pago = datetime.date(c.primera_cuota.year, c.primera_cuota.month, c.primera_cuota.day)
+                    today = datetime.date.today()
+                    if c.regimen == "QUINCENAL":
+                        cuotas_pasadas = 0
+                        fecha_aux = fecha_primer_pago
+                        while fecha_aux < today:
+                            cuotas_pasadas +=1
+                            if cuotas_pasadas == c.cuotas:
+                                break
+                            else:
+                                fecha_aux = fecha_aux + datetime.timedelta(days=15)
+                        mora = cuotas_pasadas*(c.monto/c.cuotas) - monto_pagado
+                        if cuotas_pasadas < c.cuotas:
+                            proxima_cuota = fecha_aux
+                            monto_proxima = c.monto/c.cuotas
+                        else:
+                            proxima_cuota = 0
+                            monto_proxima = 0
+                        
+                
+                    if c.regimen == "MENSUAL":
+                        cuotas_pasadas = 0
+                        fecha_aux = fecha_primer_pago
+                        while fecha_aux < today:
+                            cuotas_pasadas +=1
+                            if cuotas_pasadas == c.cuotas:
+                                break
+                            else:
+                                if fecha_aux.month != 12:
+                                    fecha_aux = datetime.date(fecha_aux.year, fecha_aux.month +1, fecha_aux.day)
+                                else:
+                                    fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
+                        mora = cuotas_pasadas*(c.monto/c.cuotas) - monto_pagado
+                        if cuotas_pasadas < c.cuotas:
+                            proxima_cuota = fecha_aux
+                            monto_proxima = c.monto/c.cuotas
+                        else:
+                            proxima_cuota = 0
+                            monto_proxima = 0
+
+                    data_credito.append((c, monto_pagado, avance, ultimo_pago, proxima_cuota, monto_proxima, mora, (mora/(c.monto/c.cuotas))))
+
+            else:
+
+                data_credito = 0
+
+        except:
+            tipo = "EMPRESA"
+            data = Empresa.objects.get(code_key = code_key)
+            data_credito = []
+            data_pagos = []
+
+            prestamos_empresa = Prestamos.objects.filter(cliente__empresa = data).order_by("cliente__nombre")
+            for c in prestamos_empresa:
+                monto_pagado = sum(Pagos.objects.filter(prestamo = c).values_list("monto", flat = True))
+                avance = (monto_pagado/c.monto)*100
+                try:
+                    ultimo_pago = Pagos.objects.filter(prestamo = c).order_by("-fecha")[0].fecha
+                except:
+                    ultimo_pago = 0
+                proxima_cuota = 'Aguanta'
+                monto_proxima = 0
+                mora = 0
+                fecha_primer_pago = datetime.date(c.primera_cuota.year, c.primera_cuota.month, c.primera_cuota.day)
+                today = datetime.date.today()
+                if c.regimen == "QUINCENAL":
+                    cuotas_pasadas = 0
+                    fecha_aux = fecha_primer_pago
+                    while fecha_aux < today:
+                        cuotas_pasadas +=1
+                        if cuotas_pasadas == c.cuotas:
+                            break
+                        else:
+                            fecha_aux = fecha_aux + datetime.timedelta(days=15)
+                    mora = cuotas_pasadas*(c.monto/c.cuotas) - monto_pagado
+                    if cuotas_pasadas < c.cuotas:
+                        proxima_cuota = fecha_aux
+                        monto_proxima = c.monto/c.cuotas
+                    else:
+                        proxima_cuota = 0
+                        monto_proxima = 0
+                    
+            
+                if c.regimen == "MENSUAL":
+                    cuotas_pasadas = 0
+                    fecha_aux = fecha_primer_pago
+                    while fecha_aux < today:
+                        cuotas_pasadas +=1
+                        if cuotas_pasadas == c.cuotas:
+                            break
+                        else:
+                            if fecha_aux.month != 12:
+                                fecha_aux = datetime.date(fecha_aux.year, fecha_aux.month +1, fecha_aux.day)
+                            else:
+                                fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
+                    mora = cuotas_pasadas*(c.monto/c.cuotas) - monto_pagado
+                    if cuotas_pasadas < c.cuotas:
+                        proxima_cuota = fecha_aux
+                        monto_proxima = c.monto/c.cuotas
+                    else:
+                        proxima_cuota = 0
+                        monto_proxima = 0
+
+                data_credito.append((c, monto_pagado, avance, ultimo_pago, proxima_cuota, monto_proxima, mora, (mora/(c.monto/c.cuotas))))
+
 
     except:
 
         return redirect('/')
 
-    code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
-
-    while len(Clientes.objects.filter(code_key = int(code_key_new))) > 0:
-
-        code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
-
-    data.code_key = int(code_key_new)
-    data.save()
-
-    creditos = Prestamos.objects.filter(cliente = data)
-
-    if len(creditos) > 0:
-
-        data_credito = []
-
-        for c in creditos:
-            monto_pagado = sum(Pagos.objects.filter(prestamo = c).values_list("monto", flat = True))
-            avance = (monto_pagado/c.monto)*100
-            try:
-                ultimo_pago = Pagos.objects.filter(prestamo = c).order_by("-fecha")[0].fecha
-            except:
-                ultimo_pago = 0
-            proxima_cuota = 'Aguanta'
-            monto_proxima = 0
-            mora = 0
-            fecha_primer_pago = datetime.date(c.primera_cuota.year, c.primera_cuota.month, c.primera_cuota.day)
-            today = datetime.date.today()
-            if c.regimen == "QUINCENAL":
-                cuotas_pasadas = 0
-                fecha_aux = fecha_primer_pago
-                while fecha_aux < today:
-                    cuotas_pasadas +=1
-                    if cuotas_pasadas == c.cuotas:
-                        break
-                    else:
-                        fecha_aux = fecha_aux + datetime.timedelta(days=15)
-                mora = cuotas_pasadas*(c.monto/c.cuotas) - monto_pagado
-                if cuotas_pasadas < c.cuotas:
-                    proxima_cuota = fecha_aux
-                    monto_proxima = c.monto/c.cuotas
-                else:
-                    proxima_cuota = 0
-                    monto_proxima = 0
-                
-           
-            if c.regimen == "MENSUAL":
-                cuotas_pasadas = 0
-                fecha_aux = fecha_primer_pago
-                while fecha_aux < today:
-                    cuotas_pasadas +=1
-                    if cuotas_pasadas == c.cuotas:
-                        break
-                    else:
-                        if fecha_aux.month != 12:
-                            fecha_aux = datetime.date(fecha_aux.year, fecha_aux.month +1, fecha_aux.day)
-                        else:
-                            fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
-                mora = cuotas_pasadas*(c.monto/c.cuotas) - monto_pagado
-                if cuotas_pasadas < c.cuotas:
-                    proxima_cuota = fecha_aux
-                    monto_proxima = c.monto/c.cuotas
-                else:
-                    proxima_cuota = 0
-                    monto_proxima = 0
-
-            data_credito.append((c, monto_pagado, avance, ultimo_pago, proxima_cuota, monto_proxima, mora, (mora/(c.monto/c.cuotas))))
+    
 
 
-
-    else:
-
-        data_credito = 0
-
-    return render(request, "externo/consulta_externo.html", {'data': data, 'data_credito':data_credito})
+    return render(request, "externo/consulta_externo.html", {'tipo':tipo, 'data': data, 'data_credito':data_credito, 'data_pagos':data_pagos})
 
 def clientes(request):
 
@@ -398,6 +478,14 @@ def profileclient(request, id_cliente):
         data.empleador = request.POST['empleador']
         data.otros_datos = request.POST['otros_datos']
         data.empresa = Empresa.objects.get(nombre = request.POST['empresa'])
+        try:
+           data.dni = request.FILES['dni']
+        except:
+            pass 
+        try:
+           data.servicio = request.FILES['servicio']
+        except:
+            pass 
         data.save()
      
     data_credito = Prestamos.objects.filter(cliente = data)
@@ -444,8 +532,32 @@ def newclientes(request):
 def newcredito(request):
 
     clientes = Clientes.objects.all()
+    proveedores = Proveedor.objects.all()
 
-    return render(request, 'prestamos/nuevo_credito.html', {'clientes':clientes})
+    return render(request, 'prestamos/nuevo_credito.html', {'clientes':clientes, 'proveedores':proveedores})
+
+def newproveedor(request):
+
+    mensaje = 0
+
+    if request.method == 'POST':
+
+        b = Proveedor(
+            razon_social = request.POST['razon_social'],
+            fantasia = request.POST['fantasia'],
+        )
+
+        b.save()
+
+        return redirect('Home')
+
+    return render(request, "proveedores/new_proveedores.html", {"mensaje":mensaje})
+
+def administrar_credito(request, id_credito):
+
+    credito = Prestamos.objects.get(id = id_credito)
+
+    return render(request, 'prestamos/administrar_credito.html', {'credito':credito})
 
 def informacion_prestamos(request):
 

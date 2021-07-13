@@ -1,0 +1,108 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Agregar proveedor</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Agregar proveedor</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+                    <h4 class="card-title">Incorporar un proveedor a la base de datos</h4>
+                    <h6 class="card-subtitle">Complete el formulario</h6>
+                    
+
+                    <div class="row d-flex justify-content-center">
+                        <div class="col col-md-12 col-lg-6">
+                            <div class="row">
+                                <div class="col bg-light border rounded p-4 ">
+
+                                    {% if mensaje %}
+                                    <h6 class="text-danger">{{mensaje}}</h6>
+                                    {% endif %}
+
+                                    <form method="POST">
+
+                                        {% csrf_token %}
+
+                                        <div class="campoctacte">
+
+                                            <div class="campo">
+
+                                                <div>
+                                                    <label for="nombre">
+                                                        <h6>Razón social</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="razon_social" required type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="apellido">
+                                                        <h6>Nombre fantasia</h6>
+                                                    </label>
+                                                </div>
+
+                                                <div class="row d-flex justify-content-center my-3">
+                                                    <div class="col col-md-8 col-lg-8">
+                                                        <div>
+
+                                                            <input name="fantasia" required type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row d-flex justify-content-center mt-4">
+                                                <div class="col-lg-6 text-center">
+
+                                                    <button type="submit" class="btn btn-primary">Cargar proveedor</button>
+
+                                                </div>
+                                            </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
