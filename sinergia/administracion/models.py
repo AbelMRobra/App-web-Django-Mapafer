@@ -39,6 +39,7 @@ class Clientes(models.Model):
     code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
     dni = models.FileField(verbose_name="Dni", blank=True, null=True)
     servicio = models.FileField(verbose_name="Servicio", blank=True, null=True)
+    informe_crediticio = models.FileField(verbose_name="Informe crediticio", blank=True, null=True)
     imagen = models.ImageField(verbose_name="Imagen", blank=True, null=True)
     class Meta:
         verbose_name="Cliente"

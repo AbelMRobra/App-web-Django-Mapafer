@@ -456,7 +456,7 @@ def consulta_usuario_externo(request, code_key):
 
 def clientes(request):
 
-    data = Clientes.objects.all()
+    data = Clientes.objects.all().order_by("nombre")
 
     return render(request, "clientes/basededatosclientes.html", {'data':data})
 
@@ -464,29 +464,43 @@ def profileclient(request, id_cliente):
 
     data = Clientes.objects.get(id = id_cliente)
 
-    empresas = Empresa.objects.all()
-
     if request.method == 'POST':
 
-        data.nombre = request.POST['nombre']
-        data.apellido = request.POST['apellido']
-        data.direccion = request.POST['direccion']
-        data.cuil = request.POST['cuil']
-        data.email = request.POST['email']
-        data.telefono = request.POST['telefono']
-        data.score = request.POST['score']
-        data.empleador = request.POST['empleador']
-        data.otros_datos = request.POST['otros_datos']
-        data.empresa = Empresa.objects.get(nombre = request.POST['empresa'])
         try:
-           data.dni = request.FILES['dni']
+            data.dni = request.FILES['dni']
+            data.save()
+        except:
+            pass
+
+        try:
+            data.servicio = request.FILES['servicio']
+            data.save()
+        except:
+            pass
+
+        try:
+            data.informe_crediticio = request.FILES['informe_crediticio']
+            data.save()
+        except:
+            pass
+
+        try:
+            data.nombre = request.POST['nombre']
+            data.apellido = request.POST['apellido']
+            data.direccion = request.POST['direccion']
+            data.cuil = request.POST['cuil']
+            data.email = request.POST['email']
+            data.telefono = request.POST['telefono']
+            data.score = request.POST['score']
+            data.empleador = request.POST['empleador']
+            data.empresa = Empresa.objects.get(nombre = request.POST['empresa'])
+            data.save()
         except:
             pass 
-        try:
-           data.servicio = request.FILES['servicio']
-        except:
-            pass 
-        data.save()
+
+    
+
+    empresas = Empresa.objects.all()
      
     data_credito = Prestamos.objects.filter(cliente = data)
 

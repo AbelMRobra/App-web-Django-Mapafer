@@ -8,7 +8,7 @@
 
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Base de clientes</h3>
+            <h3 class="text-themecolor">Clientes</h3>
         </div>
 
         <div class="col-md-7 align-self-center">
@@ -26,20 +26,19 @@
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
-                    <h4 class="card-title">Base de clientes</h4>
+                    <h4 class="card-title">Base de clientes y prospectos</h4>
                     <h6 class="card-subtitle">Información sobre los clientes activos y potenciales</h6>
 
                     <div class="table-responsive">
 
-                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <table id="example" class="table" style="width:100%">
 
                             <thead>
                                 <tr>
-                                    <th>Apellido</th>
-                                    <th>Nombre</th>
+                                    <th>Usuario</th>
                                     <th>Estado</th>
                                     <th>Score</th>
-                                    <th>Cuil</th>
+                                    <th>Email</th>
                                     <th>Telefono</th>
                                     <th style="min-width: 70px;"></th>
 
@@ -50,56 +49,32 @@
 
                                 {% for i in data %}
                                 <tr>
-                                    <td> {{i.apellido}}</td>
-                                    <td>{{i.nombre}}</td>
-                                    <td {% if i.estado == 'Activo' %} class = "text-success" 
-                                    {% elif i.estado == 'Potencial' %} class = "text-warning"
+                                    <td>{% if i.imagen %}<img src="{{i.imagen.url}}" style="width: 30px;" alt="usuario">{% else %}<img src="{% static 'img/userlog2.png' %}" style="width: 30px;" alt="usuario">{% endif %} {{i.nombre}}, {{i.apellido}}</td>
+                                    <td {% if i.estado == 'Activo' %} class = "text-info" 
+                                    {% elif i.estado == 'Potencial' %} class = "text-secondary"
                                     {% elif i.estado == 'Moroso' %} class = "text-danger" 
                                     {% else %} class = "text-dark" {% endif %}><b>{{i.estado}}</b></td>
-                                    <td {% if i.score < 300 %} class = "text-danger" {% else %} class = "text-success" {% endif %}><b>{{i.score}}</b></td>
-                                    <td>{{i.cuil|floatformat:0}} </td>
+                                    <td {% if i.score < 300 %} class = "text-danger" {% else %} class = "text-secondary" {% endif %}><b>{{i.score}}</b></td>
+                                    <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
                                     {% if i.telefono %}
                                     <td>{{i.telefono|floatformat:0}}</td>
                                     {% else %}
                                     <td>-</td>
                                     {% endif %}
-                                    <td style="text-align: right;"><a href="#" data-toggle="modal" data-target="#ModalOtrosDatos{{i.id}}"><i class="fa fa-plus text-primary"></i></a> <a href="{% url 'Perfil del cliente' i.id %}"><i class="fa fa-user text-primary"></i></a></td>
+                                    <td style="text-align: right;">
 
-                                    <!-- Modal otros datos -->
-                                    <div class="modal fade" id="ModalOtrosDatos{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalOtrosDatos"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header"
-                                                style="background: rgb(225, 43, 211);
-                                                            background: linear-gradient(315deg, rgba(225, 43, 211,1) 0%, rgba(139, 44, 140,1) 22%, rgba(243, 95, 232,1) 100%);">
-                                                <h5 class="modal-title text-light" id="exampleModalLongTitle">{{i.apellido}}, {{i.nombre}}</h5>
-                                                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h6>C.U.I.L</h6>
-                                                <p>{{i.cuil|floatformat:0}}</p>
-                                                <h6>Telefono</h6>
-                                                <p>{{i.telefono|floatformat:0}}</p>
-                                                <h6>Dirección</h6>
-                                                <p>{{i.direccion}}</p>
-                                                <h6>Estado civil</h6>
-                                                <p>Soltero/a</p>
-                                                <h6>Estado en sistema</h6>
-                                                <p>{{i.estado}}</p>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            {% if i.estado == "Potencial" or i.estado == "Cliente" %}
-                                            <button class="btn btn-danger" type="submit">Rechazar</button>
-                                            {% endif %}
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                    <div class="btn-group ml-auto">
+                                        <a href="JavaScript:void(0)" class="icon-options-vertical link"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="{% url 'Perfil del cliente' i.id %}"><i
+                                                    class="fa fa-user mr-2"></i>Perfil</a>
+                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal"
+                                                data-target="#ModalBorrar{{d.id}}"><i
+                                                    class="fa fa-trash-o mr-2"></i>Borrar</a>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -122,8 +97,8 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
-            "paging": false,
             "info": false,
+            "ordering":false,
             dom: 'Bfrtip',
             buttons: [
             {
