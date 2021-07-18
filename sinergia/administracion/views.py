@@ -485,6 +485,12 @@ def profileclient(request, id_cliente):
             pass
 
         try:
+            data.otros_datos = request.POST['otros_datos']
+            data.save()
+        except:
+            pass
+
+        try:
             data.nombre = request.POST['nombre']
             data.apellido = request.POST['apellido']
             data.direccion = request.POST['direccion']

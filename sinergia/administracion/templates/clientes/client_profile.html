@@ -12,7 +12,7 @@
     <div class="col-md-7 align-self-center">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'BBDD clientes' %}">BBDD</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'BBDD clientes' %}">Clientes</a></li>
             <li class="breadcrumb-item active">Perfil</li>
         </ol>
     </div>
@@ -31,7 +31,7 @@
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <center class="m-t-30"> <img src="{% static 'img/anonimo2.png' %}" class="img-circle" width="150" />
+                    <center class="m-t-30"> <img src="{% if data.imagen %}{{data.imagen.url}}{% else %}{% static 'img/anonimo2.png' %}{% endif %}" class="img-circle" width="150" />
                         <h4 class="card-title m-t-10">{{data.nombre}},  {{data.apellido}}</h4>
                         <div class="row text-center justify-content-md-center">
                             <div class="col-4"><a href="javascript:void(0)" class="link"><font class="font-medium">Score: {{data.score}}</font></a></div>
@@ -70,7 +70,7 @@
                                 <div class="sl-item">
                                     <div class="sl-left"> <img src="{% static 'img/bank.png' %}" alt="user" class="img-circle" /> </div>
                                     <div class="sl-right">
-                                        <div><a href="#" class="link">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a> 
+                                        <div>Prestamo de ${{d.0.monto|floatformat:2|intcomma}}
                                             <p><span class="sl-date"> Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></p>
  
                                         </div>
@@ -82,11 +82,11 @@
                                 {% else %}
 
                                 <div class="sl-item">
-                                    <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
+                                    <div class="sl-left"> <img src="{% static 'img/clean.png' %}" alt="user" class="img-circle" /> </div>
                                     <div class="sl-right">
                                         <div><a href="#" class="link">No tiene creditos otorgados</a> 
                                             <p><span class="sl-date"> -</span></p>
-                                            <p>Sin información</p>
+
 
                                         </div>
                                     </div>
@@ -105,18 +105,18 @@
                             <h4><a href="#" data-toggle="modal" data-target="#EditarLegajo"><i class="fa fa-pencil"></i></a> Datos personales</h4>
 
                             <div style="margin: 15px;">
-                                <h6><b>Nombre y Apellido:</b> {{data.nombre}}, {{data.apellido}}</h6>
-                                <h6><b>Telefono:</b> {% if data.email %}{{data.telefono}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Email:</b> {% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Dirección:</b> {% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Empresa:</b> {% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Empleador:</b> {% if data.email %}{{data.empleador}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Cuil:</b> {% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 style="margin-top: 5px;"><b>Nombre y Apellido:</b> {{data.nombre}}, {{data.apellido}}</h6>
+                                <h6 style="margin-top: 5px;"><b>Telefono:</b> {% if data.email %}{{data.telefono}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 style="margin-top: 5px;"><b>Email:</b> {% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 style="margin-top: 5px;"><b>Dirección:</b> {% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 style="margin-top: 5px;"><b>Empresa:</b> {% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 style="margin-top: 5px;"><b>Empleador:</b> {% if data.email %}{{data.empleador}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 style="margin-top: 5px;"><b>Cuil:</b> {% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</h6>
 
                             </div>
                             
                             <hr>
-                            <h4><i class="fa fa-pencil"></i> Anotaciones</h4>
+                            <h4><a href="#" data-toggle="modal" data-target="#EditarComentarios"><i class="fa fa-pencil"></i></a> Anotaciones</h4>
                             <p class="m-t-30">{% if data.otros_datos %}{{data.otros_datos}}{% else %} Sin registrar{% endif %}</p>
 
 
@@ -125,16 +125,34 @@
 
                     <div class="tab-pane" id="programa" role="tabpanel">
                         <div class="card-body">
-                            <h4><i class="fa fa-pencil"></i> Programa social</h4>
+                            <h4>Programa social</h4>
+                            <small>Para completar el formulario presione <a href="">aqui</a></small>
 
                             <div style="margin: 15px;">
-                                <h6><b>Nombre y Apellido:</b> {{data.nombre}}, {{data.apellido}}</h6>
-                                <h6><b>Telefono:</b> {% if data.email %}{{data.telefono}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Email:</b> {% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Dirección:</b> {% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Empresa:</b> {% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Empleador:</b> {% if data.email %}{{data.empleador}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6><b>Cuil:</b> {% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6>¿Cuantas personas habitan en su hogar?</h6>
+                                <p>{% if data.habitantes_hogar %}En el hogar hay {{data.habitantes_hogar}} personas {% else %}Sin responder{% endif %}</p>
+                                <h6>¿Algún mientro de su hogar tiene alguna discapacidad?</h6>
+                                <p>{% if data.partiente_discapacidad %}{{data.partiente_discapacidad|lower|capfirst}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Cuantas personas trabajan en su hogar?</h6>
+                                <p>{% if data.trabajadores_hogar %}Trabajadores activos {{data.trabajadores_hogar}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Cual es el ingreso aproximado de su grupo familiar?</h6>
+                                <p>{% if data.ingreso_hogar %}Aproximadamente ${{data.ingreso_hogar|floatformat:0|intcomma}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Tiene alguna deuda con alguna entidad bancaria o comercial?</h6>
+                                <p>{% if data.deuda %}{{data.deuda|lower|capfirst}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Cuantos ambientes tiene su hogar?</h6>
+                                <p>{% if data.cuartos %}Total de ambientes {{data.cuartos}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Cuantos dormitorios tiene su hogar?</h6>
+                                <p>{% if data.bathrooms %}Total de dormitorios {{data.bathrooms}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Tiene gas?</h6>
+                                <p>{% if data.gas %}{{data.gas|lower|capfirst}} tiene conexión de gas {% else %}Sin responder{% endif %}</p>
+                                <h6>¿Tiene conexión cloacal?</h6>
+                                <p>{% if data.cloaca %}{{data.cloaca|lower|capfirst}} tiene conexión cloacal{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Tiene agua corriente?</h6>
+                                <p>{% if data.agua_corriente %}{{data.agua_corriente|lower|capfirst}} tiene agua corriente{% else %}Sin responder{% endif %}</p>
+                                <h6>¿El baño esta en el interior o en el exterior?</h6>
+                                <p>{% if data.bath_sit %}{{data.bath_sit|lower|capfirst}}{% else %}Sin responder{% endif %}</p>
+                                <h6>¿Qué documento respalda su vivienda?</h6>
+                                <p>{% if data.titulo_vivienda %}{{data.titulo_vivienda|lower|capfirst}}{% else %}Sin responder{% endif %}</p>
 
                             </div>
                             
@@ -147,14 +165,14 @@
                             <h4>Documentos</h4>
 
                             <div class="sl-item">
-                                <div class="sl-left"> <i class="fa fa-address-card-o"></i> {% if data.dni %}<a href="{{data.dni.url}}">Documento nacional de identidad</a>{% else %}Documento nacional de identidad{% endif %} {% if data.dni %}<a href="#" data-toggle="modal" data-target="#ModificarDNI"><i class="fa fa-check"></i></a>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarDNI"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
+                                <div class="sl-left"> <i class="fa fa-address-card-o"></i> {% if data.dni %}<a href="{{data.dni.url}}" target="_blank">Documento nacional de identidad</a>{% else %}Documento nacional de identidad{% endif %} {% if data.dni %}<a href="#" data-toggle="modal" data-target="#ModificarDNI"><i class="fa fa-check"></i></a>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarDNI"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
                             </div>
                             <div class="sl-item" style="margin-top: 10px;">
-                                <div class="sl-left"> <i class="fa fa-file-o"></i> {% if data.servicio %}<a href="{{data.servicio.url}}">Boleta de servicio</a>{% else %}Boleta de servicio{% endif %} {% if data.servicio %}<a href="#" data-toggle="modal" data-target="#ModificarSERVICIO"><i class="fa fa-check"></i></a></i>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarSERVICIO"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
+                                <div class="sl-left"> <i class="fa fa-file-o"></i> {% if data.servicio %}<a href="{{data.servicio.url}}" target="_blank">Boleta de servicio</a>{% else %}Boleta de servicio{% endif %} {% if data.servicio %}<a href="#" data-toggle="modal" data-target="#ModificarSERVICIO"><i class="fa fa-check"></i></a></i>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarSERVICIO"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
                             </div>
 
                             <div class="sl-item" style="margin-top: 10px;">
-                                <div class="sl-left"> <i class="fa fa-university"></i> {% if data.informe_crediticio %}<a href="{{data.informe_crediticio.url}}">Informe crediticio</a>{% else %}Informe crediticio{% endif %} {% if data.informe_crediticio %}<a href="#" data-toggle="modal" data-target="#ModificarIC"><i class="fa fa-check"></i></a></i>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarIC"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
+                                <div class="sl-left"> <i class="fa fa-university"></i> {% if data.informe_crediticio %}<a href="{{data.informe_crediticio.url}}" target="_blank">Informe crediticio</a>{% else %}Informe crediticio{% endif %} {% if data.informe_crediticio %}<a href="#" data-toggle="modal" data-target="#ModificarIC"><i class="fa fa-check"></i></a></i>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarIC"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
                             </div>
 
                         </div>
@@ -281,9 +299,50 @@
                         </div>
 
                         </div>
-
+                        
 
                     </div>
+
+                    <div class="modal fade" id="EditarComentarios" tabindex="-1" role="dialog" aria-labelledby="EditarComentarios"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header"
+                                    style="background: rgb(195, 39, 181);
+                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Comentarios</h5>
+                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data">
+
+                                        {% csrf_token %}
+
+                                        <p class="my-2">Comentarios</p>
+                                        <div class="mb-3">
+                                            <textarea class="form-control form-control" name="otros_datos" >{{data.otros_datos}}</textarea>
+            
+                                        </div>
+
+                                        <div>
+                                            <button class="btn btn-primary" type="submit" 
+                                                style="margin-top: 10px;">Actualizar</button>
+
+                                        </div>
+                                        {{ form.as_p }}
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
 
                     <div class="modal fade" id="EditarLegajo" tabindex="-1" role="dialog" aria-labelledby="EditarLegajo"
                         aria-hidden="true">

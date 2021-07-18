@@ -16,6 +16,23 @@ class Empresa(models.Model):
 
 class Clientes(models.Model):
 
+    class vivienda(models.TextChoices):
+        PRESTADO = "PRESTADO"
+        ALQUILADO = "ALQUILADO"
+        TOMADO = "TOMADO"
+        PROPIO_S_TITULO_S_BOLETO = "PROPIO SIN TITULO Y SIN BOLETO"
+        PROPIO_BOLETO = "PROPIO CON BOLETO DE COMPRA-VENTA"
+        PROPIO_S_TITULO_S_BOLETO_CONS = "PROPIO SIN TITULO Y SIN BOLETO, CON CONSTANCIA POLICIAL"
+        OTRO = "OTRO"
+
+    class siono(models.TextChoices):
+        SI = "SI"
+        NO = "NO"
+
+    class situacionbath(models.TextChoices):
+        ADENTRO = "ADENTRO"
+        AFUERA = "AFUERA"
+
     class Estado(models.TextChoices):
         rechazado = "Rechazado"
         activo = "Activo"
@@ -41,6 +58,25 @@ class Clientes(models.Model):
     servicio = models.FileField(verbose_name="Servicio", blank=True, null=True)
     informe_crediticio = models.FileField(verbose_name="Informe crediticio", blank=True, null=True)
     imagen = models.ImageField(verbose_name="Imagen", blank=True, null=True)
+
+    # Parte social
+    habitantes_hogar = models.IntegerField(verbose_name="Habitantes del hogar", blank=True, null=True)
+    trabajadores_hogar = models.IntegerField(verbose_name="Trabajadores del hogar", blank=True, null=True)
+    ingreso_hogar = models.IntegerField(verbose_name="Ingreso hogar", blank=True, null=True)
+    cuartos = models.IntegerField(verbose_name="Ambientes", blank=True, null=True)
+    bathrooms = models.IntegerField(verbose_name="Dormitorios", blank=True, null=True)
+
+    partiente_discapacidad = models.CharField(choices=siono.choices, max_length=20, verbose_name="Pariente con discapacidad", blank=True, null=True)
+    gas = models.CharField(choices=siono.choices, max_length=20, verbose_name="Gas", blank=True, null=True)
+    cloaca = models.CharField(choices=siono.choices, max_length=20, verbose_name="Cloaca", blank=True, null=True)
+    agua_corriente = models.CharField(choices=siono.choices, max_length=20, verbose_name="Agua corriente", blank=True, null=True)
+    deuda = models.CharField(choices=siono.choices, max_length=20, verbose_name="Deuda entidad bancaria", blank=True, null=True)
+
+    titulo_vivienda = models.CharField(choices=vivienda.choices, max_length=100, verbose_name="Vivienda", blank=True, null=True)
+    bath_sit = models.CharField(choices=situacionbath.choices, max_length=100, verbose_name="Baño situación", blank=True, null=True)
+
+
+
     class Meta:
         verbose_name="Cliente"
         verbose_name_plural="Clientes"
