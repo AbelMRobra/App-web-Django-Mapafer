@@ -46,115 +46,88 @@
 
                                             <div class="campo">
 
-                                                <div>
-                                                    <label for="nombre">
-                                                        <h6>Nombre</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="nombre" required type="text"
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Nombre</label>
+                                                    <div class="col-sm-12">
+                                                        <input name="nombre" type="text"
                                                                 class="form-control form-control" aria-label="Amount"
                                                                 >
-
-                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div>
-                                                    <label for="apellido">
-                                                        <h6>Apellido</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="apellido" required type="text"
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Apellido</label>
+                                                    <div class="col-sm-12">
+                                                        <input name="apellido" type="text"
                                                                 class="form-control form-control" aria-label="Amount"
                                                                 >
-
-                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div>
-                                                    <label for="cuil">
-                                                        <h6>CUIL</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="cuil" required type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                placeholder="Sin guiones, ejemplo 20377258305">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label for="telefono">
-                                                        <h6>Telefono de contacto</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="telefono" type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                placeholder="Sin +54, ejemplo 3813540261">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label for="direccion">
-                                                        <h6>Dirección</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="direccion" type="text"
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">CUIL</label>
+                                                    <div class="col-sm-12">
+                                                        <input name="cuil" type="text" placeholder="Sin guiones, ejemplo 20377258305"
                                                                 class="form-control form-control" aria-label="Amount"
                                                                 >
-
-                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div>
-                                                    <label for="score">
-                                                        <h6>Score</h6>
-                                                    </label>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Telefono de contacto</label>
+                                                    <div class="col-sm-12">
+                                                        <input name="telefono" type="text" placeholder="Sin +54, ejemplo 3813540261"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
                                                 </div>
 
-                                                <div class="row d-flex justify-content-center mt-3">
-                                                    <div class="col col-md-8 col-lg-8">
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Dirección</label>
+                                                    <div class="col-sm-12">
+                                                        <input name="direccion" type="text"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Email</label>
+                                                    <div class="col-sm-12">
+                                                        <input name="email" type="email"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Score</label>
+                                                    <div class="col-sm-12">
                                                         <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-
+                                                        <div class="input-group-prepend">
+                                                            
                                                                 <span class="input-group-text">Puntos</span>
+
+                                                                </div>
+                                                                <input name="score" required type="number" 
+                                                                        class="form-control form-control" aria-label="Amount">
+
 
                                                             </div>
 
-                                                            <input name="score" required type="number" 
-                                                                class="form-control form-control" aria-label="Amount">
+                                                            
+                                                    </div>
+                                                </div>
 
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Empresa</label>
+                                                    <div class="col-sm-12">
+                                                        <select name="empresa" class="form-control form-control-line">
+                                                            {% for i in empresas %}
+                                                            <option {% if data.empresa == i%} selected {% endif %}>{{i.nombre}}</option>
+                                                            {% endfor %}
+                
+                                                        </select>
                                                     </div>
                                                 </div>
 

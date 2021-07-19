@@ -456,6 +456,14 @@ def consulta_usuario_externo(request, code_key):
 
 def clientes(request):
 
+    if request.method == 'POST':
+
+        try:
+            cliente = Clientes.objects.get(id = request.POST['borrar'])
+            cliente.delete()
+        except:
+            pass
+
     data = Clientes.objects.all().order_by("nombre")
 
     return render(request, "clientes/basededatosclientes.html", {'data':data})
@@ -529,6 +537,8 @@ def newclientes(request):
 
     mensaje = 0
 
+    empresas = Empresa.objects.all()
+
     if request.method == 'POST':
 
         if len(Clientes.objects.filter(cuil = request.POST['cuil'])) > 0:
@@ -541,13 +551,15 @@ def newclientes(request):
                 cuil = request.POST['cuil'],
                 telefono = request.POST['telefono'],
                 score = request.POST['score'],
+                email = request.POST['email'],
+                empresa = Empresa.objects.get(nombre = request.POST['empresa']),
             )
 
             b.save()
 
             return redirect('BBDD clientes')
 
-    return render(request, "clientes/cliente_new.html", {"mensaje":mensaje})
+    return render(request, "clientes/cliente_new.html", {"mensaje":mensaje, "empresas":empresas})
 
 def newcredito(request):
 
