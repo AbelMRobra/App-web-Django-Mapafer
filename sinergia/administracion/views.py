@@ -566,6 +566,28 @@ def newcredito(request):
     clientes = Clientes.objects.all()
     proveedores = Proveedor.objects.all()
 
+    if request.method == 'POST':
+        print(request.POST['regimen'])
+        new_credito = Prestamos(
+            cliente = Clientes.objects.get(id = request.POST['cliente']),
+            proveedor = Proveedor.objects.get(id = request.POST['proveedor']),
+            fecha = request.POST['fecha'],
+            primera_cuota = request.POST['priimeracuota'],
+            valor_original = request.POST['precio1'],
+            presupuesto_cliente = request.POST['precio3'],
+            monto = request.POST['precio2'],
+            cuotas = request.POST['cuotas'],
+            regimen = request.POST['regimen'],
+        )
+        new_credito.save()
+        try:
+            new_credito.adjunto = request.FILES['adjunto']
+            new_credito.save()
+        except:
+            pass
+
+        return redirect('Principal Prestamos')
+
     return render(request, 'prestamos/nuevo_credito.html', {'clientes':clientes, 'proveedores':proveedores})
 
 def newproveedor(request):
