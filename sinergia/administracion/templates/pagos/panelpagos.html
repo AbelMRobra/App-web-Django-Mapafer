@@ -1,5 +1,4 @@
 {% extends "home.html" %}
-
 {% load static %}
 {% load humanize %}
 {% block content %}
@@ -8,13 +7,13 @@
 
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Cartera activa</h3>
+            <h3 class="text-themecolor">Panel de pagos</h3>
         </div>
 
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Cartera</li>
+                <li class="breadcrumb-item">Pagos</li>
             </ol>
         </div>
     </div>
@@ -26,8 +25,14 @@
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
-                    <h4 class="card-title">Avance de los creditos</h4>
-                    <h6 class="card-subtitle">Información sobre el estado de los creditos otorgados</h6>
+                    <h4 class="card-title">Pagos de creditos registrados</h4>
+                    <h6 class="card-subtitle">Información historica</h6>
+
+                    <div>
+                        <a href= "{% url 'Agregar pagos' 0 %}" class="btn btn-primary" ><i
+                            class="fa fa-plus"><span class="ml-2"
+                                style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Añadir</span></i></a>
+                    </div>
 
                     <div class="table-responsive">
 
@@ -35,16 +40,11 @@
 
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Cliente</th>
+                                    <th>Fecha</th>
+                                    <th>Prestamo</th>
+                                    <th>Empresa</th>
                                     <th>Regimen</th>
                                     <th>Monto</th>
-                                    <th>N°c</th>
-                                    <th>Mora</th>
-                                    <th>Pagado</th>
-                                    <th>Saldo</th>
-                                    <th>Fecha</th>
-                                    <th>Prox. Ven*</th>
                                     <th></th>
 
 
@@ -53,26 +53,19 @@
 
                             <tbody style="font-size: 12px;">
 
-                                {% for i in data %}
+                                {% for i in pagos %}
                                 <tr>
-                                    <td>{{i.0.id}}</td>
-                                    <td>{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</td>
-                                    <td>{{i.0.regimen|lower|capfirst}}</td>
-                                    <td>$ {{i.0.monto|floatformat:0|intcomma}}</td>
-                                    <td>{{i.0.cuotas}}</td>
-                                    <td class="text-danger"><b>$ {{i.4|floatformat:0|intcomma}}</b></td>
-                                    <td>$ {{i.1|floatformat:0|intcomma}}</td>
-                                    <td>$ {{i.2|floatformat:0|intcomma}}</td>
-                                    <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
-                                    <td>{{i.3|date:"d/m/Y"}}</td>
+                                    <td>{{i.fecha|date:"Y/m/d"}}</td>
+                                    <td>{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}}</td>
+                                    <td>{{i.prestamo.cliente.empresa}}</td>
+                                    <td>{{i.prestamo.regimen|lower|capfirst}}</td>
+                                    <td>${{i.monto|floatformat:0|intcomma}}</td>
                                     <td><div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="{% url 'Administrar credito' i.0.id %}"><i
-                                                    class="fa fa-university mr-2"></i> Información</a>
-                                            <a class="dropdown-item" href="{% url 'Agregar pagos' i.0.id %}"><i
-                                                class="fa fa-money mr-2"></i> Agregar pago</a>
+                                            <a class="dropdown-item" href="#"><i
+                                                class="fa fa-pencil"></i> Editar</a>
                                             <a class="dropdown-item text-danger" href="#" data-toggle="modal"
                                                 data-target="#ModalBorrar{{i.id}}"><i
                                                     class="fa fa-trash-o mr-2"></i> Borrar</a>
@@ -101,7 +94,7 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
-            "paging": false,
+
             "info": false,
             dom: 'Bfrtip',
             buttons: [

@@ -7,6 +7,7 @@ from .models import Clientes, Prestamos, Pagos, Proveedor, Empresa
 import numpy as np
 import datetime
 
+
 # Create your views here.
 
 def login(request):
@@ -567,7 +568,6 @@ def newcredito(request):
     proveedores = Proveedor.objects.all()
 
     if request.method == 'POST':
-        print(request.POST['regimen'])
         new_credito = Prestamos(
             cliente = Clientes.objects.get(id = request.POST['cliente']),
             proveedor = Proveedor.objects.get(id = request.POST['proveedor']),

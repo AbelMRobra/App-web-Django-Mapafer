@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from . import views
+from . import views_pagos
 from django.contrib.auth.decorators import login_required
 
 
@@ -10,6 +11,10 @@ urlpatterns = [
     url(r'^logout$', views.logout, name = 'Logout'),
     url(r'^$', views.welcome, name = 'Welcome'),
     url(r'^home$', login_required(views.home), name = 'Home'),
+
+    # URL de clientes
+    url(r'^panelpagos$', login_required(views_pagos.pagos_panel), name = 'Panel de pagos'),
+    url(r'^agregarpago/(?P<id_prestamo>\d+)/$', login_required(views_pagos.pagos_agregar), name = 'Agregar pagos'),
 
     # URL de clientes
     url(r'^bbdd$', login_required(views.clientes), name = 'BBDD clientes'),
