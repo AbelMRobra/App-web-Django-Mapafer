@@ -3,9 +3,10 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as do_login
-from .models import Clientes, Prestamos, Pagos, Proveedor, Empresa
+from .models import Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
 import numpy as np
 import datetime
+from .functions import estado_cliente
 
 
 # Create your views here.
@@ -467,6 +468,12 @@ def clientes(request):
 
     data = Clientes.objects.all().order_by("nombre")
 
+    for d in data:
+
+        cliente_Estado = estado_cliente(d)
+        d.estado = cliente_Estado
+        d.save()
+
     return render(request, "clientes/basededatosclientes.html", {'data':data})
 
 def profileclient(request, id_cliente):
@@ -590,28 +597,47 @@ def newcredito(request):
 
     return render(request, 'prestamos/nuevo_credito.html', {'clientes':clientes, 'proveedores':proveedores})
 
-def newproveedor(request):
 
-    mensaje = 0
-
-    if request.method == 'POST':
-
-        b = Proveedor(
-            razon_social = request.POST['razon_social'],
-            fantasia = request.POST['fantasia'],
-        )
-
-        b.save()
-
-        return redirect('Home')
-
-    return render(request, "proveedores/new_proveedores.html", {"mensaje":mensaje})
 
 def administrar_credito(request, id_credito):
 
     credito = Prestamos.objects.get(id = id_credito)
 
-    return render(request, 'prestamos/administrar_credito.html', {'credito':credito})
+    if request.method == 'POST':
+        id_proveedor = request.POST['proveedor'].split("-")[0]
+        proveedor = Proveedor.objects.get(id = int(id_proveedor))
+        credito.proveedor = proveedor
+        credito.valor_original = request.POST['valor_original']
+        credito.monto = request.POST['monto']
+        credito.cuotas = request.POST['cuotas']
+        credito.presupuesto_cliente = request.POST['presupuesto_cliente']
+        credito.fecha = request.POST['fecha']
+        credito.save()
+
+        if request.POST['primera_cuota'] != str(credito.primera_cuota):
+            cuotas_prestamo = CuotasPrestamo.objects.filter(prestamo = credito)
+            for c in cuotas_prestamo:
+                c.delete()
+            credito.primera_cuota = request.POST['primera_cuota']
+            credito.save()
+
+
+    cuotas = CuotasPrestamo.objects.filter(prestamo = credito)
+
+    pagos = Pagos.objects.filter(prestamo = credito)
+
+    total_pagado = sum(Pagos.objects.filter(prestamo = credito).values_list("monto", flat=True))
+
+    proveedores = Proveedor.objects.all()
+
+    context = {}
+    context['credito'] = credito
+    context['cuotas'] = cuotas
+    context['pagos'] = pagos
+    context['total_pagado'] = total_pagado
+    context['proveedores'] = proveedores
+
+    return render(request, 'prestamos/administrar_credito.html', context)
 
 def informacion_prestamos(request):
 
@@ -632,6 +658,10 @@ def informacion_prestamos(request):
     return render(request, "prestamos/informacion.html", {'data':data})
 
 def cartera_activa(request):
+
+    if request.method == 'POST':
+        consulta_borrar = Prestamos.objects.get(id = int(request.POST['borrar']))
+        consulta_borrar.delete()
 
     data = []
 
@@ -655,14 +685,7 @@ def cartera_activa(request):
                 else:
                     fecha_aux = fecha_aux + datetime.timedelta(days=15)
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-            if ((mora/d.monto*cuotas_pasadas) > 0.5) and (cuotas_pasadas/d.cuotas > 0.5):
-                cliente = Clientes.objects.get(id = d.cliente.id)
-                cliente.estado = "Moroso"
-                cliente.save()
-            else:
-                cliente = Clientes.objects.get(id = d.cliente.id)
-                cliente.estado = "Activo"
-                cliente.save()
+
             prox_vencimiento = fecha_aux 
             data.append((d, pagos, saldo, prox_vencimiento, mora))
         if d.regimen == "MENSUAL":
@@ -678,14 +701,7 @@ def cartera_activa(request):
                     else:
                         fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-            if ((mora/d.monto*cuotas_pasadas) > 0.5) and (cuotas_pasadas/d.cuotas > 0.5):
-                cliente = Clientes.objects.get(id = d.cliente.id)
-                cliente.estado = "Moroso"
-                cliente.save()
-            else:
-                cliente = Clientes.objects.get(id = d.cliente.id)
-                cliente.estado = "Activo"
-                cliente.save()
+
             prox_vencimiento = fecha_aux 
             data.append((d, pagos, saldo, prox_vencimiento, mora))
     return render(request, "prestamos/panelprincipal.html", {'data':data})

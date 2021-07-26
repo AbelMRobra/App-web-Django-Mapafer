@@ -6,22 +6,16 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="{% static 'css/styleabel.css' %}">
-  <link rel="stylesheet" href="extensions/sticky-header/bootstrap-table-sticky-header.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/styleabel.css' %}" />
+  <link rel="stylesheet" href="extensions/sticky-header/bootstrap-table-sticky-header.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="shortcut icon" href="{% static 'img/logosinergia.ico' %}" />
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-  <!-- Hojas de estilos AdminPro -->
-  <!--  -->
-  <!--  -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-  <!--  -->
-  <!--  -->
-
 
   <link rel="stylesheet" href="{% static 'css/styleabel.css' %}">
   <link rel="stylesheet" href="{% static 'css/registro_contable.css' %}">
@@ -147,8 +141,8 @@
                 class="fa fa-shopping-basket"></i><span class="hide-menu"> Proveedores</span></a>
               <ul aria-expanded="false" class="collapse">
   
-                  <li><a href="{% url 'Nuevo proveedor' %}">Nuevo proveedor</a></li>
-                  <li><a href="#">Información</a></li>
+                  <li><a href="{% url 'Nuevo proveedor' %}">Agregar proveedor</a></li>
+                  <li><a href="{% url 'Panel proveedor' %}">Base de datos</a></li>
   
   
               </ul>
@@ -524,8 +518,7 @@
 <script src="{% static 'adminpro/main/js/custom.min.js' %}"></script>
 <script src="{% static 'adminpro/assets/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
 <script src="{% static 'adminpro/assets/plugins/chartist-js/dist/chartist.min.js' %}"></script>
-<script
-    src="{% static 'adminpro/assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js' %}"></script>
+<script src="{% static 'adminpro/assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js' %}"></script>
 <script src="{% static 'adminpro/assets/plugins/d3/d3.min.js' %}"></script>
 <script src="{% static 'adminpro/assets/plugins/c3-master/c3.min.js' %}"></script>
 <script src="{% static 'adminpro/main/js/dashboard1.js' %}"></script>

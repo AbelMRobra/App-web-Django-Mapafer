@@ -31,7 +31,7 @@
 
                     <div class="table-responsive">
 
-                        <table id="example" class="table" style="width:100%">
+                        <table id="example2" class="table" style="width:100%">
 
                             <thead>
                                 <tr>
@@ -45,7 +45,7 @@
                                     <th>Saldo</th>
                                     <th>Fecha</th>
                                     <th>Prox. Ven*</th>
-                                    <th></th>
+                                    <th style="max-width: 5px;"></th>
 
 
                                 </tr>
@@ -65,7 +65,8 @@
                                     <td>$ {{i.2|floatformat:0|intcomma}}</td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>{{i.3|date:"d/m/Y"}}</td>
-                                    <td><div class="btn-group ml-auto">
+                                    <td>
+                                        <div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
@@ -74,14 +75,59 @@
                                             <a class="dropdown-item" href="{% url 'Agregar pagos' i.0.id %}"><i
                                                 class="fa fa-money mr-2"></i> Agregar pago</a>
                                             <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                                                data-target="#ModalBorrar{{i.id}}"><i
+                                                data-target="#ModalBorrar{{i.0.id}}"><i
                                                     class="fa fa-trash-o mr-2"></i> Borrar</a>
                                         </div>
-                                    </div></td>
+                                    </div>  
+                                </td>
 
 
 
                                 </tr>
+
+                                    <div class="modal fade" id="ModalBorrar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header"
+                                                    style="background: rgb(195, 39, 181);
+                                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
+                                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="POST" enctype="multipart/form-data">
+
+                                                        {% csrf_token %}
+                                                        <div style="text-align: left;">
+                                                            <h3>Advertencia</h3>
+
+                                                            <h6>Esta acción no se puede deshacer, toda la información asociada al cliente sera eliminada. Recomendamos analizar esta acción</h6>
+
+                        
+
+                                                            <div>
+                                                                <button class="btn btn-danger" type="submit" name="borrar" value="{{i.0.id}}"
+                                                                    style="margin-top: 10px;">Continuar</button>
+
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                        {{ form.as_p }}
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 {% endfor %}
                             </tbody>
 
@@ -100,7 +146,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#example').DataTable({
+        $('#example2').DataTable({
             "paging": false,
             "info": false,
             dom: 'Bfrtip',

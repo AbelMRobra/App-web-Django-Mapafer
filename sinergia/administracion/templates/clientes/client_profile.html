@@ -70,7 +70,7 @@
                                 <div class="sl-item">
                                     <div class="sl-left"> <img src="{% static 'img/bank.png' %}" alt="user" class="img-circle" /> </div>
                                     <div class="sl-right">
-                                        <div>Prestamo de ${{d.0.monto|floatformat:2|intcomma}}
+                                        <div><a href="{% url 'Administrar credito' d.0.id %}">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a> 
                                             <p><span class="sl-date"> Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></p>
  
                                         </div>

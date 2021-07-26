@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from .models import Pagos, Prestamos
 
 def pagos_panel(request):
+
+    if request.method == 'POST':
+        consulta_borrar = Pagos.objects.get(id = int(request.POST['borrar']))
+        consulta_borrar.delete()
+
     context = {}
     context['pagos'] = Pagos.objects.all()
     context['prestamos'] = Prestamos.objects.all().order_by("cliente__apellido")

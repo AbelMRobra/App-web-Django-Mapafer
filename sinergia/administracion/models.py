@@ -34,11 +34,16 @@ class Clientes(models.Model):
         AFUERA = "AFUERA"
 
     class Estado(models.TextChoices):
-        rechazado = "Rechazado"
-        activo = "Activo"
+
         potencial = "Potencial"
-        cliente = "Cliente"
-        moroso = "Moroso"
+        rechazado = "Rechazado"
+        no_activo = "No activo"
+        moroso_1 = "Situación 1"
+        moroso_2 = "Situación 2"
+        moroso_3 = "Situación 3"
+        moroso_4 = "Situación 4"
+        moroso_5 = "Situación 5"
+        moroso_6 = "Situación 6"
 
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
     nombre = models.CharField(max_length=200, verbose_name="Nombre")
@@ -118,6 +123,25 @@ class Prestamos(models.Model):
 
     def __str__(self):
         return self.cliente.nombre
+
+class CuotasPrestamo(models.Model):
+
+    class Pagado(models.TextChoices):
+        NO = "NO"
+        SI = "SI"
+        PARCIAL = "PARCIAL"
+
+    prestamo = models.ForeignKey(Prestamos, on_delete=models.CASCADE, verbose_name = "Prestamo asociado")
+    fecha = models.DateField(verbose_name="Fecha del pago")
+    monto = models.FloatField(verbose_name="Monto")
+    estado = models.CharField(choices=Pagado.choices, max_length=20, verbose_name="Estado", blank=True, null=True)
+
+    class Meta:
+        verbose_name="Cuota"
+        verbose_name_plural="Cuotas"
+
+    def __str__(self):
+        return self.fecha
 
 class Pagos(models.Model):
     prestamo = models.ForeignKey(Prestamos, on_delete=models.CASCADE, verbose_name = "Prestamo")

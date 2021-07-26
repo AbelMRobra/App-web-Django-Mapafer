@@ -3,6 +3,7 @@ from django.urls import path
 from django.conf.urls import url
 from . import views
 from . import views_pagos
+from . import views_proveedores
 from django.contrib.auth.decorators import login_required
 
 
@@ -36,7 +37,8 @@ urlpatterns = [
     url(r'^infoaclaraciones$', login_required(views.aclaraciones), name = 'Aclaraciones'),
 
     # URL de proveedores
-    url(r'^newproveedores$', login_required(views.newproveedor), name = 'Nuevo proveedor'),
+    url(r'^newproveedores$', login_required(views_proveedores.newproveedor), name = 'Nuevo proveedor'),
+    url(r'^panelproveedores$', login_required(views_proveedores.panel_proveedores), name = 'Panel proveedor'),
     
 
 ]

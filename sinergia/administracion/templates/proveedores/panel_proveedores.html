@@ -7,13 +7,13 @@
 
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Panel de pagos</h3>
+            <h3 class="text-themecolor">Proveedores</h3>
         </div>
 
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Pagos</li>
+                <li class="breadcrumb-item">Proveedores</li>
             </ol>
         </div>
     </div>
@@ -25,14 +25,8 @@
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
-                    <h4 class="card-title">Pagos de creditos registrados</h4>
-                    <h6 class="card-subtitle">Información historica</h6>
-
-                    <div>
-                        <a href= "{% url 'Agregar pagos' 0 %}" class="btn btn-primary" ><i
-                            class="fa fa-plus"><span class="ml-2"
-                                style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Añadir</span></i></a>
-                    </div>
+                    <h4 class="card-title">Proveedores</h4>
+                    <h6 class="card-subtitle">Listado de proveedores activos</h6>
 
                     <div class="table-responsive">
 
@@ -40,11 +34,9 @@
 
                             <thead>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Prestamo</th>
-                                    <th>Empresa</th>
-                                    <th>Regimen</th>
-                                    <th>Monto</th>
+                                    <th>ID</th>
+                                    <th>Razón social</th>
+                                    <th>Nombre de fantasia</th>
                                     <th style="max-width: 5px;"></th>
 
 
@@ -53,13 +45,11 @@
 
                             <tbody style="font-size: 12px;">
 
-                                {% for i in pagos %}
+                                {% for i in proveedores %}
                                 <tr>
-                                    <td>{{i.fecha|date:"Y/m/d"}}</td>
-                                    <td>{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}}</td>
-                                    <td>{{i.prestamo.cliente.empresa}}</td>
-                                    <td>{{i.prestamo.regimen|lower|capfirst}}</td>
-                                    <td>${{i.monto|floatformat:0|intcomma}}</td>
+                                    <td>{{i.id}}</td>
+                                    <td>{{i.razon_social}}</td>
+                                    <td>{{i.fantasia}}</td>
                                     <td><div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>

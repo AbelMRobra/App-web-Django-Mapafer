@@ -50,7 +50,7 @@
                                                     <label class="col-sm-12">Prestamo</label>
                                                     <div class="col-sm-12">
                                                         {% if id_prestamo %}
-                                                        <input name="prestamo" type="text" value="{{id_prestamo.id}}-{{id_prestamo.cliente.nombre}}, {{id_prestamo.cliente.apellido}} - ${{id_prestamo.monto}}"
+                                                        <input name="prestamo" type="text" value="{{id_prestamo.id}}-{{id_prestamo.cliente.nombre}}, {{id_prestamo.cliente.apellido}} - ${{id_prestamo.monto|floatformat:2|intcomma}}"
                                                         readonly
                                                         class="form-control form-control" aria-label="Amount"
                                                                 >
@@ -65,7 +65,7 @@
 
                                                 <datalist id="prestamos">
                                                     {% for prestamo in prestamos %}
-                                                    <option value="{{prestamo.id}}-{{prestamo.cliente.nombre}}, {{prestamo.cliente.apellido}} - ${{prestamo.monto}}"></option>
+                                                    <option value="{{prestamo.id}}-{{prestamo.cliente.nombre}}, {{prestamo.cliente.apellido}} - ${{prestamo.monto|floatformat:2|intcomma}}"></option>
                                                     {% endfor %}
                                                   </datalist>
 
