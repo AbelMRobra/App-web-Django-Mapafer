@@ -7,14 +7,14 @@
 
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Agregar un pago</h3>
+            <h3 class="text-themecolor">Editar un pago</h3>
         </div>
 
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{% url 'Panel de pagos' %}">Pagos</a></li>
-                <li class="breadcrumb-item">Agregar</li>
+                <li class="breadcrumb-item">Editar</li>
             </ol>
         </div>
     </div>
@@ -25,8 +25,8 @@
         <div class="card">
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
-                    <h4 class="card-title">Registrar un pago de un prestamo</h4>
-                    <h6 class="card-subtitle">Complete el formulario</h6>
+                    <h4 class="card-title">Editar el registro seleccionadoo</h4>
+                    <h6 class="card-subtitle">Modifique el formulario</h6>
                     
 
                     <div class="row d-flex justify-content-center">
@@ -49,17 +49,11 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-12">Prestamo</label>
                                                     <div class="col-sm-12">
-                                                        {% if id_prestamo %}
-                                                        <input name="prestamo" type="text" value="{{id_prestamo.id}}-{{id_prestamo.cliente.nombre}}, {{id_prestamo.cliente.apellido}} - ${{id_prestamo.monto|floatformat:2|intcomma}}"
-                                                        readonly
-                                                        class="form-control form-control" aria-label="Amount"
-                                                                >
 
-                                                        {% else %}
-                                                        <input name="prestamo" type="search" list="prestamos"
+                                                        <input name="prestamo" type="search" list="prestamos" value="{{pago.prestamo.id}}-{{pago.prestamo.cliente.nombre}}, {{pago.prestamo.cliente.apellido}} - ${{pago.prestamo.monto|floatformat:2|intcomma}}"
                                                                 class="form-control form-control" aria-label="Amount"
                                                                 >
-                                                        {% endif %}
+
                                                     </div>
                                                 </div>
 
@@ -78,7 +72,7 @@
                                                                 <span class="input-group-text">$</span>
 
                                                                 </div>
-                                                                <input name="monto" required type="number" 
+                                                                <input name="monto" required type="number" value="{{pago.monto}}"
                                                                         class="form-control form-control" aria-label="Amount">
 
 
@@ -91,7 +85,7 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-12">Fecha</label>
                                                     <div class="col-sm-12">
-                                                        <input name="fecha" type="date" 
+                                                        <input name="fecha" value="{{pago.fecha|date:'Y-m-d'}}" type="date" 
                                                                 class="form-control form-control" aria-label="Amount"
                                                                 >
                                                     </div>
@@ -103,7 +97,7 @@
                                             <div class="row d-flex justify-content-center mt-4">
                                                 <div class="col-lg-6 text-center">
 
-                                                    <button type="submit" class="btn btn-primary">Cargar pago</button>
+                                                    <button type="submit" class="btn btn-primary">Editar pago</button>
 
                                                 </div>
                                             </div>

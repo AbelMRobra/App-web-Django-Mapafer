@@ -13,9 +13,10 @@ urlpatterns = [
     url(r'^$', views.welcome, name = 'Welcome'),
     url(r'^home$', login_required(views.home), name = 'Home'),
 
-    # URL de clientes
+    # URL de pagos
     url(r'^panelpagos$', login_required(views_pagos.pagos_panel), name = 'Panel de pagos'),
     url(r'^agregarpago/(?P<id_prestamo>\d+)/$', login_required(views_pagos.pagos_agregar), name = 'Agregar pagos'),
+    url(r'^editarpago/(?P<id_pago>\d+)/$', login_required(views_pagos.pagos_editar), name = 'Editar pagos'),
 
     # URL de clientes
     url(r'^bbdd$', login_required(views.clientes), name = 'BBDD clientes'),
@@ -38,6 +39,8 @@ urlpatterns = [
 
     # URL de proveedores
     url(r'^newproveedores$', login_required(views_proveedores.newproveedor), name = 'Nuevo proveedor'),
+    url(r'^editarproveedor/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.editarproveedor), name = 'Editar proveedor'),
+    url(r'^pagosproveedor/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.pagosproveedor), name = 'Pago proveedor'),
     url(r'^panelproveedores$', login_required(views_proveedores.panel_proveedores), name = 'Panel proveedor'),
     
 

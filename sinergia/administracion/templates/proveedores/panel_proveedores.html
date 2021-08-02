@@ -35,27 +35,35 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Razón social</th>
-                                    <th>Nombre de fantasia</th>
+                                    <th>Empresa</th>
+                                    <th style="text-align: center;">Prestamos</th>
+                                    <th>Monto prestado</th>
+                                    <th>Pagado</th>
+                                    <th>Saldo</th>
                                     <th style="max-width: 5px;"></th>
 
 
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 12px;">
+                            <tbody style="font-size: 14px;">
 
                                 {% for i in proveedores %}
                                 <tr>
-                                    <td>{{i.id}}</td>
-                                    <td>{{i.razon_social}}</td>
-                                    <td>{{i.fantasia}}</td>
+                                    <td>{{i.0.id}}</td>
+                                    <td>{{i.0.fantasia}}</td>
+                                    <td style="text-align: center;">{{i.1}}</td>
+                                    <td>${{i.2|floatformat:2|intcomma}}</td>
+                                    <td>${{i.3|floatformat:2|intcomma}}</td>
+                                    <td>${{i.4|floatformat:2|intcomma}}</td>
                                     <td><div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <a class="dropdown-item" href="#"><i
-                                                class="fa fa-pencil"></i> Editar</a>
+                                                class="fa fa-money mr-2"></i> Agregar pago</a>
+                                            <a class="dropdown-item" href="{% url 'Editar proveedor' i.0.id %}"><i
+                                                class="fa fa-pencil mr-2"></i> Editar</a>
                                             <a class="dropdown-item text-danger" href="#" data-toggle="modal"
                                                 data-target="#ModalBorrar{{i.id}}"><i
                                                     class="fa fa-trash-o mr-2"></i> Borrar</a>

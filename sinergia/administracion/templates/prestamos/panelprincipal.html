@@ -33,11 +33,12 @@
 
                         <table id="example2" class="table" style="width:100%">
 
-                            <thead>
+                            <thead style="font-size: 13px;">
                                 <tr>
                                     <th>ID</th>
                                     <th>Cliente</th>
-                                    <th>Regimen</th>
+                                    <th>Empresa</th>
+                                    <th>R</th>
                                     <th>Monto</th>
                                     <th>N°c</th>
                                     <th>Mora</th>
@@ -57,12 +58,13 @@
                                 <tr>
                                     <td>{{i.0.id}}</td>
                                     <td>{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</td>
-                                    <td>{{i.0.regimen|lower|capfirst}}</td>
-                                    <td>$ {{i.0.monto|floatformat:0|intcomma}}</td>
+                                    <td>{{i.0.cliente.empresa}}</td>
+                                    <td>{{i.0.regimen.0|lower|capfirst}}</td>
+                                    <td>$ {{i.0.monto|floatformat:2|intcomma}}</td>
                                     <td>{{i.0.cuotas}}</td>
-                                    <td class="text-danger"><b>$ {{i.4|floatformat:0|intcomma}}</b></td>
-                                    <td>$ {{i.1|floatformat:0|intcomma}}</td>
-                                    <td>$ {{i.2|floatformat:0|intcomma}}</td>
+                                    <td class="text-danger"><b>$ {{i.4|floatformat:2|intcomma}}</b></td>
+                                    <td>$ {{i.1|floatformat:2|intcomma}}</td>
+                                    <td>$ {{i.2|floatformat:2|intcomma}}</td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>{{i.3|date:"d/m/Y"}}</td>
                                     <td>

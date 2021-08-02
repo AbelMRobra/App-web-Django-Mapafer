@@ -100,6 +100,19 @@ class Proveedor(models.Model):
     def __str__(self):
         return self.razon_social
 
+class PagosProveedores(models.Model):
+
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, verbose_name = "Cliente")
+    fecha = models.DateField(verbose_name="Fecha del pago")
+    monto = models.FloatField(verbose_name="Monto")
+
+    class Meta:
+        verbose_name="Pago a proveedor"
+        verbose_name_plural="Pagos a proveedores"
+
+    def __str__(self):
+        return self.proveedor.fantasia
+
 class Prestamos(models.Model):
 
     class Regimen(models.TextChoices):

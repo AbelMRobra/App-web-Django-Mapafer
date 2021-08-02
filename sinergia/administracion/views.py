@@ -621,6 +621,8 @@ def administrar_credito(request, id_credito):
             credito.primera_cuota = request.POST['primera_cuota']
             credito.save()
 
+        return redirect('Administrar credito', id_credito = credito.id)
+
 
     cuotas = CuotasPrestamo.objects.filter(prestamo = credito)
 

@@ -59,12 +59,12 @@
                                     <td>{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}}</td>
                                     <td>{{i.prestamo.cliente.empresa}}</td>
                                     <td>{{i.prestamo.regimen|lower|capfirst}}</td>
-                                    <td>${{i.monto|floatformat:0|intcomma}}</td>
+                                    <td>${{i.monto|floatformat:2|intcomma}}</td>
                                     <td><div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#"><i
+                                            <a class="dropdown-item" href="{% url 'Editar pagos' i.id %}"><i
                                                 class="fa fa-pencil"></i> Editar</a>
                                             <a class="dropdown-item text-danger" href="#" data-toggle="modal"
                                                 data-target="#ModalBorrar{{i.id}}"><i
