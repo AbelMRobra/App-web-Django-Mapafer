@@ -11,7 +11,7 @@ def panel_proveedores(request):
     for proveedor in proveedores:
         prestamos_asociados = len(Prestamos.objects.filter(proveedor = proveedor))
         monto_prestado = sum(np.array(Prestamos.objects.filter(proveedor = proveedor).values_list("valor_original", flat=True)))
-        pagado = 0
+        pagado = sum(np.array(PagosProveedores.objects.filter(proveedor= proveedor).values_list("monto", flat=True)))
         saldo = monto_prestado - pagado
         data_proveedores.append((proveedor, prestamos_asociados, monto_prestado, pagado, saldo))
 
@@ -58,6 +58,19 @@ def editarproveedor(request, id_proveedor):
 
 def pagosproveedor(request, id_proveedor):
 
+    proveedor = Proveedor.objects.get(id = id_proveedor)
+
+    if request.method == 'POST':
+        new_pago = PagosProveedores(
+            proveedor = proveedor,
+            fecha = request.POST['fecha'],
+            monto = request.POST['monto']
+
+        )
+        new_pago.save()
+
     context = {}
+    context['pagos'] = PagosProveedores.objects.filter(proveedor= proveedor)
+    context['proveedor'] = proveedor
 
     return render(request, "proveedores/pago_proveedor.html", context)

@@ -25,14 +25,21 @@
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
-                    <h4 class="card-title">Pagos de creditos registrados</h4>
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span>Pagos de creditos registrados</h4>
+                        
+                        <div class="btn-group ml-auto">
+                            <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{% url 'Agregar pagos' 0 %}" name="subir_item"><i
+                                    class="fa fa-plus-circle mr-2"></i>Agregar pagos</a>
+                                    
+                            </div>
+                        </div>
+                    </div>
                     <h6 class="card-subtitle">Información historica</h6>
 
-                    <div>
-                        <a href= "{% url 'Agregar pagos' 0 %}" class="btn btn-primary" ><i
-                            class="fa fa-plus"><span class="ml-2"
-                                style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Añadir</span></i></a>
-                    </div>
 
                     <div class="table-responsive">
 
