@@ -188,7 +188,7 @@
 
     {% for i in clientes %}
 
-    <option value="{{ i.id}}" id="{{ i.id}}">{{i.nombre}}, {{i.apellido}}</option>
+    <option value="{{i.id}}-{{i.nombre}}, {{i.apellido}}, CUIL: {{i.cuil}}" ></option>
 
     {% endfor %}
 
@@ -198,7 +198,7 @@
 
     {% for i in proveedores %}
 
-    <option value="{{ i.id}}" id="{{ i.id}}">{{i.fantasia}}</option>
+    <option value="{{i.id}}-{{i.fantasia}}"></option>
 
     {% endfor %}
 

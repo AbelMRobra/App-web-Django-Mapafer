@@ -575,9 +575,11 @@ def newcredito(request):
     proveedores = Proveedor.objects.all()
 
     if request.method == 'POST':
+        string_cliente = request.POST['cliente'].split("-")
+        string_proveedor = request.POST['proveedor'].split("-")
         new_credito = Prestamos(
-            cliente = Clientes.objects.get(id = request.POST['cliente']),
-            proveedor = Proveedor.objects.get(id = request.POST['proveedor']),
+            cliente = Clientes.objects.get(id = string_cliente[0]),
+            proveedor = Proveedor.objects.get(id = string_proveedor[0]),
             fecha = request.POST['fecha'],
             primera_cuota = request.POST['priimeracuota'],
             valor_original = request.POST['precio1'],
