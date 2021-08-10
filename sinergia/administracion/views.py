@@ -611,10 +611,8 @@ def calculadora(request):
     tasa_mensual = float((1 + tasa_anual/100))
     tasa_mensual = tasa_mensual**0.0833333333333333
     importe_cuota = npf.pmt(tasa_mensual, cantidad_cuotas, -monto_inicial,)
-    print(importe_cuota)
+ 
     monto_prestamo = importe_cuota*tasa_mensual
-    print(monto_prestamo)
-
 
 
     return render(request, "prestamos/calculadora.html")
