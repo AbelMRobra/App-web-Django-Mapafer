@@ -1,0 +1,224 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Empresas</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Empresas</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span>Empresas asociadas</h4>
+                        
+                        <div class="btn-group ml-auto">
+                            <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Agregarempresa"><i
+                                    class="fa fa-plus-circle mr-2"></i>Agregar empresa</a>
+                                    
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="Agregarempresa" tabindex="-1" role="dialog" aria-labelledby="Agregarempresa"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header"
+                                style="background-color: #2a3e52;">
+                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Agregar empresa</h5>
+                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data">
+
+                                        {% csrf_token %}
+
+                                        <p class="my-2">Nombre</p>
+                                        <div class="mb-3">
+                                            <input type="text" name="nombre" value="{{data.nombre}}" class="form-control form-control-line">
+            
+                                        </div>
+
+                                        <div>
+                                            <button class="btn btn-primary" type="submit" 
+                                                style="margin-top: 10px;">Crear</button>
+
+                                        </div>
+                                        {{ form.as_p }}
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    <h6 class="card-subtitle">Información historica</h6>
+
+                    <div class="table-responsive">
+
+                        <table id="example" class="table" style="width:100%">
+
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Empresa</th>
+                                    <th style="text-align: center;">Clientes</th>
+                                    <th style="text-align: center;">Cuotas a vencer</th>
+                                    <th style="max-width: 5px;"></th>
+
+
+                                </tr>
+                            </thead>
+
+                            <tbody style="font-size: 14px;">
+
+                                {% for i in informacion %}
+                                <tr>
+                                    <td>{{i.0.id}}</td>
+                                    <td>{{i.0.nombre}}</td>
+                                    <td style="text-align: center;">{{i.1}}</td>
+                                    {% if i.3 == 0 and i.2 == 0 %}
+                                    <td style="text-align: center;">No tiene vencimientos proximos </td>
+                                    {% else %}
+                                    <td style="text-align: center;"><a href="{% url 'Pagos por empresas' i.0.id %}">Se vence ${{i.3|floatformat:2|intcomma}} ({{i.2}} cuotas)</a></td>
+                                    {% endif %}
+                                    <td><div class="btn-group ml-auto">
+                                        <a href="JavaScript:void(0)" class="icon-options-vertical link"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="{% url 'Pagos por empresas' i.0.id %}"><i
+                                                class="fa fa-money mr-2"></i> Pagos</a>
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Editar{{i.0.id}}"><i
+                                                class="fa fa-pencil mr-2"></i> Editar</a>
+                                        </div>
+                                    </div></td>
+
+                                    <div class="modal fade" id="Editar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="Editar{{i.0.id}}"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header"
+                                style="background-color: #2a3e52;">
+                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar nombre</h5>
+                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data">
+
+                                        {% csrf_token %}
+
+                                        <p class="my-2">Nombre</p>
+                                        <div class="mb-3">
+                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
+            
+                                        </div>
+
+                                        <div>
+                                            <button class="btn btn-primary" type="submit" value="{{i.0.id}}" name="id"
+                                                style="margin-top: 10px;">Editar</button>
+
+                                        </div>
+                                        {{ form.as_p }}
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+
+                                </tr>
+
+                                <div class="modal fade" id="ModalBorrar{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header"
+                                                    style="background: rgb(195, 39, 181);
+                                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
+                                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="POST" enctype="multipart/form-data">
+
+                                                        {% csrf_token %}
+                                                        <div style="text-align: left;">
+                                                            <h3>Advertencia</h3>
+
+                                                            <h6>Esta acción no se puede deshacer, toda la información asociada al cliente sera eliminada. Recomendamos analizar esta acción</h6>
+
+                        
+
+                                                            <div>
+                                                                <button class="btn btn-danger" type="submit" name="borrar" value="{{i.id}}"
+                                                                    style="margin-top: 10px;">Continuar</button>
+
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                        {{ form.as_p }}
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+{% endblock %}

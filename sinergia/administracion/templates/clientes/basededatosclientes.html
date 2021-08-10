@@ -46,11 +46,11 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 14px;">
+                            <tbody style="font-size: 13px;">
 
                                 {% for i in data %}
                                 <tr>
-                                    <td>{% if i.imagen %}<img src="{{i.imagen.url}}" style="width: 30px;" alt="usuario">{% else %}<img src="{% static 'img/userlog2.png' %}" style="width: 30px;" alt="usuario">{% endif %} {{i.nombre}}, {{i.apellido}}</td>
+                                    <td>{% if i.imagen %}<img src="{{i.imagen.url}}" style="width: 30px; margin-right: 5px;" alt="usuario">{% else %}<img src="{% static 'img/userlog2.png' %}" style="width: 30px; margin-right: 5px" alt="usuario">{% endif %} <a href="{% url 'Perfil del cliente' i.id %}">{{i.nombre}}, {{i.apellido}}</a></td>
                                     <td {% if i.estado == 'Activo' %} class = "text-info" 
                                     {% elif i.estado == 'Potencial' %} class = "text-secondary"
                                     {% elif i.estado == 'Moroso' %} class = "text-danger" 

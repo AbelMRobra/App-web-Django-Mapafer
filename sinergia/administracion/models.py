@@ -154,7 +154,7 @@ class CuotasPrestamo(models.Model):
         verbose_name_plural="Cuotas"
 
     def __str__(self):
-        return self.fecha
+        return self.estado
 
 class Pagos(models.Model):
     prestamo = models.ForeignKey(Prestamos, on_delete=models.CASCADE, verbose_name = "Prestamo")

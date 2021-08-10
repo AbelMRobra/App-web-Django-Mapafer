@@ -4,6 +4,7 @@ from django.conf.urls import url
 from . import views
 from . import views_pagos
 from . import views_proveedores
+from . import views_empresa
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,6 +13,10 @@ urlpatterns = [
     url(r'^logout$', views.logout, name = 'Logout'),
     url(r'^$', views.welcome, name = 'Welcome'),
     url(r'^home$', login_required(views.home), name = 'Home'),
+
+    # URL de empresas
+    url(r'^panelempresas$', login_required(views_empresa.panelempresas), name = 'Panel de empresas'),
+    url(r'^panelempresas/(?P<id_empresa>\d+)/$', login_required(views_empresa.panel_pagos), name = 'Pagos por empresas'),
 
     # URL de pagos
     url(r'^panelpagos$', login_required(views_pagos.pagos_panel), name = 'Panel de pagos'),
@@ -30,6 +35,7 @@ urlpatterns = [
     # URL de Prestamos
     url(r'^principal$', login_required(views.cartera_activa), name = 'Principal Prestamos'),
     url(r'^newcredito$', login_required(views.newcredito), name = 'Nuevo credito'),
+    url(r'^calculadora$', login_required(views.calculadora), name = 'Calculadora'),
     url(r'^admincredito/(?P<id_credito>\d+)/$', login_required(views.administrar_credito), name = 'Administrar credito'),
     url(r'^infoprestamo$', login_required(views.informacion_prestamos), name = 'Información Prestamos'),
     url(r'^cashflow$', login_required(views.cashflow), name = 'Cash Flow'),

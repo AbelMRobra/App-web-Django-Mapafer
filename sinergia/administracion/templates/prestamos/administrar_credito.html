@@ -25,10 +25,8 @@
                 <div class="card-body">
                     <center class="m-t-30"> <img src="{% if credito.cliente.imagen %}{{credito.cliente.imagen.url}}{% else %}{% static 'img/anonimo2.png' %}{% endif %}" class="img-circle" width="150" />
                         <h4 class="card-title m-t-10">{{credito.cliente.nombre}},  {{credito.cliente.apellido}}</h4>
-                        <div class="row text-center justify-content-md-center">
-                            <div class="col-4"><a href="javascript:void(0)" class="link"><font class="font-medium">Score: {{credito.cliente.score}}</font></a></div>
-                            <div class="col-4"><a href="javascript:void(0)" class="link"></i> <font class="font-medium">Estado: {{credito.cliente.estado}}</font></a></div>
-                        </div>
+                        <h5 class="card-title m-t-10">Score: {{credito.cliente.score}}</h5>
+                        <h5 class="card-title m-t-10">{{credito.cliente.estado}}</h5>
                     </center>
                 </div>
                 <div>
@@ -47,7 +45,7 @@
             <div class="card">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs profile-tab" role="tablist">
-                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#ddatos" role="tab">Datos del credito</a> </li>
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#ddatos" role="tab">Resumen</a> </li>
                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cuotas" role="tab">Cuotas</a> </li>
                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#pagos" role="tab">Pagos</a> </li>
                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab">Editar</a> </li>
@@ -77,9 +75,9 @@
                             <div class="profiletimeline">
                                 {% for c in cuotas %}
                                 <div class="sl-item">
-                                    <div class="sl-left"> <img src="{% static 'img/cuota.png' %}" alt="user" class="img-circle" /> </div>
+                                    <div class="sl-left"> <i class="fa fa-info-circle text-info mt-1"></i> </div>
                                     <div class="sl-right">
-                                        <div>Estado de la cuota {{c.estado}}
+                                        <div style="font-size: 14px;">Estado de la cuota {{c.estado}}
                                             <p><span class="sl-date"> Vencimiento aprox el: {{c.fecha|date:"d/m/Y"}}</span></p>
  
                                         </div>
@@ -97,9 +95,9 @@
                         <div class="profiletimeline">
                             {% for p in pagos %}
                             <div class="sl-item">
-                                <div class="sl-left"> <img src="{% static 'img/bank.png' %}" alt="user" class="img-circle" /> </div>
+                                <div class="sl-left"> <i class="fa fa-lg fa-check-circle text-success mt-1"></i> </div>
                                 <div class="sl-right">
-                                    <div>Monto  ${{p.monto|floatformat:2|intcomma}}
+                                    <div style="font-size: 14px;">Monto  ${{p.monto|floatformat:2|intcomma}}
                                         <p><span class="sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</span></p>
 
                                     </div>

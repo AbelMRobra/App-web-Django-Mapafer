@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as do_login
 from .models import Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
 import numpy as np
+import numpy_financial as npf
 import datetime
 from .functions import estado_cliente
 
@@ -599,7 +600,24 @@ def newcredito(request):
 
     return render(request, 'prestamos/nuevo_credito.html', {'clientes':clientes, 'proveedores':proveedores})
 
+def calculadora(request):
 
+    monto_inicial = 100
+    cantidad_cuotas = 12
+    tasa_anual = 120
+    
+    # Empiezan los calculos
+
+    tasa_mensual = float((1 + tasa_anual/100))
+    tasa_mensual = tasa_mensual**0.0833333333333333
+    importe_cuota = npf.pmt(tasa_mensual, cantidad_cuotas, -monto_inicial,)
+    print(importe_cuota)
+    monto_prestamo = importe_cuota*tasa_mensual
+    print(monto_prestamo)
+
+
+
+    return render(request, "prestamos/calculadora.html")
 
 def administrar_credito(request, id_credito):
 

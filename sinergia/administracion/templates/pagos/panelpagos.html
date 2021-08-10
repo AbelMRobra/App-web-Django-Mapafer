@@ -57,13 +57,14 @@
 
                                 </tr>
                             </thead>
+                            
 
                             <tbody style="font-size: 12px;">
 
                                 {% for i in pagos %}
                                 <tr>
                                     <td>{{i.fecha|date:"Y/m/d"}}</td>
-                                    <td>{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}}</td>
+                                    <td><a href="{% url 'Administrar credito' i.prestamo.id %}">{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}}</a></td>
                                     <td>{{i.prestamo.cliente.empresa}}</td>
                                     <td>{{i.prestamo.regimen|lower|capfirst}}</td>
                                     <td>${{i.monto|floatformat:2|intcomma}}</td>
@@ -147,6 +148,7 @@
         $('#example').DataTable({
 
             "info": false,
+            "ordering":false,
             dom: 'Bfrtip',
             buttons: [
             {

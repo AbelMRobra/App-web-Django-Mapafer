@@ -8,7 +8,7 @@ def pagos_panel(request):
         consulta_borrar.delete()
 
     context = {}
-    context['pagos'] = Pagos.objects.all()
+    context['pagos'] = Pagos.objects.all().order_by("-fecha")
     context['prestamos'] = Prestamos.objects.all().order_by("cliente__apellido")
     return render(request, 'pagos/panelpagos.html', context)
 

@@ -1,0 +1,429 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Calculadora</h3>
+        </div>
+
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+                <li class="breadcrumb-item">Nuevo credito</li>
+                <li class="breadcrumb-item">Calculadora</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span>Calculos para nuevo credito</h4>
+
+                    </div>
+                    <h6 class="card-subtitle">Complete los datos para realizar el calculo, luego se generara un formulario para cargar el credito</h6>
+                    <div class="row d-flex justify-content-center mt-4">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row d-flex justify-content-center mt-4 ">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col">
+                                        <div class="row bg-light p-4 rounded">
+    
+                                            <div style="display: inline-block">
+                                                <h5>Agregar cliente</h5>
+                                            </div>
+    
+                                            <b>
+                                                <hr class="my-3" style="width: 100%;">
+                                            </b>
+                                            <div class="col-6">
+                                                <div>
+                                                    <label for="nombre">
+                                                        <h6>Nombre del cliente</h6>
+                                                    </label>
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="nombre" type="text" class="form-control form-control"
+                                                            placeholder="Nombre del cliente">
+    
+                                                    </div>
+                                                </div>
+    
+                                                <div>
+                                                    <label for="apellido">
+                                                        <h6>Apellido</h6>
+                                                    </label>
+    
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+    
+                                                        <input name="apellido" type="text" class="form-control form-control"
+                                                            placeholder="Apellido del cliente">
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+    
+                                                <div>
+                                                    <label for="telefono">
+                                                        <h6>Telefono</h6>
+                                                    </label>
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="telefono" type="text" class="form-control form-control"
+                                                            placeholder="Formato: 543814999999" maxlength="13">
+    
+                                                    </div>
+                                                </div>
+    
+                                                <div>
+                                                    <label for="email">
+                                                        <h6>Email</h6>
+                                                    </label>
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="email" type="email" class="form-control form-control"
+                                                            placeholder="ej: cliente@linkp.com">
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col">
+                                        <div class="row bg-light p-4 rounded">
+    
+    
+                                            <h5>Datos para simular</h5>
+    
+                                            <b>
+                                                <hr class="my-4" style="width: 100%;">
+                                            </b>
+                                            <div class="col-6">
+                                                <div style="display: inline-block;">
+    
+                                                    <label for="anticipo">
+                                                        <h6>Anticipo a entregar</h6>
+                                                    </label>
+    
+                                                </div>
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+    
+                                                                <span class="input-group-text">$</span>
+    
+                                                            </div>
+    
+                                                            <input name="anticipo" type="number"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                placeholder="0">
+    
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                                <div style="display: inline-block;">
+    
+                                                    <label for="cuotas_esp">
+                                                        <h6>Cuotas esperas {{tiempo_restante}} </h6>
+                                                    </label>
+    
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="cuotas_esp" type="number"
+                                                            class="form-control form-control" list="art"  placeholder="0">
+    
+                                                    </div>
+                                                </div>
+    
+                                                <div style="display: inline-block;">
+    
+                                                    <label for="aporte">
+                                                        <h6>Cuotas entrega</h6>
+                                                    </label>
+    
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+                                                        <input name="aporte" type="number" class="form-control form-control"
+                                                            list="art"  placeholder="0">
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-6">
+                                                <div style="display: inline-block;">
+    
+                                                    <label for="cuotas_p">
+                                                        <h6>Cuotas Posesión</h6>
+                                                    </label>
+    
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="cuotas_p" type="number"
+                                                            class="form-control form-control" list="art"  placeholder="0">
+    
+                                                    </div>
+                                                </div>
+                                                <div style="display: inline-block;">
+    
+                                                    <label for="descuento">
+                                                        <h6>Especiales</h6>
+                                                    </label>
+    
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="descuento" type="number"
+                                                            class="form-control form-control" placeholder="0">
+    
+                                                    </div>
+                                                </div>
+                                                <div style="display: inline-block;">
+    
+                                                    <label for="observacion">
+                                                        <h6>Observaciones</h6>
+                                                    </label>
+    
+                                                </div>
+    
+                                                <div class="row d-flex justify-content-center my-1">
+                                                    <div class="col col-md-12 col-lg-8">
+    
+                                                        <input name="observacion" type="text"
+                                                            class="form-control form-control" placeholder="Ej:Ajuste especial a cliente habitual">
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                        </div>
+                                        <div class="row d-flex justify-content-center my-1">
+                                            <div class="col col-md-12 col-lg-8 text-center">
+    
+                                                <button type="submit" class="btn btn-info">Simular</button>
+    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="row d-flex justify-content-center">
+                        <div class="col col-md-12 col-lg-6">
+                            <div class="row">
+                                <div class="col bg-light border rounded p-4 ">
+
+                                    {% if mensaje %}
+                                    <h6 class="text-danger">{{mensaje}}</h6>
+                                    {% endif %}
+
+                                    <form method="POST" enctype="multipart/form-data">
+
+                                        {% csrf_token %}
+
+                                        <div class="campoctacte">
+
+                                            <div class="campo">
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Cliente que recibe</label>
+                                                    <small>El cliente debe estar previamente cargado</small>
+                                                    <div class="col-sm-12">
+                                                        <input name="cliente" type="search" list="clientes"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Proveedor</label>
+        
+                                                    <div class="col-sm-12">
+                                                        <input name="proveedor" type="search" list="proveedores"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Fecha del credito</label>
+        
+                                                    <div class="col-sm-12">
+                                                        <input name="fecha" type="date"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Primera cuota</label>
+        
+                                                    <div class="col-sm-12">
+                                                        <input name="priimeracuota" type="date"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Cantidad de cuotas</label>
+        
+                                                    <div class="col-sm-12">
+                                                        <input name="cuotas" type="number"
+                                                                class="form-control form-control" aria-label="Amount"
+                                                                >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Regimen del credito</label>
+        
+                                                    <div class="col col-md-12 col-lg-8">
+                                                        
+                                                        <input type="radio" name="regimen" value="MENSUAL"  id="regimen" class="filled-in chk-col-blue" checked />
+                                                        <label for="regimen">MENSUAL</label>
+                                                        
+                                                        <input type="radio" name="regimen" value="QUINCENAL"  id="regimen2" class="filled-in chk-col-blue" />
+                                                        <label for="regimen2">QUINCENAL</label> 
+        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Monto base</label>
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            
+                                                                <span class="input-group-text">$</span>
+
+                                                                </div>
+                                                                <input name="precio1" required type="number" step="0.0001"
+                                                                        class="form-control form-control" aria-label="Amount">
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Monto con intereses</label>
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            
+                                                                <span class="input-group-text">$</span>
+
+                                                                </div>
+                                                                <input name="precio2" required type="number" step="0.0001"
+                                                                        class="form-control form-control" aria-label="Amount">
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Presupuesto del cliente</label>
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            
+                                                                <span class="input-group-text">$</span>
+
+                                                                </div>
+                                                                <input name="precio3" required type="number" step="0.0001"
+                                                                        class="form-control form-control" aria-label="Amount">
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-12">Adjunto</label>
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            
+                                           
+
+                                                                </div>
+                                                                <input name="adjunto" required type="file" step="0.0001"
+                                                                        class="form-control form-control" aria-label="Amount">
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row d-flex justify-content-center mt-4">
+                                                <div class="col-lg-6 text-center">
+
+                                                    <button type="submit" class="btn btn-primary">Cargar credito</button>
+
+                                                </div>
+                                            </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<datalist id="clientes">
+
+    {% for i in clientes %}
+
+    <option value="{{i.id}}-{{i.nombre}}, {{i.apellido}}, CUIL: {{i.cuil}}" ></option>
+
+    {% endfor %}
+
+</datalist>
+
+<datalist id="proveedores">
+
+    {% for i in proveedores %}
+
+    <option value="{{i.id}}-{{i.fantasia}}"></option>
+
+    {% endfor %}
+
+</datalist>
+
+
+
+
+{% endblock %}
