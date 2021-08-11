@@ -593,52 +593,73 @@ def newclientes(request):
 
     return render(request, "clientes/cliente_new.html", {"mensaje":mensaje, "empresas":empresas})
 
-def newcredito(request):
+def calculadora(request):
 
     clientes = Clientes.objects.all()
     proveedores = Proveedor.objects.all()
+    formulario = 0
+    context = {}
 
     if request.method == 'POST':
-        string_cliente = request.POST['cliente'].split("-")
-        string_proveedor = request.POST['proveedor'].split("-")
-        new_credito = Prestamos(
-            cliente = Clientes.objects.get(id = string_cliente[0]),
-            proveedor = Proveedor.objects.get(id = string_proveedor[0]),
-            fecha = request.POST['fecha'],
-            primera_cuota = request.POST['priimeracuota'],
-            valor_original = request.POST['precio1'],
-            presupuesto_cliente = request.POST['precio3'],
-            monto = request.POST['precio2'],
-            cuotas = request.POST['cuotas'],
-            regimen = request.POST['regimen'],
-        )
-        new_credito.save()
+
         try:
-            new_credito.adjunto = request.FILES['adjunto']
+            string_cliente = request.POST['cliente'].split("-")
+            string_proveedor = request.POST['proveedor'].split("-")
+            new_credito = Prestamos(
+                cliente = Clientes.objects.get(id = string_cliente[0]),
+                proveedor = Proveedor.objects.get(id = string_proveedor[0]),
+                fecha = request.POST['fecha'],
+                primera_cuota = request.POST['priimeracuota'],
+                valor_original = request.POST['precio1'],
+                presupuesto_cliente = request.POST['precio3'],
+                monto = request.POST['precio2'],
+                cuotas = request.POST['cuotas'],
+                regimen = request.POST['regimen'],
+            )
             new_credito.save()
+            try:
+                new_credito.adjunto = request.FILES['adjunto']
+                new_credito.save()
+            except:
+                pass
+
+            return redirect('Principal Prestamos')
+
         except:
-            pass
 
-        return redirect('Principal Prestamos')
+            monto_inicial = float(request.POST['monto'])
+            regimen = request.POST['regimen']
+            cantidad_cuotas = float(request.POST['cuotas'])
 
-    return render(request, 'prestamos/nuevo_credito.html', {'clientes':clientes, 'proveedores':proveedores})
+            if regimen == "QUINCENAL":
+                cantidad_cuotas = cantidad_cuotas/2
+            
+            tasa_anual = float(request.POST['tasa'])
+            
+            tasa_mensual = float((1 + tasa_anual/100))
+            tasa_mensual = tasa_mensual**0.0833333333333333-1
+            importe_cuota = npf.pmt(tasa_mensual, cantidad_cuotas, -monto_inicial,)
+            monto_prestamo = importe_cuota*cantidad_cuotas
 
-def calculadora(request):
+            if regimen == "QUINCENAL":
 
-    monto_inicial = 100
-    cantidad_cuotas = 12
-    tasa_anual = 120
+                importe_cuota = importe_cuota/2
+                cantidad_cuotas = cantidad_cuotas*2
+
+            formulario = 1
+            context["monto"] = monto_prestamo
+            context["monto_base"] = monto_inicial
+            context["cuota"] = cantidad_cuotas
+            context["regimen"] = regimen
+
+
     
-    # Empiezan los calculos
+    context["clientes"] = clientes
+    context["proveedores"] = proveedores
+    context["formulario"] = formulario
+        
+    return render(request, "prestamos/calculadora.html", context)
 
-    tasa_mensual = float((1 + tasa_anual/100))
-    tasa_mensual = tasa_mensual**0.0833333333333333
-    importe_cuota = npf.pmt(tasa_mensual, cantidad_cuotas, -monto_inicial,)
- 
-    monto_prestamo = importe_cuota*tasa_mensual
-
-
-    return render(request, "prestamos/calculadora.html")
 
 def administrar_credito(request, id_credito):
 

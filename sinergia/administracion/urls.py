@@ -34,7 +34,6 @@ urlpatterns = [
 
     # URL de Prestamos
     url(r'^principal$', login_required(views.cartera_activa), name = 'Principal Prestamos'),
-    url(r'^newcredito$', login_required(views.newcredito), name = 'Nuevo credito'),
     url(r'^calculadora$', login_required(views.calculadora), name = 'Calculadora'),
     url(r'^admincredito/(?P<id_credito>\d+)/$', login_required(views.administrar_credito), name = 'Administrar credito'),
     url(r'^infoprestamo$', login_required(views.informacion_prestamos), name = 'Información Prestamos'),
