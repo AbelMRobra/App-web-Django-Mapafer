@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from .models import Pagos, Prestamos
+from .functions import estado_cliente
 
 def pagos_panel(request):
 
     if request.method == 'POST':
         consulta_borrar = Pagos.objects.get(id = int(request.POST['borrar']))
+        cliente = consulta_borrar.prestamo.cliente
         consulta_borrar.delete()
+        estado_cliente(cliente)
 
     context = {}
     context['pagos'] = Pagos.objects.all().order_by("-fecha")
@@ -21,6 +24,9 @@ def pagos_agregar(request, id_prestamo):
             fecha = request.POST['fecha']
         )
         new_pago.save()
+        
+        cliente = new_pago.prestamo.cliente
+        estado_cliente(cliente)
         return redirect('Panel de pagos')
 
     context = {}

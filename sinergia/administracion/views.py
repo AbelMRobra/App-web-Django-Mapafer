@@ -487,18 +487,22 @@ def clientes(request):
         try:
             cliente = Clientes.objects.get(id = request.POST['borrar'])
             cliente.delete()
+        
         except:
-            pass
 
-    data = Clientes.objects.all().order_by("nombre")
+            data = Clientes.objects.all().order_by("nombre")
 
-    for d in data:
+            for d in data:
 
-        cliente_Estado = estado_cliente(d)
-        d.estado = cliente_Estado
-        d.save()
+                cliente_Estado = estado_cliente(d)
+                d.estado = cliente_Estado
+                d.save()
 
-    return render(request, "clientes/basededatosclientes.html", {'data':data})
+    context = {}
+    context["data"] = Clientes.objects.all().order_by("nombre")
+
+
+    return render(request, "clientes/basededatosclientes.html", context)
 
 def profileclient(request, id_cliente):
 
@@ -613,7 +617,7 @@ def calculadora(request):
                 valor_original = request.POST['precio1'],
                 presupuesto_cliente = request.POST['precio3'],
                 monto = request.POST['precio2'],
-                cuotas = request.POST['cuotas'],
+                cuotas = int(request.POST['cuotas']),
                 regimen = request.POST['regimen'],
             )
             new_credito.save()
@@ -623,7 +627,9 @@ def calculadora(request):
             except:
                 pass
 
-            return redirect('Principal Prestamos')
+            estado_cliente(new_credito.cliente)
+            formulario = 0
+            context["mensaje"] = 1
 
         except:
 
@@ -649,7 +655,7 @@ def calculadora(request):
             formulario = 1
             context["monto"] = monto_prestamo
             context["monto_base"] = monto_inicial
-            context["cuota"] = cantidad_cuotas
+            context["cuota"] = int(cantidad_cuotas)
             context["regimen"] = regimen
 
 

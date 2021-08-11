@@ -3,19 +3,16 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Panel de pagos</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Panel de pagos</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Pagos</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Pagos</li>
+        </ol>
     </div>
 </div>
 
@@ -89,8 +86,7 @@
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header"
-                                                    style="background: rgb(195, 39, 181);
-                                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                                style="background-color: #2a3e52;">
                                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
                                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -153,7 +149,12 @@
             buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'BBDD clientes'
+                className: "btn btn-primary",
+                title: 'Pagos registrados',
+
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button buttons-excel buttons-html5')
+                    }
             },
             ]   
         });

@@ -4,19 +4,16 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Agregar credito</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Calculadora</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Calculadora</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Nuevo credito</li>
+        </ol>
     </div>
 </div>
 
@@ -170,7 +167,7 @@
                                            
 
                                                                 </div>
-                                                                <input name="adjunto" required type="file" step="0.0001"
+                                                                <input name="adjunto" type="file" step="0.0001"
                                                                         class="form-control form-control" aria-label="Amount">
                                                             </div>
                                                     </div>
@@ -287,5 +284,28 @@
 
 
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{% if mensaje %}
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'success',
+        title: 'Credito cargado exitosamente!'
+    })
+
+</script>
+{% endif %}
 {% endblock %}

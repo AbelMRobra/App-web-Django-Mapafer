@@ -4,7 +4,6 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
         <h3 class="text-themecolor">Perfil del cliente</h3>
@@ -55,34 +54,27 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="actividad" role="tabpanel">
                         <div class="card-body">
-                            <div class="profiletimeline">
+                            <div>
                                 {% if data_credite_complete %}
                                 {% for d in data_credite_complete %}
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img src="{% static 'img/bank.png' %}" alt="user" class="img-circle" /> </div>
-                                    <div class="sl-right">
-                                        <div><a href="{% url 'Administrar credito' d.0.id %}">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a> 
-                                            <p><span class="sl-date"> Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></p>
- 
-                                        </div>
+                                <div>
+                                    <div> <i class="fa fa-university text-info mr-2"></i> <a href="{% url 'Administrar credito' d.0.id %}">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a>
+                                        <p><span class="sl-date"> Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></p>
+                                        <hr>
                                     </div>
+
                                 </div>
-                                <hr>
+
                                 {% endfor %}
 
                                 {% else %}
 
-                                <div class="sl-item">
-                                    <div class="sl-left"> <img src="{% static 'img/clean.png' %}" alt="user" class="img-circle" /> </div>
-                                    <div class="sl-right">
-                                        <div><a href="#" class="link">No tiene creditos otorgados</a> 
-                                            <p><span class="sl-date"> -</span></p>
-
-
-                                        </div>
+                                <div>
+                                    <div><i class="fa fa-bell-o mr-2"></i> <a href="#" class="link">No tiene creditos otorgados</a> 
+                                        <p><span class="sl-date"> -</span></p>
+                                        <hr>
                                     </div>
                                 </div>
-                                <hr>
 
                                 {% endif %}
                                 
@@ -93,22 +85,22 @@
                     <!--second tab-->
                     <div class="tab-pane" id="perfil" role="tabpanel">
                         <div class="card-body">
-                            <h4><a href="#" data-toggle="modal" data-target="#EditarLegajo"><i class="fa fa-pencil"></i></a> Datos personales</h4>
+                            <h4><a href="#" data-toggle="modal" data-target="#EditarLegajo"><i class="icon-options-vertical link"></i></a> Datos personales</h4>
 
                             <div style="margin: 15px;">
-                                <h6 style="margin-top: 5px;"><b>Nombre y Apellido:</b> {{data.nombre}}, {{data.apellido}}</h6>
-                                <h6 style="margin-top: 5px;"><b>Telefono:</b> {% if data.telefono %}{{data.telefono}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 style="margin-top: 5px;"><b>Email:</b> {% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 style="margin-top: 5px;"><b>Dirección:</b> {% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 style="margin-top: 5px;"><b>Empresa:</b> {% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 style="margin-top: 5px;"><b>Empleador:</b> {% if data.email %}{{data.empleador}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 style="margin-top: 5px;"><b>Cuil:</b> {% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 class="mt-2"><b>Nombre y Apellido:</b> {{data.nombre}}, {{data.apellido}}</h6>
+                                <h6 class="mt-2"><b>Telefono:</b> {% if data.telefono %}{{data.telefono}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 class="mt-2"><b>Email:</b> {% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 class="mt-2"><b>Dirección:</b> {% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 class="mt-2"><b>Empresa:</b> {% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 class="mt-2"><b>Empleador:</b> {% if data.email %}{{data.empleador}}{% else %} Sin registrar{% endif %}</h6>
+                                <h6 class="mt-2"><b>Cuil:</b> {% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</h6>
 
                             </div>
                             
                             <hr>
-                            <h4><a href="#" data-toggle="modal" data-target="#EditarComentarios"><i class="fa fa-pencil"></i></a> Anotaciones</h4>
-                            <p class="m-t-30">{% if data.otros_datos %}{{data.otros_datos}}{% else %} Sin registrar{% endif %}</p>
+                            <h4><a href="#" data-toggle="modal" data-target="#EditarComentarios"><i class="icon-options-vertical link"></i></a> Anotaciones</h4>
+                            <p class="m-t-30" style="white-space: pre-wrap;">{% if data.otros_datos %}{{data.otros_datos}}{% else %} Sin registrar{% endif %}</p>
 
 
                         </div>
@@ -176,8 +168,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header"
-                                    style="background: rgb(195, 39, 181);
-                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                style="background-color: #2a3e52;">
                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Documento nacional</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -215,8 +206,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header"
-                                    style="background: rgb(195, 39, 181);
-                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                style="background-color: #2a3e52;">
                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Boleta de servicio</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -255,8 +245,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header"
-                                    style="background: rgb(195, 39, 181);
-                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                style="background-color: #2a3e52;">
                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Informe crediticio</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -299,8 +288,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header"
-                                    style="background: rgb(195, 39, 181);
-                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                style="background-color: #2a3e52;">
                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Comentarios</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -340,8 +328,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header"
-                                    style="background: rgb(195, 39, 181);
-                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                    style="background-color: #2a3e52;">
                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Legajo personal</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -433,7 +420,5 @@
                 </div>
             </div>
         </div>
-        <!-- Column -->
-    </div>
 
     {% endblock %}

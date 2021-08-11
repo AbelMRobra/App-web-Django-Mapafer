@@ -4,19 +4,16 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Cartera activa</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Cartera activa</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Cartera</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Cartera</li>
+        </ol>
     </div>
 </div>
 
@@ -50,13 +47,13 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 12px;">
+                            <tbody style="font-size: 13px;">
 
                                 {% for i in data %}
                                 <tr>
-                                    <td style="max-width: 10px;">{{i.0.id}}</td>
-                                    <td style="min-height: 150px;">{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}
-                                        <h6 class="card-subtitle" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %} Regimen: {{i.0.regimen.0|lower|capfirst}}</h6>
+                                    <td style="width: 7px;">{{i.0.id}}</td>
+                                    <td style="min-height: 150px; width: 160px;"><a href="{% url 'Administrar credito' i.0.id %}">{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
+                                        <h6 class="card-subtitle" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}} - {% endif %}{{i.0.regimen|lower|capfirst}}</h6>
                                     </td>
                                     <td>${{i.0.monto|floatformat:2|intcomma}}</td>
                                     <td>{{i.0.cuotas}}</td>
@@ -153,7 +150,12 @@
             buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'BBDD clientes'
+                title: 'Cartera activa',
+                className: "btn btn-primary",
+
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button buttons-excel buttons-html5')
+                    }
             },
             ]   
         });

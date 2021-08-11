@@ -20,12 +20,15 @@ def armar_cuotas(prestamo):
                 cuota_nueva = CuotasPrestamo(
                     prestamo = prestamo,
                     fecha =  fecha_aux,
+                    numero = cuotas_pasadas,
                     monto = prestamo.monto/prestamo.cuotas,
                     
                 )
                 cuota_nueva.save()
             else:
                 cuota_nueva = CuotasPrestamo.objects.get(prestamo = prestamo, fecha = fecha_aux)
+                cuota_nueva.numero = cuotas_pasadas
+                cuota_nueva.save()
 
             if pagado_auxiliar >= cuota_nueva.monto:
                 cuota_nueva.estado = "SI"
@@ -50,12 +53,15 @@ def armar_cuotas(prestamo):
                 cuota_nueva = CuotasPrestamo(
                     prestamo = prestamo,
                     fecha =  fecha_aux,
+                    numero = cuotas_pasadas,
                     monto = prestamo.monto/prestamo.cuotas,
                     
                 )
                 cuota_nueva.save()
             else:
                 cuota_nueva = CuotasPrestamo.objects.get(prestamo = prestamo, fecha = fecha_aux)
+                cuota_nueva.numero = cuotas_pasadas
+                cuota_nueva.save()
 
             if pagado_auxiliar >= cuota_nueva.monto:
                 cuota_nueva.estado = "SI"

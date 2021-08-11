@@ -3,19 +3,16 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Empresas</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Empresas</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Empresas</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Empresas</li>
+        </ol>
     </div>
 </div>
 
@@ -78,7 +75,7 @@
                         </div>
 
                         </div>
-                    <h6 class="card-subtitle">Información historica</h6>
+                    <h6 class="card-subtitle">Información de las empresas de los clientes</h6>
 
                     <div class="table-responsive">
 
@@ -88,6 +85,8 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Empresa</th>
+                                    <th>Rubro</th>
+                                    <th>Contacto</th>
                                     <th style="text-align: center;">Clientes</th>
                                     <th style="text-align: center;">Cuotas a vencer</th>
                                     <th style="max-width: 5px;"></th>
@@ -101,7 +100,9 @@
                                 {% for i in informacion %}
                                 <tr>
                                     <td>{{i.0.id}}</td>
-                                    <td>{{i.0.nombre}}</td>
+                                    <td>{{i.0.nombre|lower|capfirst}}</td>
+                                    <td>{{i.0.rubro|lower|capfirst}}</td>
+                                    <td>{{i.0.contacto|lower|capfirst}}</td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     {% if i.3 == 0 and i.2 == 0 %}
                                     <td style="text-align: center;">No tiene vencimientos proximos </td>

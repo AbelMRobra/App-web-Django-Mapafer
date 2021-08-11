@@ -7,6 +7,12 @@ class Empresa(models.Model):
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
     code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
 
+    telefono = models.CharField(max_length=200, verbose_name="Telefono", blank=True, null=True)
+    contacto = models.CharField(max_length=200, verbose_name="Contacto", blank=True, null=True)
+    rubro = models.CharField(max_length=200, verbose_name="Rubro", blank=True, null=True)
+    direccion = models.CharField(max_length=200, verbose_name="Direccion", blank=True, null=True)
+    email = models.CharField(max_length=200, verbose_name="Email", blank=True, null=True)
+
     class Meta:
         verbose_name="Empresa"
         verbose_name_plural="Empresas"
@@ -147,6 +153,7 @@ class CuotasPrestamo(models.Model):
     prestamo = models.ForeignKey(Prestamos, on_delete=models.CASCADE, verbose_name = "Prestamo asociado")
     fecha = models.DateField(verbose_name="Fecha del pago")
     monto = models.FloatField(verbose_name="Monto")
+    numero = models.IntegerField(verbose_name= "Numero", blank=True, null=True, default=1)
     estado = models.CharField(choices=Pagado.choices, max_length=20, verbose_name="Estado", blank=True, null=True)
 
     class Meta:
