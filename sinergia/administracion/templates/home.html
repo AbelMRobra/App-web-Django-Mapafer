@@ -203,64 +203,45 @@
                 </div>
 
             </div>
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Stats box -->
-            <!-- ============================================================== -->
+
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex no-block">
-                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/staff.png' %}" alt="" /></div>
+                                
                                 <div class="align-self-center">
-                                    <h6 class="text-muted m-t-10 m-b-0">Usuarios activos</h6>
-                                    <h4 class="m-t-0">{{user_active}}</h4></div>
+                                    <h5><span class="lstick m-r-20"></span>Clientes con deuda menor a 90 dias </h5>
+                                    <h6 class="text-muted m-t-10 m-b-0">Situación 1: <b class="ml-2">{{user_1}}</b></h6>
+                                    <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 30 dias</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0">Situación 2: <b class="ml-2">{{user_2}}</b></h6>
+                                    <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 60 dias</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0">Situación 3: <b class="ml-2">{{user_3}}</b></h6>
+                                    <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 90 dias</h6></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex no-block">
-                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/expense.png' %}" alt="" /></div>
+                                
                                 <div class="align-self-center">
-                                    <h6 class="text-muted m-t-10 m-b-0">Prestamos</h6>
-                                    <h4 class="m-t-0">{{prestamos}}</h4></div>
+                                    <h5><span class="lstick m-r-20"></span>Clientes con deuda mayor a 90 dias</h5>
+                                    <h6 class="text-muted m-t-10 m-b-0">Situación 4: <b class="ml-2">{{user_4}}</b></h6>
+                                    <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 180 dias</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0">Situación 5: <b class="ml-2">{{user_5}}</b></h6>
+                                    <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 365 dias</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0">Situación 6: <b class="ml-2">{{user_6}}</b></h6>
+                                    <h6 class="m-t-0" style="font-size: 12px;">Deuda en situación especial</h6></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex no-block">
-                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/income.png' %}" alt="" /></div>
-                                <div class="align-self-center">
-                                    <h6 class="text-muted m-t-10 m-b-0">Monto prestado</h6>
-                                    <h4 class="m-t-0">$ {{monto_total|floatformat:0|intcomma}}</h4></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex no-block">
-                                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="{% static 'adminpro/assets/images/icon/income.png' %}" alt="" /></div>
-                                <div class="align-self-center">
-                                    <h6 class="text-muted m-t-10 m-b-0">Monto cobrado</h6>
-                                    <h4 class="m-t-0">$ {{pago_total|floatformat:0|intcomma}}</h4></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 
             </div>

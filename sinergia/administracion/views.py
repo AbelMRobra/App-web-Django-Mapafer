@@ -266,7 +266,6 @@ def home(request):
 
     # Otros datos
 
-    user_active = len(Clientes.objects.filter(estado = "Activo"))
     prestamos = len(Prestamos.objects.all())
     total_prestamos = sum(Prestamos.objects.all().values_list('monto', flat = True))
     total_pago = round((sum(Pagos.objects.all().values_list('monto', flat = True))/total_prestamos)*100, 0)
@@ -305,7 +304,31 @@ def home(request):
     monto_total = sum(Prestamos.objects.all().values_list("monto", flat=True))
     pago_total = sum(Pagos.objects.all().values_list("monto", flat=True))
 
-    return render(request, "home.html", {"prom_tae_year_last":prom_tae_year_last, "prom_tae_year_courrent":prom_tae_year_courrent, "monto_interes":monto_interes, "matriz_resultante":matriz_resultante, "fechas_cash":fechas_cash,"monto_saldo":monto_saldo, "monto_mora":monto_mora, "pago_total":pago_total, "monto_total":monto_total, "datos_grafico":datos_grafico, "mora_total":mora_total, "user_active":user_active, "prestamos":prestamos, "total_saldo":total_saldo, "total_pago":total_pago})
+    context = {}
+    context["prom_tae_year_last"] = prom_tae_year_last
+    context["prom_tae_year_courrent"] = prom_tae_year_courrent
+    context["monto_interes"] = monto_interes
+    context["matriz_resultante"] = matriz_resultante
+    context["fechas_cash"] = fechas_cash
+    context["monto_saldo"] = monto_saldo
+    context["monto_mora"] = monto_mora
+    context["pago_total"] = pago_total
+    context["monto_total"] = monto_total
+    context["datos_grafico"] = datos_grafico
+    context["mora_total"] = mora_total
+    context["user_1"] = len(Clientes.objects.filter(estado = "Situación 1"))
+    context["user_2"] = len(Clientes.objects.filter(estado = "Situación 2"))
+    context["user_3"] = len(Clientes.objects.filter(estado = "Situación 3"))
+    context["user_4"] = len(Clientes.objects.filter(estado = "Situación 4"))
+    context["user_5"] = len(Clientes.objects.filter(estado = "Situación 5"))
+    context["user_6"] = len(Clientes.objects.filter(estado = "Situación 6"))
+    context["prestamos"] = prestamos
+    context["total_saldo"] = total_saldo
+    context["total_pago"] = total_pago
+
+
+
+    return render(request, "home.html", context)
 
 def consulta_usuario_externo(request, code_key):
 
