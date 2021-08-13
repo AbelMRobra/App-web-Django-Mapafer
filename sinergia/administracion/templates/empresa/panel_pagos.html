@@ -29,6 +29,16 @@
                     <div class="d-flex">
                         <h4 class="card-title"><span class="lstick m-r-20"></span>{{empresa}} - Pagos a vencer</h4>
 
+                        <div class="btn-group ml-auto">
+                            <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Agregarempresa"><i
+                                    class="fa fa-clock-o mr-2"></i>Fechas</a>
+                                    
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="modal fade" id="Agregarempresa" tabindex="-1" role="dialog" aria-labelledby="Agregarempresa"
@@ -37,7 +47,7 @@
                             <div class="modal-content">
                                 <div class="modal-header"
                                 style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Agregar empresa</h5>
+                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Fechas para buscar</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -47,15 +57,21 @@
 
                                         {% csrf_token %}
 
-                                        <p class="my-2">Nombre</p>
+                                        <p class="my-2">Desde</p>
                                         <div class="mb-3">
-                                            <input type="text" name="nombre" value="{{data.nombre}}" class="form-control form-control-line">
+                                            <input type="date" name="fecha_desde" class="form-control form-control-line">
+            
+                                        </div>
+
+                                        <p class="my-2">Hasta</p>
+                                        <div class="mb-3">
+                                            <input type="date" name="fecha_hasta" class="form-control form-control-line">
             
                                         </div>
 
                                         <div>
                                             <button class="btn btn-primary" type="submit" 
-                                                style="margin-top: 10px;">Crear</button>
+                                                style="margin-top: 10px;">Buscar</button>
 
                                         </div>
                                         {{ form.as_p }}
@@ -70,7 +86,7 @@
                         </div>
 
                         </div>
-                    <h6 class="card-subtitle">El periodo de vencimiento es de {{fecha_1|date:"d/m/Y"}} a {{fecha_2|date:"d/m/Y"}}</h6>
+                    <h6 class="card-subtitle">El periodo de vencimiento es de {{fecha_1}} a {{fecha_2}}</h6>
 
                     <div class="table-responsive">
                         <form method="POST" enctype="multipart/form-data">
@@ -224,7 +240,12 @@
             buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'BBDD clientes'
+                title: 'Cuotas a vencer',
+                className: "btn btn-primary",
+
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button buttons-excel buttons-html5')
+                    }
             },
             ]   
         });

@@ -19,21 +19,22 @@ def panelempresas(request):
         dia_auxiliar_3 = dia_auxiliar_1 + timedelta(days = 5)
 
     if request.method == 'POST':
+
         try:
             empresa_editar = Empresa.objects.get(id =request.POST["id"] )
             empresa_editar.nombre = request.POST["nombre"]
             empresa_editar.save()
-            
+                
         except:
+
             new_empresa = Empresa(
                 nombre = request.POST["nombre"]
-            )
+                )
             new_empresa.save()
 
     context = {}
     context["empresas"] = Empresa.objects.all()
     
-
     datos_completos = []
 
     for empresa in context["empresas"]:
@@ -53,24 +54,6 @@ def panel_pagos(request, id_empresa):
 
     hoy = datetime.date.today()
 
-    if request.method == 'POST':
-
-        data = request.POST.items()
-
-        for d in data:
-            if "cuota" in d[0]:
-                cuota = CuotasPrestamo.objects.get(id = d[1])
-                new_pago = Pagos(
-                    prestamo = cuota.prestamo,
-                    fecha = hoy,
-                    monto = cuota.monto,
-                )
-
-                new_pago.save()
-
-                cuota.estado = "SI"
-                cuota.save()
-
     if hoy.day < 13:
         dia_auxiliar_1 = datetime.date(hoy.year, hoy.month, 1)
         dia_auxiliar_2 = dia_auxiliar_1 - timedelta(days = 5)
@@ -80,6 +63,31 @@ def panel_pagos(request, id_empresa):
         dia_auxiliar_1 = datetime.date(hoy.year, hoy.month, 15)
         dia_auxiliar_2 = dia_auxiliar_1 - timedelta(days = 5)
         dia_auxiliar_3 = dia_auxiliar_1 + timedelta(days = 5)
+
+    if request.method == 'POST':
+
+        try:
+            dia_auxiliar_2 = request.POST["fecha_desde"]
+            dia_auxiliar_3 = request.POST["fecha_hasta"]
+
+        except:
+
+
+            data = request.POST.items()
+
+            for d in data:
+                if "cuota" in d[0]:
+                    cuota = CuotasPrestamo.objects.get(id = d[1])
+                    new_pago = Pagos(
+                        prestamo = cuota.prestamo,
+                        fecha = hoy,
+                        monto = cuota.monto,
+                    )
+
+                    new_pago.save()
+
+                    cuota.estado = "SI"
+                    cuota.save()
     
     
     data_filtrada = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by("prestamo__cliente__apellido").exclude(estado = "SI")
