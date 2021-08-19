@@ -4,8 +4,6 @@ from .Google import Create_Service, convert_to_RFC_datetime
 
 def agendar_calendar(inicio, final, tema, descrip, email):
 
-    print(final)
-
     CLIENT_SECRET_FILE = settings.MEDIA_ROOT + "/claves/client_secret.json"
     API_NAME = 'calendar'
     API_VERSION = 'v3'
