@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Clientes, Proveedor, Prestamos, Pagos, Empresa, CuotasPrestamo
+from .models import Clientes, Proveedor, Prestamos, Pagos, Empresa, CuotasPrestamo, Citas
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -56,3 +56,4 @@ admin.site.register(Proveedor, ProveedorAdmin)
 admin.site.register(Prestamos, PrestamosAdmin)
 admin.site.register(Pagos, PagosAdmin)
 admin.site.register(CuotasPrestamo)
+admin.site.register(Citas)

@@ -11,7 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="shortcut icon" href="{% static 'img/mapafericon.ico' %}" />
-
+  <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -65,29 +65,19 @@
   <!-- Main wrapper - style you can find in pages.scss -->
   <!-- ============================================================== -->
   <div id="main-wrapper">
-    <!-- ============================================================== -->
-    <!-- Topbar header - style you can find in pages.scss -->
-    <!-- ============================================================== -->
     <header class="topbar">
       <nav class="navbar top-navbar navbar-expand-md navbar-light">
-        <!-- ============================================================== -->
-        <!-- Logo -->
-        <!-- ============================================================== -->
-        <div class="navbar-header">
+        <div class="navbar-header" id="navbar">
           <a class="navbar-brand" href="{% url 'Home' %}">
 
-            <!-- Logo icon --><b>
-              <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-              <!-- Dark Logo icon -->
-              <img src="{% static 'img/brote1.png' %}" style="max-width: 50px; vertical-align: bottom; margin: 5px;" alt="" class="dark-logo" />
-              <!-- Light Logo icon -->
-              <img src="{% static 'img/brote1.png' %}" style="max-width: 50px; vertical-align: bottom; margin: 10px;" alt="" class="light-logo" />
+            <b>
+              <img src="{% static 'img/brote1.png' %}" style="max-width: 50px; vertical-align: bottom; margin: 5px;" 
+              alt="" class="dark-logo" id="dark-logo" />
+              <img src="{% static 'img/brote1.png' %}" style="max-width: 50px; vertical-align: bottom; margin: 10px;" 
+              alt="" class="light-logo" id="light-logo" />
             </b>
-            <!--End Logo icon -->
-            <!-- Logo text --><span>
-              <!-- dark Logo text -->
-              <img src="{% static 'img/Linkp.png' %}" style="max-width: 60px; vertical-align: bottom; margin-bottom: 12px;" alt="" class="dark-logo" />
-              <!-- Light Logo text -->
+            <span>
+              <img src="{% static 'img/Mapafer.png' %}" style="max-width: 60px; vertical-align: bottom; margin-bottom: 12px;" alt="" class="dark-logo" />
               <img src="{% static 'img/Mapafer.png' %}" class="mb-3" style="max-width: 120px; vertical-align: bottom;" class="light-logo"
                 alt="" />
             </span>
@@ -245,9 +235,10 @@
 
                 
             </div>
-            <!-- ============================================================== -->
-            <!-- Sales overview chart -->
-            <!-- ============================================================== -->
+
+            {% if sin_datos %}
+
+            {% else %}
             <div class="row">
                 <div class="col-lg-9 col-md-12">
                     <div class="card">
@@ -434,6 +425,7 @@
                   </div>
               </div>
           </div>
+          {% endif %}
           {% endblock %}
         </div>
         

@@ -3,11 +3,13 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as do_login
-from .models import Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
+from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
 import numpy as np
 import numpy_financial as npf
 import datetime
 from .functions import estado_cliente
+from .functions_g import agendar_calendar
+
 
 
 # Create your views here.
@@ -90,241 +92,250 @@ def welcome(request):
 
 def home(request):
 
-    today = datetime.date.today()
-
-    ### Conjunto de fechas para el flujo de ingresos
-
-    if today.day > 15:
-        if today.month == 12:
-            fecha_cash_inicial = datetime.date(today.year, 1, 1)
-        else:
-            fecha_cash_inicial = datetime.date(today.year, today.month + 1, 1)      
-    else:
-        fecha_cash_inicial = datetime.date(today.year, today.month, 1)
-
-    fechas_cash = []
-
-    fecha_cash_aux = fecha_cash_inicial
-
-    for f in range(24):
-        fechas_cash.append(fecha_cash_aux)
-        if fecha_cash_aux.month == 12:
-            fecha_cash_aux = datetime.date(fecha_cash_aux.year + 1, 1, 1)
-        else:
-            fecha_cash_aux = datetime.date(fecha_cash_aux.year, fecha_cash_aux.month + 1, 1)
-
-    ### Aqui termina la programación para el conjunto de fechas para el flujo de ingreso
-
-    # Bucle para mora y flujo de ingresos
-
-    matriz_ones = []
-    matriz_ingresos = []
-    mora_total = 0
-    data_aux = Prestamos.objects.all()
-
-    for d in data_aux:
-        datos_cuenta = []   
-        pagos_list = Pagos.objects.filter(prestamo = d).values_list("monto", flat = True)
-        pagos = sum(pagos_list)
-        saldo = d.monto - pagos
-        fecha_primer_pago = datetime.date(d.primera_cuota.year, d.primera_cuota.month, d.primera_cuota.day)
-        if d.regimen == "QUINCENAL":
-            cuotas_pasadas = 0
-            fecha_aux = fecha_primer_pago
-            while fecha_aux < today:
-                cuotas_pasadas +=1
-                if cuotas_pasadas == d.cuotas:
-                    break
-                else:
-                    fecha_aux = fecha_aux + datetime.timedelta(days=15)
-            mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-            mora_total += mora
-
-            for f in range(24):
-                situacion_1 = 1
-                if fecha_cash_inicial.day > 15:
-                    situacion_1 = 1
-                else:
-                    situacion_1 = 0
-
-                if situacion_1 == 1:
-                    cuotas_pendientes = d.cuotas - cuotas_pasadas
-                    if cuotas_pendientes == 1:
-                        pago_mes = (d.monto/d.cuotas)
-                        if saldo > pago_mes:
-                            datos_cuenta.append(pago_mes)
-                            cuotas_pasadas += 1
-                            saldo = saldo - pago_mes
-                        elif saldo <= 0:
-                            datos_cuenta.append(0)
-                            cuotas_pasadas += 1
-                        else:
-                            datos_cuenta.append(saldo)
-                            cuotas_pasadas += 1
-                            saldo = 0
-
-                    else:
-                        datos_cuenta.append(0)
-
-                    situacion_1 = 0
-                else:
-                    cuotas_pendientes = d.cuotas - cuotas_pasadas
-                    if cuotas_pendientes >= 2:
-                        pago_mes = (d.monto/d.cuotas*2)
-                        if saldo > pago_mes:
-                            datos_cuenta.append(pago_mes)
-                            cuotas_pasadas += 2
-                            saldo = saldo - pago_mes
-                        elif saldo <= 0:
-                            datos_cuenta.append(0)
-                            cuotas_pasadas += 2
-                        else:
-                            datos_cuenta.append(saldo)
-                            cuotas_pasadas += 2
-                            saldo = 0
-
-                    elif cuotas_pendientes == 1:
-                        pago_mes = (d.monto/d.cuotas)
-                        if saldo > pago_mes:
-                            datos_cuenta.append(pago_mes)
-                            cuotas_pasadas += 1
-                            saldo = saldo - pago_mes
-                        elif saldo <= 0:
-                            datos_cuenta.append(0)
-                            cuotas_pasadas += 1
-                        else:
-                            datos_cuenta.append(saldo)
-                            cuotas_pasadas += 1
-                            saldo = 0
-
-                    else:
-                        datos_cuenta.append(0)
-
-        if d.regimen == "MENSUAL":
-            cuotas_pasadas = 0
-            fecha_aux = fecha_primer_pago
-            while fecha_aux < today:
-                cuotas_pasadas +=1
-                if cuotas_pasadas == d.cuotas:
-                    break
-                else:
-                    if fecha_aux.month != 12:
-                        fecha_aux = datetime.date(fecha_aux.year, fecha_aux.month +1, fecha_aux.day)
-                    else:
-                        fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
-            mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-            mora_total += mora
-            for f in range(24):
-                cuotas_pendientes = d.cuotas - cuotas_pasadas
-                if cuotas_pendientes >= 1:
-                    pago_mes = (d.monto/d.cuotas)
-                    if saldo > pago_mes:
-                        datos_cuenta.append(pago_mes)
-                        cuotas_pasadas += 1
-                        saldo = saldo - pago_mes
-                    elif saldo <= 0:
-                        datos_cuenta.append(0)
-                        cuotas_pasadas += 1
-                    else:
-                        datos_cuenta.append(saldo)
-                        cuotas_pasadas += 1
-                        saldo = 0
-                else:
-                    datos_cuenta.append(0)
-        matriz_ingresos.append(datos_cuenta)
-        matriz_ones.append(1)
-    matriz_ingresos = np.array(matriz_ingresos)
-    matriz_resultante = np.matmul(matriz_ones, matriz_ingresos)
-
-    # Aqui termina la programación para ese calculo
-
-    # Calculo del monto de interes y las TAE
-
-    monto_interes = sum(Prestamos.objects.all().values_list('monto', flat = True)) - sum(Prestamos.objects.all().values_list('valor_original', flat = True))
-
-    prestamos_year_courrent = Prestamos.objects.filter(fecha__gte = datetime.date(today.year, 1, 1))
-
-    tae_year_courrent = []
-
-    for d in prestamos_year_courrent:
-        interes = (d.monto/d.valor_original - 1)*100
-        tae = (interes/d.cuotas)*12
-        tae_year_courrent.append(tae)
-
-    prom_tae_year_courrent = np.mean(tae_year_courrent)
-
-    prestamos_year_last = Prestamos.objects.filter(fecha__range = (datetime.date(today.year -1, 1, 1), datetime.date(today.year, 1, 1)))
-
-    tae_year_last = []
-
-    for d in prestamos_year_last:
-        interes = (d.monto/d.valor_original - 1)*100
-        tae = (interes/d.cuotas)*12
-        tae_year_last.append(tae)
-
-    prom_tae_year_last = np.mean(tae_year_last)
-
-    # Otros datos
-
-    prestamos = len(Prestamos.objects.all())
-    total_prestamos = sum(Prestamos.objects.all().values_list('monto', flat = True))
-    total_pago = round((sum(Pagos.objects.all().values_list('monto', flat = True))/total_prestamos)*100, 0)
-    total_saldo = round(((total_prestamos - sum(Pagos.objects.all().values_list('monto', flat = True)) - mora_total)/total_prestamos)*100, 0)
-    monto_mora = mora_total
-    monto_saldo = (total_prestamos - sum(Pagos.objects.all().values_list('monto', flat = True)) - mora_total)
-    mora_total = round((mora_total/total_prestamos)*100, 0)
-
-    # Información del grafico principal
-
-    fechas_grafico = []
-
-    fecha_inicial = datetime.date(today.year, today. month, 1)
-
-    fecha_auxiliar = fecha_inicial
-    for f in range(12):
-        fechas_grafico.append(fecha_auxiliar)
-        if fecha_auxiliar.month != 1:
-            fecha_auxiliar = datetime.date(fecha_auxiliar.year, fecha_auxiliar.month -1 , fecha_auxiliar.day)
-        else:
-            fecha_auxiliar = datetime.date(fecha_auxiliar.year - 1, 12 , fecha_auxiliar.day)
-
-    datos_grafico = []
-    fecha_auxiliar = 0
-    cont = 0
-    for f in fechas_grafico:
-        if cont == 0:
-            fecha_auxiliar = f
-            cont = 1
-        else:
-            monto = sum(Prestamos.objects.filter(fecha__range = (f, fecha_auxiliar)).values_list("monto", flat = True))
-            datos_grafico.append((f, monto))
-            fecha_auxiliar = f
-
-    datos_grafico = sorted(datos_grafico, key=lambda x: x[0])
-    monto_total = sum(Prestamos.objects.all().values_list("monto", flat=True))
-    pago_total = sum(Pagos.objects.all().values_list("monto", flat=True))
-
     context = {}
-    context["prom_tae_year_last"] = prom_tae_year_last
-    context["prom_tae_year_courrent"] = prom_tae_year_courrent
-    context["monto_interes"] = monto_interes
-    context["matriz_resultante"] = matriz_resultante
-    context["fechas_cash"] = fechas_cash
-    context["monto_saldo"] = monto_saldo
-    context["monto_mora"] = monto_mora
-    context["pago_total"] = pago_total
-    context["monto_total"] = monto_total
-    context["datos_grafico"] = datos_grafico
-    context["mora_total"] = mora_total
     context["user_1"] = len(Clientes.objects.filter(estado = "Situación 1"))
     context["user_2"] = len(Clientes.objects.filter(estado = "Situación 2"))
     context["user_3"] = len(Clientes.objects.filter(estado = "Situación 3"))
     context["user_4"] = len(Clientes.objects.filter(estado = "Situación 4"))
     context["user_5"] = len(Clientes.objects.filter(estado = "Situación 5"))
     context["user_6"] = len(Clientes.objects.filter(estado = "Situación 6"))
-    context["prestamos"] = prestamos
-    context["total_saldo"] = total_saldo
-    context["total_pago"] = total_pago
+
+    today = datetime.date.today()
+
+    if len(Prestamos.objects.all()) == 0:
+        context["sin_datos"] = 1
+
+    else:
+
+        ### Conjunto de fechas para el flujo de ingresos
+
+        if today.day > 15:
+            
+            if today.month == 12:
+                fecha_cash_inicial = datetime.date(today.year, 1, 1)
+            else:
+                fecha_cash_inicial = datetime.date(today.year, today.month + 1, 1)      
+        
+        else:
+            fecha_cash_inicial = datetime.date(today.year, today.month, 1)
+
+        fechas_cash = []
+
+        fecha_cash_aux = fecha_cash_inicial
+
+        for f in range(24):
+            fechas_cash.append(fecha_cash_aux)
+            if fecha_cash_aux.month == 12:
+                fecha_cash_aux = datetime.date(fecha_cash_aux.year + 1, 1, 1)
+            else:
+                fecha_cash_aux = datetime.date(fecha_cash_aux.year, fecha_cash_aux.month + 1, 1)
+
+        ### Aqui termina la programación para el conjunto de fechas para el flujo de ingreso
+
+        # Bucle para mora y flujo de ingresos
+
+        matriz_ones = []
+        matriz_ingresos = []
+        mora_total = 0
+        data_aux = Prestamos.objects.all()
+
+        for d in data_aux:
+            datos_cuenta = []   
+            pagos_list = Pagos.objects.filter(prestamo = d).values_list("monto", flat = True)
+            pagos = sum(pagos_list)
+            saldo = d.monto - pagos
+            fecha_primer_pago = datetime.date(d.primera_cuota.year, d.primera_cuota.month, d.primera_cuota.day)
+            if d.regimen == "QUINCENAL":
+                cuotas_pasadas = 0
+                fecha_aux = fecha_primer_pago
+                while fecha_aux < today:
+                    cuotas_pasadas +=1
+                    if cuotas_pasadas == d.cuotas:
+                        break
+                    else:
+                        fecha_aux = fecha_aux + datetime.timedelta(days=15)
+                mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
+                mora_total += mora
+
+                for f in range(24):
+                    situacion_1 = 1
+                    if fecha_cash_inicial.day > 15:
+                        situacion_1 = 1
+                    else:
+                        situacion_1 = 0
+
+                    if situacion_1 == 1:
+                        cuotas_pendientes = d.cuotas - cuotas_pasadas
+                        if cuotas_pendientes == 1:
+                            pago_mes = (d.monto/d.cuotas)
+                            if saldo > pago_mes:
+                                datos_cuenta.append(pago_mes)
+                                cuotas_pasadas += 1
+                                saldo = saldo - pago_mes
+                            elif saldo <= 0:
+                                datos_cuenta.append(0)
+                                cuotas_pasadas += 1
+                            else:
+                                datos_cuenta.append(saldo)
+                                cuotas_pasadas += 1
+                                saldo = 0
+
+                        else:
+                            datos_cuenta.append(0)
+
+                        situacion_1 = 0
+                    else:
+                        cuotas_pendientes = d.cuotas - cuotas_pasadas
+                        if cuotas_pendientes >= 2:
+                            pago_mes = (d.monto/d.cuotas*2)
+                            if saldo > pago_mes:
+                                datos_cuenta.append(pago_mes)
+                                cuotas_pasadas += 2
+                                saldo = saldo - pago_mes
+                            elif saldo <= 0:
+                                datos_cuenta.append(0)
+                                cuotas_pasadas += 2
+                            else:
+                                datos_cuenta.append(saldo)
+                                cuotas_pasadas += 2
+                                saldo = 0
+
+                        elif cuotas_pendientes == 1:
+                            pago_mes = (d.monto/d.cuotas)
+                            if saldo > pago_mes:
+                                datos_cuenta.append(pago_mes)
+                                cuotas_pasadas += 1
+                                saldo = saldo - pago_mes
+                            elif saldo <= 0:
+                                datos_cuenta.append(0)
+                                cuotas_pasadas += 1
+                            else:
+                                datos_cuenta.append(saldo)
+                                cuotas_pasadas += 1
+                                saldo = 0
+
+                        else:
+                            datos_cuenta.append(0)
+
+            if d.regimen == "MENSUAL":
+                cuotas_pasadas = 0
+                fecha_aux = fecha_primer_pago
+                while fecha_aux < today:
+                    cuotas_pasadas +=1
+                    if cuotas_pasadas == d.cuotas:
+                        break
+                    else:
+                        if fecha_aux.month != 12:
+                            fecha_aux = datetime.date(fecha_aux.year, fecha_aux.month +1, fecha_aux.day)
+                        else:
+                            fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
+                mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
+                mora_total += mora
+                for f in range(24):
+                    cuotas_pendientes = d.cuotas - cuotas_pasadas
+                    if cuotas_pendientes >= 1:
+                        pago_mes = (d.monto/d.cuotas)
+                        if saldo > pago_mes:
+                            datos_cuenta.append(pago_mes)
+                            cuotas_pasadas += 1
+                            saldo = saldo - pago_mes
+                        elif saldo <= 0:
+                            datos_cuenta.append(0)
+                            cuotas_pasadas += 1
+                        else:
+                            datos_cuenta.append(saldo)
+                            cuotas_pasadas += 1
+                            saldo = 0
+                    else:
+                        datos_cuenta.append(0)
+            matriz_ingresos.append(datos_cuenta)
+            matriz_ones.append(1)
+        matriz_ingresos = np.array(matriz_ingresos)
+        matriz_resultante = np.matmul(matriz_ones, matriz_ingresos)
+
+        # Aqui termina la programación para ese calculo
+
+        # Calculo del monto de interes y las TAE
+
+        monto_interes = sum(Prestamos.objects.all().values_list('monto', flat = True)) - sum(Prestamos.objects.all().values_list('valor_original', flat = True))
+
+        prestamos_year_courrent = Prestamos.objects.filter(fecha__gte = datetime.date(today.year, 1, 1))
+
+        tae_year_courrent = []
+
+        for d in prestamos_year_courrent:
+            interes = (d.monto/d.valor_original - 1)*100
+            tae = (interes/d.cuotas)*12
+            tae_year_courrent.append(tae)
+
+        prom_tae_year_courrent = np.mean(tae_year_courrent)
+
+        prestamos_year_last = Prestamos.objects.filter(fecha__range = (datetime.date(today.year -1, 1, 1), datetime.date(today.year, 1, 1)))
+
+        tae_year_last = []
+
+        for d in prestamos_year_last:
+            interes = (d.monto/d.valor_original - 1)*100
+            tae = (interes/d.cuotas)*12
+            tae_year_last.append(tae)
+
+        prom_tae_year_last = np.mean(tae_year_last)
+
+        # Otros datos
+
+        prestamos = len(Prestamos.objects.all())
+        total_prestamos = sum(Prestamos.objects.all().values_list('monto', flat = True))
+        total_pago = round((sum(Pagos.objects.all().values_list('monto', flat = True))/total_prestamos)*100, 0)
+        total_saldo = round(((total_prestamos - sum(Pagos.objects.all().values_list('monto', flat = True)) - mora_total)/total_prestamos)*100, 0)
+        monto_mora = mora_total
+        monto_saldo = (total_prestamos - sum(Pagos.objects.all().values_list('monto', flat = True)) - mora_total)
+        mora_total = round((mora_total/total_prestamos)*100, 0)
+
+        # Información del grafico principal
+
+        fechas_grafico = []
+
+        fecha_inicial = datetime.date(today.year, today. month, 1)
+
+        fecha_auxiliar = fecha_inicial
+        for f in range(12):
+            fechas_grafico.append(fecha_auxiliar)
+            if fecha_auxiliar.month != 1:
+                fecha_auxiliar = datetime.date(fecha_auxiliar.year, fecha_auxiliar.month -1 , fecha_auxiliar.day)
+            else:
+                fecha_auxiliar = datetime.date(fecha_auxiliar.year - 1, 12 , fecha_auxiliar.day)
+
+        datos_grafico = []
+        fecha_auxiliar = 0
+        cont = 0
+        for f in fechas_grafico:
+            if cont == 0:
+                fecha_auxiliar = f
+                cont = 1
+            else:
+                monto = sum(Prestamos.objects.filter(fecha__range = (f, fecha_auxiliar)).values_list("monto", flat = True))
+                datos_grafico.append((f, monto))
+                fecha_auxiliar = f
+
+        datos_grafico = sorted(datos_grafico, key=lambda x: x[0])
+        monto_total = sum(Prestamos.objects.all().values_list("monto", flat=True))
+        pago_total = sum(Pagos.objects.all().values_list("monto", flat=True))
+
+
+        context["prom_tae_year_last"] = prom_tae_year_last
+        context["prom_tae_year_courrent"] = prom_tae_year_courrent
+        context["monto_interes"] = monto_interes
+        context["matriz_resultante"] = matriz_resultante
+        context["fechas_cash"] = fechas_cash
+        context["monto_saldo"] = monto_saldo
+        context["monto_mora"] = monto_mora
+        context["pago_total"] = pago_total
+        context["monto_total"] = monto_total
+        context["datos_grafico"] = datos_grafico
+        context["mora_total"] = mora_total   
+        context["prestamos"] = prestamos
+        context["total_saldo"] = total_saldo
+        context["total_pago"] = total_pago
 
 
 
@@ -501,73 +512,102 @@ def clientes(request):
     context = {}
     context["data"] = Clientes.objects.all().order_by("nombre")
 
+    cons_prestamo = Prestamos.objects.all()
+
+    for c in context["data"]:
+        if len(cons_prestamo.filter(cliente = c)) == 0:
+            c.estado = "Potencial"
+            c.save()
+
 
     return render(request, "clientes/basededatosclientes.html", context)
 
 def profileclient(request, id_cliente):
 
-    data = Clientes.objects.get(id = id_cliente)
+    context = {}
+    context['data'] = Clientes.objects.get(id = id_cliente)
+
 
     if request.method == 'POST':
 
+
+        nueva_cita = Citas(
+            cliente = context['data'],
+            inicio = request.POST['inicio'],
+            final = request.POST['final'],
+            asunto = request.POST['asunto'],
+            descripción = request.POST['descrip']
+        )
+
+        nueva_cita.save()
+
+        asunto_nombre = str(nueva_cita.cliente.nombre) + ", " + str(nueva_cita.cliente.apellido) + ": " + str(nueva_cita.asunto)
+
+        agendar_calendar(nueva_cita.inicio,
+        nueva_cita.final, asunto_nombre, nueva_cita.descripción, request.user.email)
+
         try:
-            data.dni = request.FILES['dni']
-            data.save()
+            context['data'].dni = request.FILES['dni']
+            context['data'].save()
         except:
             pass
 
         try:
-            data.servicio = request.FILES['servicio']
-            data.save()
+            context['data'].servicio = request.FILES['servicio']
+            context['data'].save()
         except:
             pass
 
         try:
-            data.informe_crediticio = request.FILES['informe_crediticio']
-            data.save()
+            context['data'].informe_crediticio = request.FILES['informe_crediticio']
+            context['data'].save()
         except:
             pass
 
         try:
-            data.otros_datos = request.POST['otros_datos']
-            data.save()
+            context['data'].otros_datos = request.POST['otros_datos']
+            context['data'].save()
         except:
             pass
 
         try:
-            data.nombre = request.POST['nombre']
-            data.apellido = request.POST['apellido']
-            data.direccion = request.POST['direccion']
-            data.cuil = request.POST['cuil']
-            data.email = request.POST['email']
-            data.telefono = request.POST['telefono']
-            data.score = request.POST['score']
-            data.empleador = request.POST['empleador']
-            data.empresa = Empresa.objects.get(nombre = request.POST['empresa'])
-            data.save()
+            context['data'].nombre = request.POST['nombre']
+            context['data'].apellido = request.POST['apellido']
+            context['data'].direccion = request.POST['direccion']
+            context['data'].cuil = request.POST['cuil']
+            context['data'].email = request.POST['email']
+            context['data'].telefono = request.POST['telefono']
+            context['data'].score = request.POST['score']
+            context['data'].empleador = request.POST['empleador']
+            context['data'].empresa = Empresa.objects.get(nombre = request.POST['empresa'])
+            context['data'].save()
         except:
             pass 
 
     
 
-    empresas = Empresa.objects.all()
+    context['empresas'] = Empresa.objects.all()
      
-    data_credito = Prestamos.objects.filter(cliente = data)
+    data_credito = Prestamos.objects.filter(cliente = context['data'])
 
     data_credite_complete = []
 
     for d in data_credito:
 
         pagos = sum(Pagos.objects.filter(prestamo = d).values_list("monto", flat=True))
+
         try:
             ultimo_pago = Pagos.objects.filter(prestamo = d).order_by("-fecha")[0].fecha
         except:
             ultimo_pago = 0
+        
         avance = pagos/d.monto*100
-
         data_credite_complete.append((d, pagos, ultimo_pago, avance))
 
-    return render(request, "clientes/client_profile.html", {'empresas':empresas, 'data':data, "data_credite_complete":data_credite_complete})
+    context['data_credite_complete'] = data_credite_complete
+    context['citas'] = Citas.objects.filter(cliente = context['data']).order_by("-id")
+
+    return render(request, "clientes/client_profile.html", context)
 
 def newclientes(request):
 
@@ -609,8 +649,9 @@ def calculadora(request):
         try:
             string_cliente = request.POST['cliente'].split("-")
             string_proveedor = request.POST['proveedor'].split("-")
+            cliente = Clientes.objects.get(id = string_cliente[0])
             new_credito = Prestamos(
-                cliente = Clientes.objects.get(id = string_cliente[0]),
+                cliente = cliente,
                 proveedor = Proveedor.objects.get(id = string_proveedor[0]),
                 fecha = request.POST['fecha'],
                 primera_cuota = request.POST['priimeracuota'],
@@ -621,15 +662,20 @@ def calculadora(request):
                 regimen = request.POST['regimen'],
             )
             new_credito.save()
+
+            cliente.estado = estado_cliente(cliente)
+            cliente.save()
+
+            
+            formulario = 0
+            context["mensaje"] = 1
+
+
             try:
                 new_credito.adjunto = request.FILES['adjunto']
                 new_credito.save()
             except:
                 pass
-
-            estado_cliente(new_credito.cliente)
-            formulario = 0
-            context["mensaje"] = 1
 
         except:
 
@@ -658,14 +704,11 @@ def calculadora(request):
             context["cuota"] = int(cantidad_cuotas)
             context["regimen"] = regimen
 
-
-    
     context["clientes"] = clientes
     context["proveedores"] = proveedores
     context["formulario"] = formulario
         
     return render(request, "prestamos/calculadora.html", context)
-
 
 def administrar_credito(request, id_credito):
 
@@ -924,7 +967,6 @@ def cashflow(request):
     matriz_resultante = np.matmul(matriz_ones, matriz_ingresos)
 
     return render(request, "prestamos/cashflow.html", {"matriz_resultante":matriz_resultante, "fechas_cash":fechas_cash, "data_aux":data_aux, "data":data})
-
 
 ### ----------> Funciones para la sección INFO
 

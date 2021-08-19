@@ -1,4 +1,5 @@
 from django.db import models
+from numpy import mod
 
 # Create your models here.
 
@@ -94,6 +95,21 @@ class Clientes(models.Model):
 
     def __str__(self):
         return self.apellido
+
+class Citas(models.Model):
+
+    cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE, verbose_name = "Cliente")
+    inicio = models.DateTimeField(verbose_name="Fecha de inicio")
+    final = models.DateTimeField(verbose_name="Fecha final")
+    asunto = models.CharField(max_length=100, verbose_name="Asunto")
+    descripción = models.CharField(max_length=100, verbose_name="Descripción")
+
+    class Meta:
+        verbose_name="Cita"
+        verbose_name_plural="Citas"
+
+    def __str__(self):
+        return self.asunto
 
 class Proveedor(models.Model):
     razon_social = models.CharField(max_length=200, verbose_name="Razón social")

@@ -26,7 +26,9 @@ def pagos_agregar(request, id_prestamo):
         new_pago.save()
         
         cliente = new_pago.prestamo.cliente
-        estado_cliente(cliente)
+        cliente.estado = estado_cliente(cliente)
+        cliente.save()
+        
         return redirect('Panel de pagos')
 
     context = {}
