@@ -31,9 +31,9 @@
                 </div>
                 <div>
                     <hr> </div>
-                <div class="card-body"> <small class="text-muted">Email address </small>
-                    <h6>{{data.email}}</h6> <small class="text-muted p-t-30 db">Phone</small>
-                    <h6>+{{data.telefono}}</h6> <small class="text-muted p-t-30 db">Address</small>
+                <div class="card-body"> <small class="text-muted">Email</small>
+                    <h6>{{data.email}}</h6> <small class="text-muted p-t-30 db">Telefono</small>
+                    <h6>+{{data.telefono}}</h6> <small class="text-muted p-t-30 db">Dirección</small>
                     <h6>{{data.direccion}}</h6>
 
                 </div>
@@ -146,21 +146,20 @@
                     <!--second tab-->
                     <div class="tab-pane" id="perfil" role="tabpanel">
                         <div class="card-body">
-                            <h4><a href="#" data-toggle="modal" data-target="#EditarLegajo"><i class="icon-options-vertical link"></i></a> Datos personales</h4>
+                            <h5><a href="#" data-toggle="modal" data-target="#EditarLegajo">Información personal</a></h5>
 
-                            <div style="margin: 15px;">
-                                <h6 class="mt-2"><b>Nombre y Apellido:</b> {{data.nombre}}, {{data.apellido}}</h6>
-                                <h6 class="mt-2"><b>Telefono:</b> {% if data.telefono %}{{data.telefono}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 class="mt-2"><b>Email:</b> {% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 class="mt-2"><b>Dirección:</b> {% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 class="mt-2"><b>Empresa:</b> {% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 class="mt-2"><b>Empleador:</b> {% if data.email %}{{data.empleador}}{% else %} Sin registrar{% endif %}</h6>
-                                <h6 class="mt-2"><b>Cuil:</b> {% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</h6>
+                            <div class="mt-3">
+                                <p class="ml-2"> Nombre y Apellido: <i>{{data.nombre}}, {{data.apellido}}</i></p>
+                                <p class="ml-2"> Telefono: <i>{% if data.telefono %}{{data.telefono}}{% else %} Sin registrar{% endif %}</i></p>
+                                <p class="ml-2"> Email: <i>{% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</i></p>
+                                <p class="ml-2"> Dirección: <i>{% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</i></p>
+                                <p class="ml-2"> Empresa: <i>{% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</i></p>
+                                <p class="ml-2"> Cuil: <i>{% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</i></p>
 
                             </div>
                             
                             <hr>
-                            <h4><a href="#" data-toggle="modal" data-target="#EditarComentarios"><i class="icon-options-vertical link"></i></a> Anotaciones</h4>
+                            <h5><a href="#" data-toggle="modal" data-target="#EditarComentarios">Anotaciones</i></a> </h5>
                             <p class="m-t-30" style="white-space: pre-wrap;">{% if data.otros_datos %}{{data.otros_datos}}{% else %} Sin registrar{% endif %}</p>
 
 

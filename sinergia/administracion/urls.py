@@ -5,6 +5,7 @@ from . import views
 from . import views_pagos
 from . import views_proveedores
 from . import views_empresa
+from . import views_clientes
 from django.contrib.auth.decorators import login_required
 
 
@@ -24,9 +25,9 @@ urlpatterns = [
     url(r'^editarpago/(?P<id_pago>\d+)/$', login_required(views_pagos.pagos_editar), name = 'Editar pagos'),
 
     # URL de clientes
-    url(r'^bbdd$', login_required(views.clientes), name = 'BBDD clientes'),
-    url(r'^newcliente$', login_required(views.newclientes), name = 'Nuevo cliente'),
-    url(r'^client_profile/(?P<id_cliente>\d+)/$', login_required(views.profileclient), name = 'Perfil del cliente'),
+    url(r'^bbdd$', login_required(views_clientes.clientes), name = 'BBDD clientes'),
+    url(r'^newcliente$', login_required(views_clientes.newclientes), name = 'Nuevo cliente'),
+    url(r'^client_profile/(?P<id_cliente>\d+)/$', login_required(views_clientes.profileclient), name = 'Perfil del cliente'),
 
     # URL de Externos
 

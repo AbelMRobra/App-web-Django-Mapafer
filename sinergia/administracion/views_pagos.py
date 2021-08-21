@@ -36,6 +36,8 @@ def pagos_agregar(request, id_prestamo):
         context['id_prestamo'] = 0
     else:
         context['id_prestamo'] = Prestamos.objects.get(id = int(id_prestamo))
+        context['valor_cuota'] = round(context['id_prestamo'].monto/context['id_prestamo'].cuotas, 2)
+    
     context['pagos'] = Pagos.objects.all()
     context['prestamos'] = Prestamos.objects.all().order_by("cliente__apellido")
     return render(request, 'pagos/agregarpagos.html', context)
