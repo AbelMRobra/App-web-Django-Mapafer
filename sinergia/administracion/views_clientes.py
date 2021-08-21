@@ -33,7 +33,6 @@ def clientes(request):
             c.estado = "Potencial"
             c.save()
 
-
     return render(request, "clientes/basededatosclientes.html", context)
 
 def profileclient(request, id_cliente):
@@ -44,7 +43,7 @@ def profileclient(request, id_cliente):
 
     if request.method == 'POST':
 
-        if request.POST['inicio']:
+        try: 
 
             nueva_cita = Citas(
                 cliente = context['data'],
@@ -60,24 +59,28 @@ def profileclient(request, id_cliente):
             crear_evento(cita.inicio.isoformat(),
             cita.final.isoformat(), asunto_nombre, cita.descripción)
 
-
-        if request.POST['dni']:
+        except:
+            pass
+        try:
             context['data'].dni = request.FILES['dni']
             context['data'].save()
-        
-        if request.POST['servicios']:
+        except:
+            pass
+        try:
             context['data'].servicio = request.FILES['servicio']
             context['data'].save()
-        
-        if request.POST['informe_crediticio']:
+        except:
+            pass
+        try:
             context['data'].informe_crediticio = request.FILES['informe_crediticio']
             context['data'].save()
-        
-        if request.POST['otros_datos']:
+        except:
+            pass
+        try:
             context['data'].otros_datos = request.POST['otros_datos']
             context['data'].save()
-
-
+        except:
+            pass
 
         try:
             context['data'].nombre = request.POST['nombre']
