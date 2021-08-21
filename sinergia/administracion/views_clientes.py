@@ -1,3 +1,5 @@
+import datetime
+from genericpath import exists
 from django.shortcuts import render, redirect
 from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
 from .google_calendar import crear_evento
@@ -42,44 +44,40 @@ def profileclient(request, id_cliente):
 
     if request.method == 'POST':
 
-        nueva_cita = Citas(
-            cliente = context['data'],
-            inicio = request.POST['inicio'],
-            final = request.POST['final'],
-            asunto = request.POST['asunto'],
-            descripción = request.POST['descrip']
-        )
+        if request.POST['inicio']:
 
-        nueva_cita.save()
-        cita = Citas.objects.get(id = nueva_cita.id)
-        asunto_nombre = str(nueva_cita.cliente.nombre) + ", " + str(nueva_cita.cliente.apellido) + ": " + str(nueva_cita.asunto)
-        crear_evento(cita.inicio.isoformat(),
-        cita.final.isoformat(), asunto_nombre, cita.descripción)
+            nueva_cita = Citas(
+                cliente = context['data'],
+                inicio = request.POST['inicio'],
+                final = request.POST['final'],
+                asunto = request.POST['asunto'],
+                descripción = request.POST['descrip']
+            )
+
+            nueva_cita.save()
+            cita = Citas.objects.get(id = nueva_cita.id)
+            asunto_nombre = str(nueva_cita.cliente.nombre) + ", " + str(nueva_cita.cliente.apellido) + ": " + str(nueva_cita.asunto)
+            crear_evento(cita.inicio.isoformat(),
+            cita.final.isoformat(), asunto_nombre, cita.descripción)
 
 
-        try:
+        if request.POST['dni']:
             context['data'].dni = request.FILES['dni']
             context['data'].save()
-        except:
-            pass
-
-        try:
+        
+        if request.POST['servicios']:
             context['data'].servicio = request.FILES['servicio']
             context['data'].save()
-        except:
-            pass
-
-        try:
+        
+        if request.POST['informe_crediticio']:
             context['data'].informe_crediticio = request.FILES['informe_crediticio']
             context['data'].save()
-        except:
-            pass
-
-        try:
+        
+        if request.POST['otros_datos']:
             context['data'].otros_datos = request.POST['otros_datos']
             context['data'].save()
-        except:
-            pass
+
+
 
         try:
             context['data'].nombre = request.POST['nombre']
@@ -116,7 +114,7 @@ def profileclient(request, id_cliente):
         data_credite_complete.append((d, pagos, ultimo_pago, avance))
 
     context['data_credite_complete'] = data_credite_complete
-    context['citas'] = Citas.objects.filter(cliente = context['data']).order_by("-id")
+    context['citas'] = Citas.objects.filter(cliente = context['data'], inicio__gte = datetime.date.today()).order_by("-id")
 
     return render(request, "clientes/client_profile.html", context)
 
