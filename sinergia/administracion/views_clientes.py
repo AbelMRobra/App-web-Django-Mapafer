@@ -3,6 +3,7 @@ from genericpath import exists
 from django.shortcuts import render, redirect
 from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
 from .google_calendar import crear_evento
+from .google_sheet import programa_social
 from .functions import estado_cliente
 
 def clientes(request):
@@ -39,7 +40,7 @@ def profileclient(request, id_cliente):
 
     context = {}
     context['data'] = Clientes.objects.get(id = id_cliente)
-
+    context['programa_social'] = programa_social(context['data'].email)
 
     if request.method == 'POST':
 
