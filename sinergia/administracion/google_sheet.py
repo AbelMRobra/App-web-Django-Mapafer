@@ -10,7 +10,7 @@ def programa_social(email):
 
     creds = ServiceAccountCredentials.from_json_keyfile_name(ruta_clave, scope)
 
-    client=gspread.authorize(creds)
+    client = gspread.authorize(creds)
 
     sheet = client.open("Mapafer-Respuestas").sheet1
 
@@ -20,7 +20,8 @@ def programa_social(email):
         mask = sheet_pandas['Dirección de correo electrónico'] == email
         sheet_filter = sheet_pandas[mask]
         columns = sheet_pandas.columns
-        data_columna = [(column, sheet_filter.loc[0, column]) for column in columns]
+        max_value = sheet_pandas.index[mask].tolist()
+        data_columna = [(column, sheet_filter.loc[max_value[-1], column]) for column in columns]
     
     except:
         data_columna = []
