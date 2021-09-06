@@ -118,14 +118,9 @@
           <ul id="sidebarnav">
             <li class="nav-small-cap">MENÚ</li>
             <li class="nav-devider"></li>
-            <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-              class="zmdi zmdi-accounts"></i><span class="hide-menu"> Clientes</span></a>
-            <ul aria-expanded="false" class="collapse">
-                <li><a href="{% url 'Nuevo cliente' %}">Nuevo cliente</a></li>
-                <li><a href="{% url 'Panel de empresas' %}">Empresas</a></li>
-                <li><a href="{% url 'BBDD clientes' %}">Base de datos</a></li>
-            </ul>
-            </li>
+            <li> <a href="{% url 'BBDD clientes' %}"><i class="zmdi zmdi-accounts"></i><span class="hide-menu"> Clientes</span></a></li>
+
+            <li> <a href="{% url 'Panel de empresas' %}"><i class="fa fa-building"></i><span class="hide-menu"> Empresas</span></a></li>
 
             <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                 class="fa fa-shopping-basket"></i><span class="hide-menu"> Proveedores</span></a>
@@ -202,11 +197,11 @@
                                 
                                 <div class="align-self-center">
                                     <h5><span class="lstick m-r-20"></span>Clientes con deuda menor a 90 dias </h5>
-                                    <h6 class="text-muted m-t-10 m-b-0">Situación 1: <b class="ml-2">{{cantidad_situaciones.user_1}}</b> - Monto afectado: ${{monto_situaciones.situacion_1|floatformat:2|intcomma}}</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos1">Situación 1: <b class="ml-2">{{cantidad_situaciones.user_1}}</b> - Monto afectado: ${{monto_situaciones.situacion_1|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 30 dias</h6>
-                                    <h6 class="text-muted m-t-10 m-b-0">Situación 2: <b class="ml-2">{{cantidad_situaciones.user_2}}</b> - Monto afectado: ${{monto_situaciones.situacion_2|floatformat:2|intcomma}}</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos2">Situación 2: <b class="ml-2">{{cantidad_situaciones.user_2}}</b> - Monto afectado: ${{monto_situaciones.situacion_2|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 60 dias</h6>
-                                    <h6 class="text-muted m-t-10 m-b-0">Situación 3: <b class="ml-2">{{cantidad_situaciones.user_3}}</b> - Monto afectado: ${{monto_situaciones.situacion_3|floatformat:2|intcomma}}</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos3">Situación 3: <b class="ml-2">{{cantidad_situaciones.user_3}}</b> - Monto afectado: ${{monto_situaciones.situacion_3|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 90 dias</h6></div>
                             </div>
                         </div>
@@ -220,16 +215,222 @@
                                 
                                 <div class="align-self-center">
                                     <h5><span class="lstick m-r-20"></span>Clientes con deuda mayor a 90 dias</h5>
-                                    <h6 class="text-muted m-t-10 m-b-0">Situación 4: <b class="ml-2">{{cantidad_situaciones.user_4}}</b> - Monto afectado: ${{monto_situaciones.situacion_4|floatformat:2|intcomma}}</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos4">Situación 4: <b class="ml-2">{{cantidad_situaciones.user_4}}</b> - Monto afectado: ${{monto_situaciones.situacion_4|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 180 dias</h6>
-                                    <h6 class="text-muted m-t-10 m-b-0">Situación 5: <b class="ml-2">{{cantidad_situaciones.user_5}}</b> - Monto afectado: ${{monto_situaciones.situacion_5|floatformat:2|intcomma}}</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos5">Situación 5: <b class="ml-2">{{cantidad_situaciones.user_5}}</b> - Monto afectado: ${{monto_situaciones.situacion_5|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 365 dias</h6>
-                                    <h6 class="text-muted m-t-10 m-b-0">Situación 6: <b class="ml-2">{{cantidad_situaciones.user_6}}</b> - Monto afectado: ${{monto_situaciones.situacion_6|floatformat:2|intcomma}}</h6>
+                                    <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos6">Situación 6: <b class="ml-2">{{cantidad_situaciones.user_6}}</b> - Monto afectado: ${{monto_situaciones.situacion_6|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda en situación especial</h6></div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+            <!-- Modales de los prestamos de los clientes -->
+            
+            <div class="modal fade" id="DataPrestamos1" tabindex="-1" role="dialog" aria-labelledby="DataPrestamos1"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header"
+                          style="background-color: #2a3e52;">
+                          <h5 class="modal-title text-light" id="exampleModalLongTitle">Prestamos en situación 1</h5>
+                          <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        {% if cantidad_situaciones.user_datos_1 %}
+                        <h6>Los prestamos afectados son: </h6>
+                        <ul class="mt-2">
+                          {% for data in cantidad_situaciones.user_datos_1 %}
+                          <li>Prestamo de: {{data.cliente.nombre}}, {{data.cliente.apellido}} de ${{data.monto|floatformat:2|intcomma}} </li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h6>No hay prestamos en esta situación</h6>
+                        {% endif %}
+                          
+
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                      </div>
+                  </div>
+              </div>
+
+              </div>
+
+              <div class="modal fade" id="DataPrestamos2" tabindex="-1" role="dialog" aria-labelledby="DataPrestamos2"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header"
+                          style="background-color: #2a3e52;">
+                          <h5 class="modal-title text-light" id="exampleModalLongTitle">Prestamos en situación 2</h5>
+                          <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        {% if cantidad_situaciones.user_datos_2 %}
+                        <h6>Los prestamos afectados son: </h6>
+                        <ul class="mt-2">
+                          {% for data in cantidad_situaciones.user_datos_2 %}
+                          <li>Prestamo de: {{data.cliente.nombre}}, {{data.cliente.apellido}} de ${{data.monto|floatformat:2|intcomma}} </li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h6>No hay prestamos en esta situación</h6>
+                        {% endif %}
+                          
+
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                      </div>
+                  </div>
+              </div>
+
+              </div>
+
+              <div class="modal fade" id="DataPrestamos3" tabindex="-1" role="dialog" aria-labelledby="DataPrestamos3"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header"
+                          style="background-color: #2a3e52;">
+                          <h5 class="modal-title text-light" id="exampleModalLongTitle">Prestamos en situación 3</h5>
+                          <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        {% if cantidad_situaciones.user_datos_3 %}
+                        <h6>Los prestamos afectados son: </h6>
+                        <ul class="mt-2">
+                          {% for data in cantidad_situaciones.user_datos_3 %}
+                          <li>Prestamo de: {{data.cliente.nombre}}, {{data.cliente.apellido}} de ${{data.monto|floatformat:2|intcomma}} </li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h6>No hay prestamos en esta situación</h6>
+                        {% endif %}
+                          
+
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                      </div>
+                  </div>
+              </div>
+
+              </div>
+
+              <div class="modal fade" id="DataPrestamos4" tabindex="-1" role="dialog" aria-labelledby="DataPrestamos4"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header"
+                          style="background-color: #2a3e52;">
+                          <h5 class="modal-title text-light" id="exampleModalLongTitle">Prestamos en situación 4</h5>
+                          <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        {% if cantidad_situaciones.user_datos_4 %}
+                        <h6>Los prestamos afectados son: </h6>
+                        <ul class="mt-2">
+                          {% for data in cantidad_situaciones.user_datos_4 %}
+                          <li>Prestamo de: {{data.cliente.nombre}}, {{data.cliente.apellido}} de ${{data.monto|floatformat:2|intcomma}} </li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h6>No hay prestamos en esta situación</h6>
+                        {% endif %}
+                          
+
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                      </div>
+                  </div>
+              </div>
+
+              </div>
+
+              <div class="modal fade" id="DataPrestamos5" tabindex="-1" role="dialog" aria-labelledby="DataPrestamos5"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header"
+                          style="background-color: #2a3e52;">
+                          <h5 class="modal-title text-light" id="exampleModalLongTitle">Prestamos en situación 5</h5>
+                          <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        {% if cantidad_situaciones.user_datos_5 %}
+                        <h6>Los prestamos afectados son: </h6>
+                        <ul class="mt-2">
+                          {% for data in cantidad_situaciones.user_datos_5 %}
+                          <li>Prestamo de: {{data.cliente.nombre}}, {{data.cliente.apellido}} de ${{data.monto|floatformat:2|intcomma}} </li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h6>No hay prestamos en esta situación</h6>
+                        {% endif %}
+                          
+
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                      </div>
+                  </div>
+              </div>
+
+              </div>
+
+              <div class="modal fade" id="DataPrestamos6" tabindex="-1" role="dialog" aria-labelledby="DataPrestamos6"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header"
+                          style="background-color: #2a3e52;">
+                          <h5 class="modal-title text-light" id="exampleModalLongTitle">Prestamos en situación 6</h5>
+                          <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        {% if cantidad_situaciones.user_datos_6 %}
+                        <h6>Los prestamos afectados son: </h6>
+                        <ul class="mt-2">
+                          {% for data in cantidad_situaciones.user_datos_6 %}
+                          <li>Prestamo de: {{data.cliente.nombre}}, {{data.cliente.apellido}} de ${{data.monto|floatformat:2|intcomma}} </li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h6>No hay prestamos en esta situación</h6>
+                        {% endif %}
+                          
+
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                      </div>
+                  </div>
+              </div>
+
+              </div>
 
 
 

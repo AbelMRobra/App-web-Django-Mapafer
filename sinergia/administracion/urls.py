@@ -18,6 +18,7 @@ urlpatterns = [
     # URL de empresas
     url(r'^panelempresas$', login_required(views_empresa.panelempresas), name = 'Panel de empresas'),
     url(r'^panelempresas/(?P<id_empresa>\d+)/$', login_required(views_empresa.panel_pagos), name = 'Pagos por empresas'),
+    url(r'^perfilempresa/(?P<id_empresa>\d+)/$', login_required(views_empresa.perfilempresa), name = 'Perfil empresa'),
 
     # URL de pagos
     url(r'^panelpagos$', login_required(views_pagos.pagos_panel), name = 'Panel de pagos'),

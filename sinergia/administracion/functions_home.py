@@ -18,12 +18,22 @@ def montos_situaciones():
 
 def cantidad_situaciones():
 
+    con_prestamos = Prestamos.objects.all()
+    con_clientes = Clientes.objects.all()
+
     context = {}
-    context["user_1"] = len(Clientes.objects.filter(estado = "Situación 1"))
-    context["user_2"] = len(Clientes.objects.filter(estado = "Situación 2"))
-    context["user_3"] = len(Clientes.objects.filter(estado = "Situación 3"))
-    context["user_4"] = len(Clientes.objects.filter(estado = "Situación 4"))
-    context["user_5"] = len(Clientes.objects.filter(estado = "Situación 5"))
-    context["user_6"] = len(Clientes.objects.filter(estado = "Situación 6"))
+    context["user_1"] = len(con_clientes.filter(estado = "Situación 1"))
+    context["user_2"] = len(con_clientes.filter(estado = "Situación 2"))
+    context["user_3"] = len(con_clientes.filter(estado = "Situación 3"))
+    context["user_4"] = len(con_clientes.filter(estado = "Situación 4"))
+    context["user_5"] = len(con_clientes.filter(estado = "Situación 5"))
+    context["user_6"] = len(con_clientes.filter(estado = "Situación 6"))
+    context["user_datos_1"] = con_prestamos.filter(cliente__estado = "Situación 1")
+    context["user_datos_2"] = con_prestamos.filter(cliente__estado = "Situación 2")
+    context["user_datos_3"] = con_prestamos.filter(cliente__estado = "Situación 3")
+    context["user_datos_4"] = con_prestamos.filter(cliente__estado = "Situación 4")
+    context["user_datos_5"] = con_prestamos.filter(cliente__estado = "Situación 5")
+    context["user_datos_6"] = con_prestamos.filter(cliente__estado = "Situación 6")
+    
 
     return context

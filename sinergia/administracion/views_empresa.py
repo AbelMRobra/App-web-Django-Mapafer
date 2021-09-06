@@ -2,9 +2,20 @@ from django.shortcuts import render, redirect
 from .models import Empresa, Clientes, Pagos, CuotasPrestamo
 import datetime
 from datetime import timedelta
+from .google_sheet import programa_social_empresa
 
+def perfilempresa(request, id_empresa):
+
+    context = {}
+    context['programa'] = programa_social_empresa(id_empresa)
+    context['empresa'] = Empresa.objects.get(id = id_empresa)
+    context['clientes'] = Clientes.objects.filter(empresa__id = id_empresa).order_by("apellido")
+
+    return render(request, "empresa/perfil_Empresa.html", context)
 
 def panelempresas(request):
+
+    context = {}
 
     hoy = datetime.date.today()
 
@@ -21,18 +32,26 @@ def panelempresas(request):
     if request.method == 'POST':
 
         try:
-            empresa_editar = Empresa.objects.get(id =request.POST["id"] )
-            empresa_editar.nombre = request.POST["nombre"]
-            empresa_editar.save()
-                
+
+            try:
+                empresa_editar = Empresa.objects.get(id =request.POST["id"] )
+                empresa_editar.nombre = request.POST["nombre"]
+                empresa_editar.save()
+                context['mensaje'] = "Empresa editada exitosamente"
+                    
+            except:
+
+                new_empresa = Empresa(
+                    nombre = request.POST["nombre"]
+                    )
+                new_empresa.save()
+                context['mensaje'] = "Empresa creada exitosamente"
+
         except:
 
-            new_empresa = Empresa(
-                nombre = request.POST["nombre"]
-                )
-            new_empresa.save()
+            context['mensaje_error'] = "Surgio un error inesperado"
 
-    context = {}
+    
     context["empresas"] = Empresa.objects.all()
     
     datos_completos = []

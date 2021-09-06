@@ -100,7 +100,7 @@
                                 {% for i in informacion %}
                                 <tr>
                                     <td>{{i.0.id}}</td>
-                                    <td>{{i.0.nombre|lower|capfirst}}</td>
+                                    <td><a href="{% url 'Perfil empresa' i.0.id %}">{{i.0.nombre|lower|capfirst}}</a></td>
                                     <td>{{i.0.rubro|lower|capfirst}}</td>
                                     <td>{{i.0.contacto|lower|capfirst}}</td>
                                     <td style="text-align: center;">{{i.1}}</td>
@@ -113,6 +113,8 @@
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="{% url 'Perfil empresa' i.0.id %}"><i
+                                                class="fa fa-users mr-2"></i> Perfil</a>
                                             <a class="dropdown-item" href="{% url 'Pagos por empresas' i.0.id %}"><i
                                                 class="fa fa-money mr-2"></i> Pagos</a>
                                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Editar{{i.0.id}}"><i
@@ -167,8 +169,7 @@
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header"
-                                                    style="background: rgb(195, 39, 181);
-                                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                                    style="background-color: #2a3e52;">
                                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
                                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -218,8 +219,72 @@
     </div>
 </div>
 
+<a id="add" href="#" data-toggle="modal" data-target="#Agregarempresa" class="btn btn-lg btn-primary btn-circle fa fa-5x fa-plus"></a>
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+{% if mensaje %}
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'success',
+        title: '{{mensaje}}'
+    })
+
+</script>
+
+{% endif %}
+
+{% if mensaje_error %}
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'danger',
+        title: '{{mensaje_error}}'
+    })
+
+</script>
+
+{% endif %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<style>
+    #add{
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+    }
 
+
+</style>
 
 {% endblock %}
