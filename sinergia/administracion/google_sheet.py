@@ -85,8 +85,6 @@ def programa_social_empresa(id_empresa):
         
         data.append((count, pregunta, tipo, cuantos, respuestas))
 
-    print(data)
-
     return data
 
 
