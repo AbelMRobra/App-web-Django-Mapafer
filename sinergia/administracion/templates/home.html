@@ -412,8 +412,8 @@
                                         label: 'Monto nominal en el mes',
                                         data: [{% for i in datos_grafico %}
                                         "{{i.1|floatformat:0}}",{% endfor %}],
-                                        backgroundColor: 'rgba(175, 23, 171 , 0.2)',
-                                        borderColor: 'rgba(175, 23, 171 )',
+                                        backgroundColor: 'rgba(147, 78, 243, 0.2)',
+                                        borderColor: 'rgba(147, 78, 243)',
                                         borderWidth: 1
                                     }]
                                 },
@@ -442,7 +442,7 @@
                 <div class="col-lg-3 col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title"><span class="lstick"></span>Composición de los creditos</h4>
+                            <h4 class="card-title"><span class="lstick"></span>Resumen de avance</h4>
                             <canvas id="myChart"></canvas>
                             <script>
         
@@ -454,7 +454,7 @@
                                     data: {
                                     datasets: [{        
                                         data: [{{total_pago}}, {{mora_total}}, {{total_saldo}}],
-                                        backgroundColor: ['rgba(58, 180, 71, 0.8)', 'rgba(252, 48, 34, 0.8)', 'rgba(175, 23, 171 , 0.8)'],    
+                                        backgroundColor: ['rgba(147, 78, 243, 0.6)', 'rgba(252, 48, 34, 0.6)', 'rgba(42, 40, 45, 0.6)'],    
                                     }],
                           
                                     labels: ["Pagado", "Moroso", "Saldo"]
@@ -469,10 +469,6 @@
                   
                             <table class="table vm font-14">
                                 <tr>
-                                    <td class="b-0">Saldo</td>
-                                    <td class="text-right font-medium b-0">{{total_saldo}}%</td>
-                                </tr>
-                                <tr>
                                     <td>Cobrado</td>
                                     <td class="text-right font-medium">{{total_pago}}%</td>
                                 </tr>
@@ -480,6 +476,11 @@
                                     <td>Moroso</td>
                                     <td class="text-right font-medium">{{mora_total}}%</td>
                                 </tr>
+                                <tr>
+                                    <td class="b-0">Saldo</td>
+                                    <td class="text-right font-medium b-0">{{total_saldo}}%</td>
+                                </tr>
+                                
 
                             </table>
 
@@ -519,8 +520,8 @@
                                       label: 'Cuotas a cobrar',
                                       data: [{% for i in matriz_resultante %}
                                       "{{i|floatformat:0}}",{% endfor %}],
-                                      backgroundColor: 'rgba(53, 44, 140, 0.2)',
-                                      borderColor: 'rgba(53, 44, 140)',
+                                      backgroundColor: 'rgba(42, 40, 45, 0.2)',
+                                      borderColor: 'rgba(42, 40, 45)',
                                       borderWidth: 1
                                   }]
                               },
@@ -543,33 +544,7 @@
                       </div>
                   </div>
               </div>
-              <!-- ============================================================== -->
-              <!-- visit charts-->
-              <!-- ============================================================== -->
-              <div class="col-lg-3 col-md-12">
-                  <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title"><span class="lstick"></span>Analisis del interes</h4>
-                          <h6>Monto del interes:</h6>
-                            <h6 class="text-info">${{monto_interes|floatformat:0|intcomma}}</h6>
-                            <hr>
 
-                
-                          <table class="table vm font-14">
-                              <tr>
-                                  <td class="b-0">T.A.E promedio año corriente</td>
-                                  <td class="text-right font-medium b-0">{{prom_tae_year_courrent|floatformat:2}}%</td>
-                              </tr>
-                              <tr>
-                                  <td>T.A.E promedio año pasado</td>
-                                  <td class="text-right font-medium">{{prom_tae_year_last|floatformat:2}}%</td>
-                              </tr>
- 
-
-                          </table>
-                      </div>
-                  </div>
-              </div>
           </div>
           {% endif %}
           {% endblock %}

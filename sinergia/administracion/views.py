@@ -152,7 +152,8 @@ def home(request):
                     else:
                         fecha_aux = fecha_aux + datetime.timedelta(days=15)
                 mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-                mora_total += mora
+                if mora > 0:
+                    mora_total += mora
 
                 for f in range(24):
                     situacion_1 = 1
@@ -227,7 +228,8 @@ def home(request):
                         else:
                             fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
                 mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-                mora_total += mora
+                if mora > 0:
+                    mora_total += mora
                 for f in range(24):
                     cuotas_pendientes = d.cuotas - cuotas_pasadas
                     if cuotas_pendientes >= 1:
