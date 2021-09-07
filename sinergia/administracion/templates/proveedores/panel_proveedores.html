@@ -48,7 +48,7 @@
                                 {% for i in proveedores %}
                                 <tr>
                                     <td>{{i.0.id}}</td>
-                                    <td>{{i.0.fantasia}}</td>
+                                    <td><a href="{% url 'Editar proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     <td>${{i.2|floatformat:2|intcomma}}</td>
                                     <td>${{i.3|floatformat:2|intcomma}}</td>
@@ -76,8 +76,7 @@
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header"
-                                                    style="background: rgb(195, 39, 181);
-                                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                                    style="background-color: #2a3e52;">
                                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
                                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -127,8 +126,20 @@
     </div>
 </div>
 
+
+<a id="add" href="{% url 'Nuevo proveedor' %}" class="btn btn-lg btn-primary btn-circle fa fa-5x fa-plus"></a>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<style>
+    #add{
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+    }
+
+
+</style>
 
 <script>
     $(document).ready(function () {

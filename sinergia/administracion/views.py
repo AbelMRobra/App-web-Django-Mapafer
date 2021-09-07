@@ -634,6 +634,12 @@ def cartera_activa(request):
     for d in data_aux:
         today = datetime.date.today()
         pagos_list = Pagos.objects.filter(prestamo = d).values_list("monto", flat = True)
+
+        if d.monto != 0:
+            avance = sum(np.array(pagos_list))/d.monto*100
+        else:
+            avance = 100
+
         cant = len(pagos_list)
         pagos = sum(pagos_list)
         saldo = d.monto - pagos    
@@ -651,7 +657,8 @@ def cartera_activa(request):
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
 
             prox_vencimiento = fecha_aux 
-            data.append((d, pagos, saldo, prox_vencimiento, mora))
+            data.append((d, pagos, saldo, prox_vencimiento, mora, avance))
+        
         if d.regimen == "MENSUAL":
             cuotas_pasadas = 0
             fecha_aux = fecha_primer_pago
@@ -667,7 +674,7 @@ def cartera_activa(request):
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
 
             prox_vencimiento = fecha_aux 
-            data.append((d, pagos, saldo, prox_vencimiento, mora))
+            data.append((d, pagos, saldo, prox_vencimiento, mora, avance))
     return render(request, "prestamos/panelprincipal.html", {'data':data})
 
 def cashflow(request):

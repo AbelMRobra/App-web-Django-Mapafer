@@ -4,87 +4,98 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Aclaraciones del soft</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Aclaraciones del soft</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Aclaraciones</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Aclaraciones</li>
+        </ol>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-lg-3 col-xlg-2 col-md-4">
+        <div class="stickyside">
+            <div class="list-group" id="top-menu">
+                <a href="#1" class="list-group-item active">Base de datos de clientes</a>
+                <a href="#22" class="list-group-item">Situaciones posibles</a>
+                <a href="#3" class="list-group-item">Consideraciones</a>
+                <a href="#4" class="list-group-item">Base de datos de empresa</a>
+                <a href="#5" class="list-group-item">Programa Mapafer</a>
+                <a href="#6" class="list-group-item">Base de datos proveedores</a>
+                <a href="#7" class="list-group-item">Base de datos prestamos</a>
+                <a href="#8" class="list-group-item">Cobranzas</a>
+                <a href="#9" class="list-group-item">Flujos</a>
+                <a href="#10" class="list-group-item">Dashboard principal</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-xlg-10 col-md-8">
         <div class="card">
-            <div class="card-body row">
-                <div class="col-12 justify-content-center">
-
-                    <h4 class="card-title">Aclaraciones</h4>
-                    <h6 class="card-subtitle">Explicación de criterios, calculos y metodos utilizados</h6>
-                    <hr>
-
-                    <div class="profiletimeline">
-                        <div class="sl-item">
-                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
-                            <div class="sl-right">
-                                <div><a href="#" class="link">Clientes</a>
-                                    <p>Sobre los caracteristicas asociadas</p>
-                                    <div class="row">
-                                        <p class="m-t-10"> Al momento de cargar un cliente se pedira completar un formulario basico, el cual sera obligatorio completar al menos con <b>nombre, apellido, cuil y un score</b>, en la BBDD se podra completar mas caracteristicas sobre el mismo.</p>
-                                        <p class="m-t-10"> El sistema rechazada el pedido de ingreso de un cliente si el <u>cuil ya se encuentra registrado</u></p>
-                                        <p class="m-t-10"> Todos los aspectos del cliente son editable menos el <b>estado</b>, los cuales se completa de la siguiente manera:</p>
-                                        <p class="m-t-10"><b class="text-warning">Potencial</b> es el estado que se coloca por defecto</p>
-                                        <p class="m-t-10"><b class="text-danger">Moroso</b> este estado el sistema lo coloca cuando el cliente tiene una deuda morosa de mas del 50% de lo que debio pagar y ya supero el 50% de su plan de pago. A estos clientes el sistema <u>no los cuenta</u> para hacer el flujo de ingresos</p>
-                                        <p class="m-t-10"><b class="text-success">Activo</b> este estado es automatico cuando el cliente asume un credito</p>
-                                        <p class="m-t-10"><b class="text-primary">Cliente</b> este estado es automatico cuando el cliente tiene todos sus creditos finalizados</p>
-                                        <p class="m-t-10"><b>Rechazado</b> es el unico estado que se coloca manualmente siempre y cuando el estado previo sea cliente o potencial</p>
-                                    </div>
-                                    <div class="like-comm"> <a href="#" class="link m-r-10">¿Tienes sugerencias?</a> </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="profiletimeline">
-                        <div class="sl-item">
-                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
-                            <div class="sl-right">
-                                <div><a href="#" class="link">Cashflow (Flujo de ingresos)</a>
-                                    <p>Sobre consideraciones al momento de hacer calculos</p>
-                                    <div class="row">
-                                        <p class="m-t-10">Los flujos de ingresos se calculan a partir de la información cargada en los <u>prestamos</u>. El mismo solo se compone por los clientes que no se encuentren en estado <u class="text-danger">moroso</u> y no considera el pago de deudas morosas anteriores.</p>
-                                    </div>
-                                    <div class="like-comm"> <a href="#" class="link m-r-10">¿Tienes sugerencias?</a> </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="profiletimeline">
-                        <div class="sl-item">
-                            <div class="sl-left"> <img src="{% static 'img/logosinergia.png' %}" alt="user" class="img-circle" /> </div>
-                            <div class="sl-right">
-                                <div><a href="#" class="link">Dashboard principal</a>
-                                    <p>Sobre su funcionamiento</p>
-                                    <div class="row">
-                                        <p class="m-t-10">Todos los datos y graficos se completan de forma automatica con los datos de las distintas BBDD. </p>
-                                        <p class="m-t-10"><b class="text-primary">Grafico del historico de creditos</b> este grafico se crea a partir de la sumatoria de los montos de los creditos y <u>la fecha</u> que se crea, sin importar la fecha de la primera cuota</p>
-                                    </div>
-                                    <div class="like-comm"> <a href="#" class="link m-r-10">¿Tienes sugerencias?</a> </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
+            <div class="card-body">
+                <h4 class="card-title" id="1">1. Base de datos de clientes</h4>
+                <p>Esta es la base de datos principal, la misma refleja todos los clientes tanto activos como potenciales del sistema. A traves de esta interfaz se puede aceeder a un perfil del cliente donde se guarda información y documentos del mismo</p>
+                <p>En en panel principal se pueden realizar las siguientes acciones:</p>
+                <ul>
+                    <li>Crear nuevos clientes, cuyo estado inicial siempre sera "Potencial"</li>
+                    <li>Ingresar al perfil de cada usuario</li>
+                    <li>Borrar usuarios, pero se debe tener presente que esta acción eliminara toda la información del mismo, como pagos o prestamos asociados</li>
+                    <li>Activar la función <b>recalculo</b>, que permite recalcular la situaciones de todos los clientes en caso de encontrar un error</li>
+                </ul>
+                <p>Por otro lado, todos los clientes tienen un perfil en el que se pueden realizar las siguientes acciones:</p>
+                <ul>
+                    <li>Editar la información personal del cliente</li>
+                    <li>Ver información resumida de los creditos del mismo</li>
+                    <li>Crear notificaciones que se crearan automaticamente en un calendario Google ya predefinido</li>
+                    <li>Ver resultados del programa MAPAFER</li>
+                    <li>Cargar documentos asociados</li>
+                </ul>
+                <h4 class="card-title m-t-40" id="22">2. Situaciones posibles de los clientes</h4>
+                <p>Las situaciones estan vinculadas al comportamiento de un cliente con los prestamos, y las mismas se calculan automaticamente de la siguiente manera</p>
+                <ul>
+                    <li>Situación 1: Se mantiene cuando no tiene deuda mayor a 30 dias</li>
+                    <li>Situación 2: Se mantiene cuando no tiene deuda mayor a 90 dias</li>
+                    <li>Situación 3: Se mantiene cuando no tiene deuda mayor a 180 dias</li>
+                    <li>Situación 4: Se mantiene cuando no tiene deuda mayor a 365 dias</li>
+                    <li>Situación 5: La deuda supera los 365 dias</li>
+                    <li>Situación 6: Sin definir</li>
+                </ul>
+                <h4 class="card-title m-t-40" id="3">3. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="4">4. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="5">5. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="6">6. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="7">7. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="8">8. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="9">9. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <h4 class="card-title m-t-40" id="10">10. Title will be here</h4>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
+                <p> enean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,</p>
             </div>
         </div>
     </div>

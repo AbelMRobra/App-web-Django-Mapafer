@@ -4,19 +4,16 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Flujo de ingresos</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Flujo de ingresos</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item">Cashflow</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Cashflow</li>
+        </ol>
     </div>
 </div>
 
@@ -26,7 +23,7 @@
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
-                    <h4 class="card-title">Flujo estimado de ingresos</h4>
+                    <h4 class="card-title"><span class="lstick m-r-20"></span> Flujo estimado de ingresos</h4>
                     <h6 class="card-subtitle">Este flujo supone el saldo (sin mora) de clientes no "Morosos" hasta el fin de su plan</h6>
 
                     <div class="table-responsive">
@@ -73,6 +70,8 @@
     </div>
 </div>
 
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
@@ -86,7 +85,12 @@
             buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'Flujo ingresos'
+                title: 'Flujo ingresos',
+                className: "btn btn-primary",
+
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button buttons-excel buttons-html5')
+                    }
             },
             ]   
         });
