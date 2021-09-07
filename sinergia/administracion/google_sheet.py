@@ -69,7 +69,7 @@ def programa_social_empresa(id_empresa):
                 data_columna = sheet_filter[mask].loc[max_value[-1], pregunta]
                 if data_columna != "":
 
-                    if type(data_columna) == "str":
+                    if isinstance(data_columna, str):
                         tipo = 0
                         respuestas.append(data_columna)
                     else:
@@ -83,7 +83,8 @@ def programa_social_empresa(id_empresa):
         tipo = sum(tipo_list)
         count += 1
         
-        data.append((count, pregunta, tipo, cuantos, respuestas))
+        if cuantos != 0:
+            data.append((count, pregunta, tipo, cuantos, respuestas))
 
     return data
 

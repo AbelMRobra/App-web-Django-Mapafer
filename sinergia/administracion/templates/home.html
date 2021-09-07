@@ -167,7 +167,7 @@
                         <div class="card-body">
                             <div class="d-flex no-block">
                                 
-                                <div class="align-self-center">
+                                <div class="align-self-center ">
                                     <h5><span class="lstick m-r-20"></span>Clientes con deuda menor a 90 dias </h5>
                                     <h6 class="text-muted m-t-10 m-b-0"><a href="#" data-toggle="modal" data-target="#DataPrestamos1">Situación 1: <b class="ml-2">{{cantidad_situaciones.user_1}}</b> - Monto afectado: ${{monto_situaciones.situacion_1|floatformat:2|intcomma}}</a></h6>
                                     <h6 class="m-t-0" style="font-size: 12px;">Deuda menor a 30 dias</h6>
@@ -555,6 +555,70 @@
 
 </div>
 
+<style>
+      .go-corner {
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 position: absolute;
+	 width: 32px;
+	 height: 32px;
+	 overflow: hidden;
+	 top: 0;
+	 right: 0;
+	 background-color: #2a3e52;;
+	 border-radius: 0 4px 0 32px;
+}
+ .go-arrow {
+	 margin-top: -4px;
+	 margin-right: -4px;
+	 color: white;
+	 font-family: courier, sans;
+}
+.card1 p{
+  display: none;
+  font-size: 12px;
+}
+ .card1 {
+	 display: block;
+	 position: relative;
+	 max-width: 262px;
+	 border-radius: 4px;
+	 text-decoration: none;
+	 z-index: 0;
+	 overflow: hidden;
+}
+ .card1:before {
+	 content: "";
+	 position: absolute;
+	 z-index: -1;
+	 top: -16px;
+	 right: -16px;
+	 background: #2a3e52;;
+	 height: 32px;
+	 width: 32px;
+	 border-radius: 32px;
+	 transform: scale(1);
+	 transform-origin: 50% 50%;
+	 transition: transform 0.25s ease-out;
+}
+ .card1:hover:before {
+	 transform: scale(21);
+}
+ .card1:hover h6 {
+   display: none;
+}
+ .card1:hover p {
+   display: block;
+	 transition: all 0.3s ease-out;
+	 color: white;
+}
+ 
+ .card1:hover img {
+  display: none;
+  }
+</style>
+
     <!-- PRUEBA IMPORTACIONES -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -636,6 +700,8 @@
 
 
 </html>
+
+
 
 
 <script>
