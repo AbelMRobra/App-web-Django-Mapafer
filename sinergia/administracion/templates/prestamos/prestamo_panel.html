@@ -32,7 +32,7 @@
 
                             <thead style="font-size: 14px;">
                                 <tr>
-                                    <th>ID</th>
+
                                     <th>Cliente</th>
                                     <th>Fecha</th>
                                     <th>Monto</th>
@@ -51,8 +51,7 @@
 
                                 {% for i in data %}
                                 <tr>
-                                    <td style="max-width: 5px;">{{i.0.id}}</td>
-                                    <td style="min-height: 120px; max-width: 130px;"><a href="{% url 'Administrar credito' i.0.id %}">{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
+                                    <td style="min-height: 120px; min-width: 100px;">{{i.0.id}} <a href="{% url 'Administrar credito' i.0.id %}"> {{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
                                         <h6 class="card-subtitle" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</h6>
                                     </td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>

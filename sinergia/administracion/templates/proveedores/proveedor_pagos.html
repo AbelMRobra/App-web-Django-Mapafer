@@ -1,0 +1,311 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">{{proveedor.fantasia}}</h3>
+    </div>
+
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'Panel proveedor' %}">Proveedores</a></li>
+            <li class="breadcrumb-item">Pagos</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span>Pagos y deudas al proveedor</h4>
+                        <div class="btn-group ml-auto">
+                            <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                data-target="#AgregarPago" name="subir_item"><i
+                                    class="fa fa-angle-right mr-2"></i>Agregar pagos</a>
+                                    
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="AgregarPago" tabindex="-1" role="dialog" aria-labelledby="AgregarPago"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header"
+                                    style="background-color: #2a3e52;">
+                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Agregar un pago</h5>
+                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data">
+
+                                        {% csrf_token %}
+                                        <div style="text-align: left;">
+                                            <form action="#" method="POST">
+                
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <span>Fecha</span>
+                                                        <div class="mb-3">
+                                                            <input name="fecha" type="date" class="form-control form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span>Monto</span>
+                                                        <div class="mb-3">
+                                                            <input name="monto" type="number" step="any" class="form-control form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span>Numero de la deuda</span>
+                                                        <div class="mb-3">
+                                                            <select name="id_deuda" class="form-control form-control">
+                                                                {% for detalle in deudas %}
+                                                                <option value="{{detalle.0.id}}">Deuda numero {{detalle.0.id}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                
+                                                        </div>
+                                                    </div>
+                                                </div>
+  
+
+                                            <div>
+                                                <button class="btn btn-primary" type="submit" name="borrar" value="{{i.id}}"
+                                                    style="margin-top: 10px;">Cargar</button>
+
+                                            </div>
+                                        </div>
+
+                                        
+                                        {{ form.as_p }}
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table" >
+                        <tbody>
+                            {% for detalle in deudas %}
+                            <tr>
+                                <td><i class="mr-3 {% if detalle.0.estado_pagado %}fa fa-check-circle text-success{% else %}fa fa-exclamation-circle text-warning{% endif %}"></i> Prestamo Nº {{detalle.0.id}} a {{detalle.0.prestamo.cliente.apellido}}, {{detalle.0.prestamo.cliente.nombre}} por un monto de ${{detalle.0.prestamo.valor_original|floatformat:2|intcomma}} vence <b>{{detalle.0.fecha|date:"d/m/Y"}}</b>
+                                    <div class="mt-1 progress" style="height: 6px;">
+                                        <div class="progress-bar bg-primary " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{detalle.1|floatformat:0}}%; height:6px;"> <span class="sr-only">{{detalle.1|floatformat:0}}% Complete</span></div>
+                                        </div></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    {% if pagos%}
+
+                    <table id="example" class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Pagos realizados </th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                    
+                        <tbody style="font-size: 14px;">
+
+                            {% for i in pagos %}
+                            <tr>
+                                <td><div class="btn-group ml-auto mr-2">
+                                    <a href="JavaScript:void(0)" class="icon-options-vertical link"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#" data-toggle="modal"
+                                        data-target="#EditarPago{{i.id}}"><i
+                                            class="fa fa-angle-right mr-2"></i> Editar</a>
+                                        <a class="dropdown-item text-danger" href="#" data-toggle="modal"
+                                            data-target="#ModalBorrar{{i.id}}"><i
+                                                class="fa fa-angle-right mr-2"></i> Borrar</a>
+                                    </div>
+                                </div> Pago realizado el: {{i.fecha|date:"d-m-Y"}} {% if i.deuda %} al prestamo Nº {{i.deuda.id}} {% else %} sin asignar {% endif %}</td>
+                                <td>${{i.monto|floatformat:2|intcomma}}</td>
+
+                            </tr>
+
+                            <div class="modal fade" id="ModalBorrar{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header"
+                                                style="background-color: #2a3e52;">
+                                                <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el pago registrado</h5>
+                                                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" enctype="multipart/form-data">
+
+                                                    {% csrf_token %}
+                                                    <div style="text-align: left;">
+                                                        <h3>Advertencia</h3>
+
+                                                        <h6>Esta acción no se puede deshacer, toda la información sera eliminada de la base de datos</h6>
+
+                    
+
+                                                        <div>
+                                                            <button class="btn btn-danger" type="submit" name="id_pago_borrar" value="{{i.id}}"
+                                                                style="margin-top: 10px;">Continuar</button>
+
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                    {{ form.as_p }}
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal fade" id="EditarPago{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="EditarPago"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header"
+                                            style="background-color: #2a3e52;">
+                                            <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar un pago</h5>
+                                            <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="POST" enctype="multipart/form-data">
+        
+                                                {% csrf_token %}
+                                                <div style="text-align: left;">
+                                                    <form action="#" method="POST">
+                        
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span>Fecha</span>
+                                                                <div class="mb-3">
+                                                                    <input name="fecha" value="{{i.fecha|date:'Y-m-d'}}" type="date" class="form-control form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span>Monto</span>
+                                                                <div class="mb-3">
+                                                                    <input name="monto" value="{{i.monto}}" type="number" step="any" class="form-control form-control">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+        
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <span>Numero de la deuda</span>
+                                                                <div class="mb-3">
+                                                                    <select name="id_deuda" class="form-control form-control">
+                                                                        {% for detalle in deudas %}
+                                                                        <option value="{{detalle.0.id}}" {% if detalle == i.deuda %}selected{% endif %}>Deuda numero {{detalle.0.id}}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+          
+        
+                                                    <div>
+                                                        <button class="btn btn-primary" type="submit" name="id_pago" value="{{i.id}}"
+                                                            style="margin-top: 10px;">Editar</button>
+        
+                                                    </div>
+                                                </div>
+        
+                                                
+                                                {{ form.as_p }}
+                                            </form>
+        
+                                        </div>
+        
+                                    </div>
+                                </div>
+        
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {% else %}
+
+                        <p style="padding: 20px;">Aun no se registraron pagos</p>
+
+                    {% endif %}
+
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% if mensaje %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        {% if mensaje.0 == 1 %}
+        icon: 'success',
+        {% elif mensaje.0 == 0 %}
+        icon: 'warning',
+        {% endif %}
+        title: '{{mensaje.1}}'
+    })
+
+</script>
+{% endif %}
+
+{% endblock %}
+

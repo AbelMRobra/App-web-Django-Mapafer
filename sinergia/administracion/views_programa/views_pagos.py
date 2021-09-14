@@ -1,18 +1,21 @@
 from django.shortcuts import render, redirect
-from .models import Pagos, Prestamos
-from .functions import estado_cliente
+from administracion.models import Pagos, Prestamos
+from ..funciones.f_estado_cliente import *
 
 def pagos_panel(request):
 
     if request.method == 'POST':
+        
         consulta_borrar = Pagos.objects.get(id = int(request.POST['borrar']))
         cliente = consulta_borrar.prestamo.cliente
         consulta_borrar.delete()
-        estado_cliente(cliente)
+        cliente.estado = estado_cliente(cliente)
+        cliente.save()
 
     context = {}
     context['pagos'] = Pagos.objects.all().order_by("-fecha")
     context['prestamos'] = Prestamos.objects.all().order_by("cliente__apellido")
+    
     return render(request, 'pagos/panelpagos.html', context)
 
 def pagos_agregar(request, id_prestamo):
@@ -40,6 +43,7 @@ def pagos_agregar(request, id_prestamo):
     
     context['pagos'] = Pagos.objects.all()
     context['prestamos'] = Prestamos.objects.all().order_by("cliente__apellido")
+    
     return render(request, 'pagos/agregarpagos.html', context)
 
 def pagos_editar(request, id_pago):
@@ -52,6 +56,10 @@ def pagos_editar(request, id_pago):
         pago.monto = request.POST['monto']
         pago.fecha = request.POST['fecha']
         pago.save()
+
+        cliente = pago.prestamo.cliente
+        cliente.estado = estado_cliente(cliente)
+        cliente.save()
         
         return redirect('Panel de pagos')
 
@@ -60,4 +68,5 @@ def pagos_editar(request, id_pago):
     context['pago'] = pago
     context['pagos'] = Pagos.objects.all()
     context['prestamos'] = Prestamos.objects.all().order_by("cliente__apellido")
+    
     return render(request, 'pagos/editarpagos.html', context)

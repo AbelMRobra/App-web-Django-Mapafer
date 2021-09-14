@@ -1,5 +1,5 @@
 import datetime
-from .models import CuotasPrestamo, Pagos, Prestamos
+from administracion.models import CuotasPrestamo, Pagos, Prestamos
 
 
 def armar_cuotas(prestamo):
@@ -78,6 +78,7 @@ def armar_cuotas(prestamo):
                 fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
 
 def estado_cliente(cliente):
+    
     today = datetime.date.today()
     prestamos_cliente = Prestamos.objects.filter(cliente = cliente)
     estados = []

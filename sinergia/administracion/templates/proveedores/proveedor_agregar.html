@@ -12,7 +12,8 @@
     <div class="col-md-7 align-self-center">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-            <li class="breadcrumb-item">Agregar proveedor</li>
+            <li class="breadcrumb-item"><a href="{% url 'Panel proveedor' %}">Proveedores</a></li>
+            <li class="breadcrumb-item">Agregar</li>
         </ol>
     </div>
 </div>
@@ -22,18 +23,15 @@
         <div class="card">
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
-                    <h4 class="card-title"><span class="lstick m-r-20"></span>Incorporar un proveedor a la base de datos</h4>
+                    <h4 class="card-title"><span class="lstick m-r-20"></span>Incorporar un proveedor a la base de datos
+                    </h4>
                     <h6 class="card-subtitle">Complete el formulario</h6>
-                    
+
 
                     <div class="row d-flex justify-content-center">
                         <div class="col col-md-12 col-lg-6">
                             <div class="row">
                                 <div class="col bg-light border rounded p-4 ">
-
-                                    {% if mensaje %}
-                                    <h6 class="text-danger">{{mensaje}}</h6>
-                                    {% endif %}
 
                                     <form method="POST">
 
@@ -54,8 +52,8 @@
                                                         <div>
 
                                                             <input name="razon_social" required type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
+                                                                placeholder="Ejemplo: Azlepi S.R.L"
+                                                                class="form-control form-control" aria-label="Amount">
 
                                                         </div>
                                                     </div>
@@ -72,8 +70,8 @@
                                                         <div>
 
                                                             <input name="fantasia" required type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
+                                                                placeholder="Link Inversiones"
+                                                                class="form-control form-control" aria-label="Amount">
 
                                                         </div>
                                                     </div>
@@ -84,7 +82,7 @@
                                             <div class="row d-flex justify-content-center mt-4">
                                                 <div class="col-lg-6 text-center">
 
-                                                    <button type="submit" class="btn btn-primary">Cargar proveedor</button>
+                                                    <button type="submit" class="btn btn-primary">Agregar</button>
 
                                                 </div>
                                             </div>
@@ -100,6 +98,36 @@
         </div>
     </div>
 </div>
+
+{% if mensaje %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        {% if mensaje.0 == 1 %}
+    icon: 'success',
+        {% elif mensaje.0 == 0 %}
+    icon: 'warning',
+        {% endif %}
+    title: '{{mensaje.1}}'
+    })
+
+</script>
+{% endif %}
 
 
 {% endblock %}

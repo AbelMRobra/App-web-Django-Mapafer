@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from . import views
-from . import views_pagos
-from . import views_proveedores
+from .views_programa import views_proveedores, views_prestamos, views_pagos
 from . import views_empresa
 from . import views_clientes
 from django.contrib.auth.decorators import login_required
@@ -35,20 +34,20 @@ urlpatterns = [
     url(r'^consulta_externo/(?P<code_key>\d+)/$', views.consulta_usuario_externo, name = 'Consulta externo'),
 
     # URL de Prestamos
-    url(r'^principal$', login_required(views.cartera_activa), name = 'Principal Prestamos'),
-    url(r'^calculadora$', login_required(views.calculadora), name = 'Calculadora'),
-    url(r'^admincredito/(?P<id_credito>\d+)/$', login_required(views.administrar_credito), name = 'Administrar credito'),
-    url(r'^infoprestamo$', login_required(views.informacion_prestamos), name = 'Información Prestamos'),
+    url(r'^principal$', login_required(views_prestamos.prestamos_panel), name = 'Principal Prestamos'),
+    url(r'^calculadora$', login_required(views_prestamos.prestamos_agregar), name = 'Calculadora'),
+    url(r'^admincredito/(?P<id_credito>\d+)/$', login_required(views_prestamos.prestamos_detalle_completo), name = 'Administrar credito'),
+    url(r'^infoprestamo$', login_required(views_prestamos.prestamos_informacion), name = 'Información Prestamos'),
     url(r'^cashflow$', login_required(views.cashflow), name = 'Cash Flow'),
 
     # URL de Info
     url(r'^infoaclaraciones$', login_required(views.aclaraciones), name = 'Aclaraciones'),
 
     # URL de proveedores
-    url(r'^newproveedores$', login_required(views_proveedores.newproveedor), name = 'Nuevo proveedor'),
-    url(r'^editarproveedor/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.editarproveedor), name = 'Editar proveedor'),
-    url(r'^pagosproveedor/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.pagosproveedor), name = 'Pago proveedor'),
-    url(r'^panelproveedores$', login_required(views_proveedores.panel_proveedores), name = 'Panel proveedor'),
+    url(r'^proveedoragregar/$', login_required(views_proveedores.proveedor_agregar), name = 'Nuevo proveedor'),
+    url(r'^proveedoreditar/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.proveedor_editar), name = 'Editar proveedor'),
+    url(r'^pagosproveedor/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.proveedor_pagos), name = 'Pago proveedor'),
+    url(r'^proveedorpanel/$', login_required(views_proveedores.proveedor_panel), name = 'Panel proveedor'),
     
 
 ]

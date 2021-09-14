@@ -3,6 +3,17 @@ from numpy import mod
 
 # Create your models here.
 
+class Proveedor(models.Model):
+    razon_social = models.CharField(max_length=200, verbose_name="Razón social")
+    fantasia = models.CharField(max_length=200, verbose_name="Nombre de fantasia")
+
+    class Meta:
+        verbose_name="Proveedor"
+        verbose_name_plural="Proveedores"
+
+    def __str__(self):
+        return self.razon_social
+
 class Empresa(models.Model):
     nombre = models.CharField(max_length=200, verbose_name="Nombre")
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
@@ -111,30 +122,6 @@ class Citas(models.Model):
     def __str__(self):
         return self.asunto
 
-class Proveedor(models.Model):
-    razon_social = models.CharField(max_length=200, verbose_name="Razón social")
-    fantasia = models.CharField(max_length=200, verbose_name="Nombre de fantasia")
-
-    class Meta:
-        verbose_name="Proveedor"
-        verbose_name_plural="Proveedores"
-
-    def __str__(self):
-        return self.razon_social
-
-class PagosProveedores(models.Model):
-
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, verbose_name = "Cliente")
-    fecha = models.DateField(verbose_name="Fecha del pago")
-    monto = models.FloatField(verbose_name="Monto")
-
-    class Meta:
-        verbose_name="Pago a proveedor"
-        verbose_name_plural="Pagos a proveedores"
-
-    def __str__(self):
-        return self.proveedor.fantasia
-
 class Prestamos(models.Model):
 
     class Regimen(models.TextChoices):
@@ -187,3 +174,30 @@ class Pagos(models.Model):
     class Meta:
         verbose_name="Pago"
         verbose_name_plural="Pagos"
+
+class DeudaProveedor(models.Model):
+    
+    prestamo = models.ForeignKey(Prestamos, on_delete=models.SET_NULL, verbose_name = "Prestamo",blank=True, null=True)
+    fecha = models.DateField(verbose_name="Fecha del pago")
+    estado_pagado = models.BooleanField(default=False, verbose_name="Estado de la deuda")
+
+    class Meta:
+        verbose_name="Deuda con proveedores"
+        verbose_name_plural="Deudas con proveedores"
+
+    def __str__(self):
+        return f'{self.prestamo.proveedor.razon_social}, {self.prestamo.valor_original}'
+
+class PagosProveedores(models.Model):
+
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, verbose_name = "Cliente",blank=True, null=True)
+    deuda = models.ForeignKey(DeudaProveedor, on_delete=models.SET_NULL, verbose_name = "Deuda",blank=True, null=True)
+    fecha = models.DateField(verbose_name="Fecha del pago")
+    monto = models.FloatField(verbose_name="Monto")
+
+    class Meta:
+        verbose_name="Pago a proveedor"
+        verbose_name_plural="Pagos a proveedores"
+
+    def __str__(self):
+        return self.proveedor.fantasia

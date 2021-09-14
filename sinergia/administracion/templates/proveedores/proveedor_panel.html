@@ -30,14 +30,13 @@
                         <table id="example" class="table" style="width:100%">
 
                             <thead>
-                                <tr>
-                                    <th>ID</th>
+      
                                     <th>Empresa</th>
                                     <th style="text-align: center;">Prestamos</th>
                                     <th>Monto prestado</th>
                                     <th>Pagado</th>
                                     <th>Saldo</th>
-                                    <th style="max-width: 5px;"></th>
+
 
 
                                 </tr>
@@ -47,31 +46,31 @@
 
                                 {% for i in proveedores %}
                                 <tr>
-                                    <td>{{i.0.id}}</td>
-                                    <td><a href="{% url 'Editar proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
-                                    <td style="text-align: center;">{{i.1}}</td>
-                                    <td>${{i.2|floatformat:2|intcomma}}</td>
-                                    <td>${{i.3|floatformat:2|intcomma}}</td>
-                                    <td>${{i.4|floatformat:2|intcomma}}</td>
-                                    <td><div class="btn-group ml-auto">
+
+                                    <td><div class="btn-group ml-auto mr-2">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <a class="dropdown-item" href="{% url 'Pago proveedor' i.0.id %}"><i
-                                                class="fa fa-money mr-2"></i> Agregar pago</a>
+                                                class="fa fa-angle-right mr-2"></i>Pagos</a>
                                             <a class="dropdown-item" href="{% url 'Editar proveedor' i.0.id %}"><i
-                                                class="fa fa-pencil mr-2"></i> Editar</a>
+                                                class="fa fa-angle-right mr-2"></i>Editar</a>
                                             <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                                                data-target="#ModalBorrar{{i.id}}"><i
-                                                    class="fa fa-trash-o mr-2"></i> Borrar</a>
+                                                data-target="#ModalBorrar{{i.0.id}}"><i
+                                                    class="fa fa-angle-right mr-2"></i>Borrar</a>
                                         </div>
-                                    </div></td>
+                                    </div><a href="{% url 'Editar proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
+                                    <td style="text-align: center;">{{i.1}}</td>
+                                    <td>${{i.2|floatformat:2|intcomma}}</td>
+                                    <td>${{i.3|floatformat:2|intcomma}}</td>
+                                    <td>${{i.4|floatformat:2|intcomma}}</td>
+          
 
 
 
                                 </tr>
 
-                                <div class="modal fade" id="ModalBorrar{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
+                                <div class="modal fade" id="ModalBorrar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
                                         aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -94,7 +93,7 @@
                         
 
                                                             <div>
-                                                                <button class="btn btn-danger" type="submit" name="borrar" value="{{i.id}}"
+                                                                <button class="btn btn-danger" type="submit" name="id_proveedor" value="{{i.0.id}}"
                                                                     style="margin-top: 10px;">Continuar</button>
 
                                                             </div>
@@ -161,6 +160,36 @@
         });
     });
 </script>
+
+{% if mensaje %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        {% if mensaje.0 == 1 %}
+        icon: 'success',
+        {% elif mensaje.0 == 0 %}
+        icon: 'warning',
+        {% endif %}
+        title: '{{mensaje.1}}'
+    })
+
+</script>
+{% endif %}
 
 
 {% endblock %}
