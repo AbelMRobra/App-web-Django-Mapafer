@@ -1,8 +1,16 @@
 import datetime
-from administracion.models import CuotasPrestamo, Pagos, Prestamos
+from administracion.models import CuotasPrestamo, Pagos, Prestamos, Clientes
 
+def eliminar_cuotas_prestamo(prestamo):
 
-def armar_cuotas(prestamo):
+    cuotas_prestamo = CuotasPrestamo.objects.filter(prestamo = prestamo)
+    
+    for cuota in cuotas_prestamo:
+        cuota.delete()
+
+def crear_cuotas_prestamo(prestamo):
+
+    prestamo = Prestamos.objects.get(id = prestamo.id)
 
     pagos_list = Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat = True)
     fecha_primer_pago = datetime.date(prestamo.primera_cuota.year, prestamo.primera_cuota.month, prestamo.primera_cuota.day)
@@ -84,7 +92,7 @@ def estado_cliente(cliente):
     estados = []
     if len(prestamos_cliente) > 0:
         for prestamo in prestamos_cliente:
-            armar_cuotas(prestamo)
+            crear_cuotas_prestamo(prestamo)
             cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).order_by("fecha").exclude(estado = "SI")
             if len(cuotas) == 0:
                 estados.append(0)
@@ -120,6 +128,10 @@ def estado_cliente(cliente):
     else:
         estado_cliente = "Potencial"
 
+    cliente = Clientes.objects.get(id = cliente.id)
+    cliente.estado = estado_cliente
+    cliente.save()
+
     return estado_cliente
 
 def calcular_estado(cliente):
@@ -149,13 +161,5 @@ def calcular_estado(cliente):
                 nivel_deuda.append(5)
             else:
                 nivel_deuda.append(6)
-
-
-
-
-        
-            
-
-    
 
     return mora

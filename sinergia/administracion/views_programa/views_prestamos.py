@@ -3,16 +3,15 @@ from administracion.models import Citas, Clientes, Prestamos, Pagos, Proveedor, 
 import numpy_financial as npf
 import numpy as np
 from ..funciones.f_estado_cliente import *
+from ..funciones.f_prestamos import *
 
 def prestamos_panel(request):
 
+    context = {}
+
     if request.method == 'POST':
-        
-        prestamo_a_borrar = Prestamos.objects.get(id = int(request.POST['borrar']))
-        cliente =prestamo_a_borrar.cliente
-        prestamo_a_borrar.delete()
-        cliente.estado = estado_cliente(cliente)
-        cliente.save()
+
+        context["mensaje"] = prestamos_borrar_prestamo(int(request.POST['borrar']))
 
     data = []
 
@@ -62,123 +61,87 @@ def prestamos_panel(request):
 
             prox_vencimiento = fecha_aux 
             data.append((d, pagos, saldo, prox_vencimiento, mora, avance))
-    return render(request, "prestamos/prestamo_panel.html", {'data':data})
+
+    context["data"] = data
+    return render(request, "prestamos/prestamo_panel.html", context)
 
 def prestamos_agregar(request):
 
-    clientes = Clientes.objects.all()
-    proveedores = Proveedor.objects.all()
-    formulario = 0
+    estado_del_calculo = 0
+    
     context = {}
 
     if request.method == 'POST':
 
         try:
+
             string_cliente = request.POST['cliente'].split("-")
             string_proveedor = request.POST['proveedor'].split("-")
-            
             cliente = Clientes.objects.get(id = string_cliente[0])
-            
-            new_credito = Prestamos(
-                cliente = cliente,
-                proveedor = Proveedor.objects.get(id = string_proveedor[0]),
-                fecha = request.POST['fecha'],
-                primera_cuota = request.POST['priimeracuota'],
-                valor_original = request.POST['precio1'],
-                presupuesto_cliente = request.POST['precio3'],
-                monto = request.POST['precio2'],
-                cuotas = int(request.POST['cuotas']),
-                regimen = request.POST['regimen'],
-            )
-            new_credito.save()
+            proveedor = Proveedor.objects.get(id = string_proveedor[0])
+
+            context["mensaje"] = prestamos_agregar_credito(cliente, proveedor, request.POST['fecha'], 
+            request.POST['priimeracuota'], request.POST['precio1'], request.POST['precio3'], 
+            request.POST['precio2'], int(request.POST['cuotas']), request.POST['regimen'])
+
+            try:
+                context["mensaje"] = prestamos_adjuntar_archivo(context["mensaje"][1], request.FILES['adjunto'])
+
+            except:
+                context["mensaje"] = context["mensaje"][0]
+
+
+            estado_del_calculo = 0
 
             cliente.estado = estado_cliente(cliente)
             cliente.save()
-
-            
-            formulario = 0
-            context["mensaje"] = 1
-
-
-            try:
-                new_credito.adjunto = request.FILES['adjunto']
-                new_credito.save()
-            except:
-                pass
 
         except:
 
             monto_inicial = float(request.POST['monto'])
             regimen = request.POST['regimen']
             cantidad_cuotas = float(request.POST['cuotas'])
-
-            if regimen == "QUINCENAL":
-                cantidad_cuotas = cantidad_cuotas/2
             
-            tasa_anual = float(request.POST['tasa'])
-            
-            tasa_mensual = float((1 + tasa_anual/100))
-            tasa_mensual = tasa_mensual**0.0833333333333333-1
-            importe_cuota = npf.pmt(tasa_mensual, cantidad_cuotas, -monto_inicial,)
-            monto_prestamo = importe_cuota*cantidad_cuotas
+            datos_calculadora = prestamos_calculadora(request.POST['tasa'], monto_inicial, regimen, cantidad_cuotas)
 
-            if regimen == "QUINCENAL":
-
-                importe_cuota = importe_cuota/2
-                cantidad_cuotas = cantidad_cuotas*2
-
-            formulario = 1
-            context["monto"] = monto_prestamo
+            estado_del_calculo = 1
+            context["monto"] = datos_calculadora[0]
+            context["monto_cuota"] = datos_calculadora[1]
             context["monto_base"] = monto_inicial
-            context["cuota"] = int(cantidad_cuotas)
+            context["cuota"] = datos_calculadora[2]
             context["regimen"] = regimen
 
-    context["clientes"] = clientes
-    context["proveedores"] = proveedores
-    context["formulario"] = formulario
+    context["clientes"] = Clientes.objects.all()
+    context["proveedores"] = Proveedor.objects.all()
+    context["estado_del_calculo"] = estado_del_calculo
         
-    return render(request, "prestamos/calculadora.html", context)
+    return render(request, "prestamos/prestamo_agregar.html", context)
 
 def prestamos_detalle_completo(request, id_credito):
 
+    context = {}
+
     credito = Prestamos.objects.get(id = id_credito)
+
+    context['credito'] = credito
 
     if request.method == 'POST':
         
         id_proveedor = request.POST['proveedor'].split("-")[0]
         proveedor = Proveedor.objects.get(id = int(id_proveedor))
-        credito.proveedor = proveedor
-        credito.valor_original = request.POST['valor_original']
-        credito.monto = request.POST['monto']
-        credito.cuotas = request.POST['cuotas']
-        credito.presupuesto_cliente = request.POST['presupuesto_cliente']
-        credito.fecha = request.POST['fecha']
-        credito.save()
 
-        if request.POST['primera_cuota'] != str(credito.primera_cuota):
-            cuotas_prestamo = CuotasPrestamo.objects.filter(prestamo = credito)
-            for c in cuotas_prestamo:
-                c.delete()
-            credito.primera_cuota = request.POST['primera_cuota']
-            credito.save()
+        context["mensaje"] = prestamos_editar_credito(id_credito, proveedor, request.POST['fecha'], 
+        request.POST['primera_cuota'], request.POST['valor_original'], request.POST['presupuesto_cliente'], 
+        request.POST['monto'], request.POST['cuotas'])
 
-        return redirect('Administrar credito', id_credito = credito.id)
+        context['credito'] = Prestamos.objects.get(id = id_credito)
 
 
-    cuotas = CuotasPrestamo.objects.filter(prestamo = credito)
-
-    pagos = Pagos.objects.filter(prestamo = credito)
-
-    total_pagado = sum(Pagos.objects.filter(prestamo = credito).values_list("monto", flat=True))
-
-    proveedores = Proveedor.objects.all()
-
-    context = {}
-    context['credito'] = credito
-    context['cuotas'] = cuotas
-    context['pagos'] = pagos
-    context['total_pagado'] = total_pagado
-    context['proveedores'] = proveedores
+        
+    context['cuotas'] = CuotasPrestamo.objects.filter(prestamo = credito)
+    context['pagos'] = Pagos.objects.filter(prestamo = credito)
+    context['total_pagado'] = sum(Pagos.objects.filter(prestamo = credito).values_list("monto", flat=True))
+    context['proveedores'] = Proveedor.objects.all()
 
     return render(request, 'prestamos/prestamo_detalle.html', context)
 

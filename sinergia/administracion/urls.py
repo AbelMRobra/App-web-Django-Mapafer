@@ -34,9 +34,9 @@ urlpatterns = [
     url(r'^consulta_externo/(?P<code_key>\d+)/$', views.consulta_usuario_externo, name = 'Consulta externo'),
 
     # URL de Prestamos
-    url(r'^principal$', login_required(views_prestamos.prestamos_panel), name = 'Principal Prestamos'),
-    url(r'^calculadora$', login_required(views_prestamos.prestamos_agregar), name = 'Calculadora'),
-    url(r'^admincredito/(?P<id_credito>\d+)/$', login_required(views_prestamos.prestamos_detalle_completo), name = 'Administrar credito'),
+    url(r'^prestamo_principal$', login_required(views_prestamos.prestamos_panel), name = 'Principal Prestamos'),
+    url(r'^prestamo_agregar$', login_required(views_prestamos.prestamos_agregar), name = 'Calculadora'),
+    url(r'^prestamo_info/(?P<id_credito>\d+)/$', login_required(views_prestamos.prestamos_detalle_completo), name = 'Administrar credito'),
     url(r'^infoprestamo$', login_required(views_prestamos.prestamos_informacion), name = 'Información Prestamos'),
     url(r'^cashflow$', login_required(views.cashflow), name = 'Cash Flow'),
 

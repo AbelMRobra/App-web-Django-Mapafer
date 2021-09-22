@@ -12,7 +12,7 @@
     <div class="col-md-7 align-self-center">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-            <li class="breadcrumb-item">Cartera</li>
+            <li class="breadcrumb-item">Panel</li>
         </ol>
     </div>
 </div>
@@ -28,7 +28,7 @@
 
                     <div class="table-responsive">
 
-                        <table id="example2" class="table" style="width:100%">
+                        <table id="example2" class="table">
 
                             <thead style="font-size: 14px;">
                                 <tr>
@@ -41,18 +41,29 @@
                                     <th>Mora</th>                   
                                     <th>Saldo</th>
                                     <th>Prox. Ven*</th>
-                                    <th style="max-width: 5px;"></th>
-
-
+  
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 14px;">
+                            <tbody style="font-size: 13px;">
 
                                 {% for i in data %}
                                 <tr>
-                                    <td style="min-height: 120px; min-width: 100px;">{{i.0.id}} <a href="{% url 'Administrar credito' i.0.id %}"> {{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
-                                        <h6 class="card-subtitle" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</h6>
+                                    <td style="min-height: 120px; min-width: 120px;">
+                                        <div class="btn-group ml-auto mr-2">
+                                        <a href="JavaScript:void(0)" class="icon-options-vertical link"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="{% url 'Administrar credito' i.0.id %}"><i
+                                                    class="fa fa-angle-right mr-2"></i> Información</a>
+                                            <a class="dropdown-item" href="{% url 'Agregar pagos' i.0.id %}"><i
+                                                class="fa fa-angle-right mr-2"></i> Agregar pago</a>
+                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal"
+                                                data-target="#ModalBorrar{{i.0.id}}"><i
+                                                    class="fa fa-angle-right mr-2"></i> Borrar</a>
+                                        </div>
+                                    </div> <a href="{% url 'Administrar credito' i.0.id %}"> {{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
+                                        <h6 class="card-subtitle ml-4" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</h6>
                                     </td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>${{i.0.monto|floatformat:2|intcomma}}</td>
@@ -66,23 +77,6 @@
                                     <td>${{i.2|floatformat:2|intcomma}}</td>
                                     
                                     <td>{{i.3|date:"d/m/Y"}}</td>
-                                    <td>
-                                        <div class="btn-group ml-auto">
-                                        <a href="JavaScript:void(0)" class="icon-options-vertical link"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="{% url 'Administrar credito' i.0.id %}"><i
-                                                    class="fa fa-university mr-2"></i> Información</a>
-                                            <a class="dropdown-item" href="{% url 'Agregar pagos' i.0.id %}"><i
-                                                class="fa fa-money mr-2"></i> Agregar pago</a>
-                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                                                data-target="#ModalBorrar{{i.0.id}}"><i
-                                                    class="fa fa-trash-o mr-2"></i> Borrar</a>
-                                        </div>
-                                    </div>  
-                                </td>
-
-
 
                                 </tr>
 
@@ -91,8 +85,7 @@
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header"
-                                                    style="background: rgb(195, 39, 181);
-                                                background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
+                                                    style="background-color: #2a3e52;">
                                                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
                                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -155,6 +148,34 @@
 
 
 </style>
+
+
+
+{% if mensaje %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: '{% if mensaje.0 == 1 %}success{% else %}warning{% endif %}',
+        title: '{{mensaje.1}}'
+    })
+
+</script>
+{% endif %}
 
 
 

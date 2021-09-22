@@ -4,179 +4,219 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">Perfil del credito</h3>
+        <h3 class="text-themecolor">Detalle del credito</h3>
     </div>
     <div class="col-md-7 align-self-center">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'Principal Prestamos' %}">Creditos</a></li>
-            <li class="breadcrumb-item active">Perfil</li>
+            <li class="breadcrumb-item active">Detalle</li>
         </ol>
     </div>
 
 </div>
-    <div class="row">
+<div class="row">
 
-        <div class="col-lg-4 col-xlg-3 col-md-5">
-            <div class="card">
-                <div class="card-body">
-                    <center class="m-t-30"> <img src="{% if credito.cliente.imagen %}{{credito.cliente.imagen.url}}{% else %}{% static 'img/anonimo2.png' %}{% endif %}" class="img-circle" width="150" />
-                        <h4 class="card-title m-t-10">{{credito.cliente.nombre}},  {{credito.cliente.apellido}}</h4>
-                        <h5 class="card-title m-t-10">Score: {{credito.cliente.score}}</h5>
-                        <h5 class="card-title m-t-10">{{credito.cliente.estado}}</h5>
-                    </center>
-                </div>
-                <div>
-                    <hr> </div>
-                <div class="card-body"> <small class="text-muted">Cliente</small>
-                    <h6>{{credito.cliente.nombre}}, {{credito.cliente.apellido}}</h6> 
-                    <small class="text-muted p-t-30 db">Email</small>
-                    <h6>{{credito.cliente.email}}</h6> 
+    <div class="col-lg-4 col-xlg-3 col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <center class="m-t-30"> <img src="{% if credito.cliente.imagen %}{{credito.cliente.imagen.url}}{% else %}{% static 'img/anonimo2.png' %}{% endif %}" class="img-circle" width="150" />
+                    <h4 class="card-title m-t-10">{{credito.cliente.nombre}},  {{credito.cliente.apellido}}</h4>
+                    <h5 class="card-title m-t-10">Score: {{credito.cliente.score}}</h5>
+                    <h5 class="card-title m-t-10">{{credito.cliente.estado}}</h5>
+                </center>
+            </div>
+            <div>
+                <hr> </div>
+            <div class="card-body"> <small class="text-muted">Cliente</small>
+                <h6>{{credito.cliente.nombre}}, {{credito.cliente.apellido}}</h6> 
+                <small class="text-muted p-t-30 db">Email</small>
+                <h6>{{credito.cliente.email}}</h6> 
 
-                </div>
             </div>
         </div>
-        <!-- Column -->
-        <!-- Column -->
-        <div class="col-lg-8 col-xlg-9 col-md-7">
-            <div class="card">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs profile-tab" role="tablist">
-                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#ddatos" role="tab">Resumen</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cuotas" role="tab">Cuotas</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#pagos" role="tab">Pagos</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab">Editar</a> </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane active" id="ddatos" role="tabpanel">
-                        <div class="card-body">
-                            <div class="card-body">
-                                <h6>Proveedor del credito</h6> 
-                                <p>{{credito.proveedor.razon_social}}</p>
-                                <h6>Fecha del credito</h6> 
-                                <p>{{credito.fecha|date:"d/m/Y"}}</p>
-                                <h6>Información del interes y plan de pago</h6> 
-                                <p>Monto: $ {{credito.monto|floatformat:2|intcomma}} - Regimen: {{credito.regimen}} - Cuotas: {{credito.cuotas}}</p>
-                                <h6>Información original</h6> 
-                                <p>El monto solicitado: ${{credito.valor_original|floatformat:2|intcomma}}</p>
-                                <h6>Total pagado a la fecha</h6> 
-                                <p>${{total_pagado|floatformat:2|intcomma}}</p>
-                                {% if credito.adjunto %}<h6>Presupuesto del cliente <a href="{{credito.adjunto.url}}"><i class="fa fa-file-o"></i></a></h6>{% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <!--second tab-->
-                    <div class="tab-pane" id="cuotas" role="tabpanel">
-                        <div class="card-body">
-                            <div class="profiletimeline">
-                                {% for c in cuotas %}
-                                <div class="sl-item">
-                                    <div class="sl-left"> <i class="fa fa-info-circle text-info mt-1"></i> </div>
-                                    <div class="sl-right">
-                                        <div style="font-size: 14px;">Estado de la cuota {{c.estado}} - ${{c.monto|floatformat:2|intcomma}}
-                                            <p><span class="sl-date"> Vencimiento aprox el: {{c.fecha|date:"d/m/Y"}}</span></p>
- 
-                                        </div>
-                                    </div>
-                                </div>
-  
-                                {% endfor %}
-
-                            </div>
-                        </div>
-                    </div>
-
-                <div class="tab-pane" id="pagos" role="tabpanel">
+    </div>
+    <!-- Column -->
+    <!-- Column -->
+    <div class="col-lg-8 col-xlg-9 col-md-7">
+        <div class="card">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs profile-tab" role="tablist">
+                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#ddatos" role="tab">Resumen</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cuotas" role="tab">Cuotas</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#pagos" role="tab">Pagos</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab">Editar</a> </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="ddatos" role="tabpanel">
                     <div class="card-body">
-                        <div class="profiletimeline">
-                            {% for p in pagos %}
-                            <div class="sl-item">
-                                <div class="sl-left"> <i class="fa fa-lg fa-check-circle text-success mt-1"></i> </div>
-                                <div class="sl-right">
-                                    <div style="font-size: 14px;">Monto  ${{p.monto|floatformat:2|intcomma}}
-                                        <p><span class="sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</span></p>
-
+                        <div class="card-body">
+                            <h6>Proveedor del credito</h6> 
+                            <p>{{credito.proveedor.razon_social}}</p>
+                            <h6>Fecha del credito</h6> 
+                            <p>{{credito.fecha|date:"d/m/Y"}}</p>
+                            <h6>Información del interes y plan de pago</h6> 
+                            <p>Monto: $ {{credito.monto|floatformat:2|intcomma}} - Regimen: {{credito.regimen}} - Cuotas: {{credito.cuotas}}</p>
+                            <h6>Información original</h6> 
+                            <p>El monto solicitado: ${{credito.valor_original|floatformat:2|intcomma}}</p>
+                            <h6>Total pagado a la fecha</h6> 
+                            <p>${{total_pagado|floatformat:2|intcomma}}</p>
+                           
+                        </div>
+                    </div>
+                </div>
+                <!--second tab-->
+                <div class="tab-pane" id="cuotas" role="tabpanel">
+                    <div class="card-body">
+                        {% if cuotas %}
+                            {% for c in cuotas %}
+                            <div class="mt-2" style="font-size: 14px;"> <i class="{% if c.estado == 'SI' %}fa fa-check-circle text-success{% else %}fa fa-info-circle text-info{% endif %} mr-2"></i>  Cuota ${{c.monto|floatformat:2|intcomma}} con vencimiento {{c.fecha|date:"d/m/Y"}}
                                     </div>
-                                </div>
-                            </div>
-       
+    
                             {% endfor %}
 
-                        </div>
+                            {% else %}
+
+                            No tiene un plan de cuotas registrado
+
+                            {% endif %}
                     </div>
                 </div>
-                    <div class="tab-pane" id="editar" role="tabpanel">
-                        <div class="card-body">
-                            <form method="POST" enctype="multipart/form-data">
 
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label class="col-sm-12">Proveedor</label>
-                                    <div class="col-sm-12">
-                                        <select name="proveedor" class="form-control form-control-line">
-                                            {% for i in proveedores %}
-                                            <option {% if credito.proveedor == i%} selected {% endif %}>{{i.id}}-{{i.fantasia}}</option>
-                                            {% endfor %}
+            <div class="tab-pane" id="pagos" role="tabpanel">
+                <div class="card-body">
+                    <div class="profiletimeline">
+                        {% if pagos %}
+                        {% for p in pagos %}
+                        <div class="sl-item">
+                            <div class="sl-left"> <i class="fa fa-lg fa-check-circle text-success mt-1"></i> </div>
+                            <div class="sl-right">
+                                <div style="font-size: 14px;">Monto  ${{p.monto|floatformat:2|intcomma}}
+                                    <p><span class="sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</span></p>
 
-                                        </select>
-                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">Valor original</label>
-                                    <div class="col-md-12">
-                                        <input type="number" step="any" name="valor_original" value="{{credito.valor_original}}" class="form-control form-control-line">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="example-email" class="col-md-12">Valor del presupuesto del cliente</label>
-                                    <div class="col-md-12">
-                                        <input type="number" step="any" value="{{credito.presupuesto_cliente}}" class="form-control form-control-line" name="presupuesto_cliente">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="example-email" class="col-md-12">Monto del credito</label>
-                                    <div class="col-md-12">
-                                        <input type="number" step="any" value="{{credito.monto}}" class="form-control form-control-line" name="monto">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="example-email" class="col-md-12">Cantidad de cuotas</label>
-                                    <div class="col-md-12">
-                                        <input type="number" step="any" value="{{credito.cuotas}}" class="form-control form-control-line" name="cuotas">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="example-email" class="col-md-12">Fecha del credito</label>
-                                    <div class="col-md-12">
-                                        <input type="date" step="any" value="{{credito.fecha|date:'Y-m-d'}}" class="form-control form-control-line" name="fecha">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="example-email" class="col-md-12">Primera cuota</label>
-                                    <div class="col-md-12">
-                                        <input type="date" step="any" value="{{credito.primera_cuota|date:'Y-m-d'}}" class="form-control form-control-line" name="primera_cuota">
-                                    </div>
-                                </div>
-
-                                
-
- 
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <button class="btn btn-success">Subir</button>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
+    
+                        {% endfor %}
+                        {% else %}
+                        <h6>No tienes pagos registrados</h6>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+                <div class="tab-pane" id="editar" role="tabpanel">
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-sm-12">Proveedor</label>
+                                <div class="col-sm-12">
+                                    <select name="proveedor" class="form-control form-control-line">
+                                        {% for i in proveedores %}
+                                        <option {% if credito.proveedor == i%} selected {% endif %}>{{i.id}}-{{i.fantasia}}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">Valor original</label>
+                                <div class="col-md-12">
+                                    <input type="number" step="any" name="valor_original" value="{{credito.valor_original}}" class="form-control form-control-line">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Valor del presupuesto del cliente</label>
+                                <div class="col-md-12">
+                                    <input type="number" step="any" value="{{credito.presupuesto_cliente}}" class="form-control form-control-line" name="presupuesto_cliente">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Monto del credito</label>
+                                <div class="col-md-12">
+                                    <input type="number" step="any" value="{{credito.monto}}" class="form-control form-control-line" name="monto">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Cantidad de cuotas</label>
+                                <div class="col-md-12">
+                                    <input type="number" step="any" value="{{credito.cuotas}}" class="form-control form-control-line" name="cuotas">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Fecha del credito</label>
+                                <div class="col-md-12">
+                                    <input type="date" step="any" value="{{credito.fecha|date:'Y-m-d'}}" class="form-control form-control-line" name="fecha">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Primera cuota</label>
+                                <div class="col-md-12">
+                                    <input type="date" step="any" value="{{credito.primera_cuota|date:'Y-m-d'}}" class="form-control form-control-line" name="primera_cuota">
+                                </div>
+                            </div>
+
+                            
+
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-success">Subir</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Column -->
     </div>
+    <!-- Column -->
+</div>
 
-    {% endblock %}
+{% if credito.adjunto %}
+<a id="add" href="{{credito.adjunto.url}}" class="btn btn-lg btn-danger btn-circle fa fa-file-pdf-o"></a>
+{% endif %}
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+    }
+
+
+</style>
+
+
+{% if mensaje %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: '{% if mensaje.0 == 1 %}success{% else %}warning{% endif %}',
+        title: '{{mensaje.1}}'
+    })
+
+</script>
+{% endif %}
+
+{% endblock %}
