@@ -53,17 +53,23 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="actividad" role="tabpanel">
-                        <div class="card-body">
-                            <div>
+                        <div class="card-body d-flex">
+
+                            <div class="col-12 col-lg-6 feeds scrollbox mr-4" style="height: 330px; max-height: 330px;">
+
                                 {% if data_credite_complete %}
                                 {% for d in data_credite_complete %}
-                                <div>
-                                    <div> <i class="fa fa-university text-info mr-2"></i> <a href="{% url 'Administrar credito' d.0.id %}">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</a>
-                                        <p><span class="sl-date"> Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></p>
-                                        <hr>
-                                    </div>
 
-                                </div>
+                                <li class="bg-proyecto-color">
+                                    <div class="justify-content-between w-100">
+                                        <div class="d-flex text-left align-items-center">
+                                            <i class="fa fa-university text-info mr-2 mb-3"></i><span ><span class="font-bold w-100">Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</span>  <span class="text-muted font-bold">Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></span>
+                                            
+                                        </div>
+               
+                                    </div>
+                                </li>
+
 
                                 {% endfor %}
 
@@ -71,19 +77,41 @@
 
                                 <div>
                                     <div><i class="fa fa-bell-o mr-3"></i> No tiene creditos otorgados </div>
-        
-                                        <hr>
+ 
                                 </div>
 
                                 {% endif %}
+                            
+                            </div>
+                            <div class="col-12 col-lg-5 feeds scrollbox">
+                                
 
                                 <div>
-                                    <div><a href="#" class="link text-warning" data-toggle="modal" data-target="#AgregarRecordatorio"><i class="fa fa-bell-o mr-4"></i>Recordatorios</a></div>
-                                    {% for cita in citas|slice:"5" %}
-                                    <div class="mt-2"><i class="fa fa-bell-o mr-4"></i>{{cita.inicio|date:"d/m/Y"}} - {{cita.asunto}}</div>
-                                    {% endfor %}
-                                    <hr>
+                                    <a id="add2" href="#" class="btn btn-warning btn-circle" data-toggle="modal" data-target="#AgregarRecordatorio">
+                                        <i 
+                                        data-toggle="tooltip" data-placement="left" title="Agregar un recordatorio"
+                                        class="fa fa-bell-o "></i></a>
                                     
+                                    
+                                    {% if citas%}
+                                        {% for cita in citas|slice:"5" %}
+                                        <li class="bg-proyecto-color">
+                                            <div class="justify-content-between w-100">
+                                                <div class="d-flex text-left align-items-center">
+                                                    <i class="fa fa-bell-o text-warning mr-2 mb-3"></i><span><span class="font-bold w-100">{{cita.asunto}} </span><span class="text-muted font-bold">{{cita.inicio|date:"d/m/Y"}}</span> </span>
+                                                    
+                                                </div>
+                    
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                        
+                                    {% else %}
+
+                                    <p>No tienes recordatorios</p>
+
+                                    {% endif %}
+
                                 </div>
 
                                 <div class="modal fade" id="AgregarRecordatorio" tabindex="-1" role="dialog" aria-labelledby="AgregarRecordatorio"
@@ -461,5 +489,103 @@
                 </div>
             </div>
         </div>
+
+        <a id="add" href="{% url 'BBDD clientes' %}"
+            data-toggle="tooltip" data-placement="left" title="Volver al panel principal"
+            class="btn btn-primary btn-circle fa fa-arrow-left"></a>
+
+
+<style>
+    @keyframes example {
+        0% {
+            transform: scale(0.9);
+        }
+
+        50% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(0.9);
+        }
+    }
+
+    #add2 {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+
+    }
+
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+
+    .scrollbox {
+
+        overflow: hidden;
+    }
+
+    .scrollbox:hover {
+        overflow: auto;
+    }
+
+    .scrollbox::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scrollbox::-webkit-scrollbar-thumb {
+        background-color: rgb(201, 201, 201);
+        border-radius: 100px;
+    }
+
+
+    .arrow_box:hover {
+        transform: scaleX(1.07);
+
+    }
+
+    .arrow_box {
+        position: absolute;
+        transform: scaleX(1);
+        transform-origin: left center;
+        transition: transform 0.7s;
+
+        background: rgba({{proyecto.color}}, 0.5);
+        width: 130px;
+        height: 30px;
+        margin-top:-5px;
+    }
+
+    .arrow_box:after {
+        left: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(136, 183, 213, 0);
+
+        border-left-color: rgba({{proyecto.color}}, 0.5);
+        border-width: 14px;
+        margin-top: -14px;
+    }
+
+    .bg-proyecto-color:nth-child(odd) {
+        border-bottom: white solid 2px;
+        background-color: rgba(160, 160, 160, 0.25);
+    }
+
+    .bg-proyecto-color:nth-child(even) {
+        border-bottom: white solid 2px;
+        background-color: rgba(160, 160, 160, 0.1);
+    }
+</style>
 
     {% endblock %}
