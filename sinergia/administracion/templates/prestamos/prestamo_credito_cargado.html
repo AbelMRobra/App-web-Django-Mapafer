@@ -1,0 +1,113 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Credito cargado!</h3>
+    </div>
+
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'Principal Prestamos' %}">Cartera activa</a></li>
+            <li class="breadcrumb-item">Cargado</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-body text-center">
+
+                <div>
+                    <img src="{% static 'img/success.gif' %}" style="max-width: 250px;" />
+                       
+                </div>
+                <div>
+                    <h2 class="text-primary">Credito cargado correctamente!</h2>
+                    <h6 class="text-primary">Como es una tarea larga, repasamos lo que se realizo</h6>
+
+                </div>
+
+                
+        
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <a href="{% url 'Administrar credito' credito_anterior.id %}">
+             <div class="card">
+            <div class="card-body">
+                <h6><i class="fa fa-lg fa-check-circle text-success mr-2"></i>Cancelaste el credito <b>{{credito_anterior.id}}</b> de <b>{{credito_anterior.cliente.nombre}}, {{credito_anterior.cliente.apellido}}</b></h6>
+            </div>
+        </div>
+        </a>
+       
+        <a href="{% url 'Administrar credito' credito_nuevo.id %}">
+            <div class="card">
+            <div class="card-body">
+                <h6><i class="fa fa-lg fa-check-circle text-success mr-2"></i>Agregaste un credito a <b>{{credito_nuevo.cliente.nombre}}, {{credito_nuevo.cliente.apellido}}</b> por <b class="font-bold">${{credito_nuevo.monto|floatformat:2|intcomma}}</b></h6>
+            </div>
+        </div>
+        </a>
+        
+        <div class="card">
+            <div class="card-body">
+                <h6><i class="fa fa-lg fa-check-circle text-success mr-2"></i>Creaste una dueda al proveedor <b class="font-bold">{{credito_nuevo.proveedor}}</b> </h6>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h6><i class="fa fa-lg fa-check-circle text-success mr-2"></i> Se modificaron estados del cliente y aspectos en general </h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a id="add" href="{% url 'Principal Prestamos' %}" class="btn btn-primary btn-circle">
+    <i data-toggle="tooltip" data-placement="left" title="Volver al panel de creditos" class="fa fa-arrow-left"></i></a>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+</style>
+
+
+
+
+{% if mensaje %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: '{% if mensaje.0 == 1 %}success{% else %}warning{% endif %}',
+        title: '{{mensaje.1}}'
+    })
+
+</script>
+{% endif %}
+{% endblock %}

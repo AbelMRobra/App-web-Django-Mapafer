@@ -19,503 +19,158 @@
 </div>
 
     <div class="row">
-        <!-- Column -->
-        <div class="col-lg-4 col-xlg-3">
-            <div class="card bg-dark">
-                <div class="card-body">
-                    <h2 class="text-light">{{empresa.nombre}}</h2>
-                </div>
-                <div>
-                    <hr> </div>
-                <div class="card-body"> <small class="text-muted">Rubro</small>
-                    <h6 class="text-light">{{empresa.rubro}}</h6> <small class="text-muted p-t-30 db">Telefono</small>
-                    <h6 class="text-light">+{{empresa.telefono}}</h6> <small class="text-muted p-t-30 db">Dirección</small>
-                    <h6 class="text-light">{{empresa.direccion}}</h6>
 
+        <div class="col-6 col-lg-4">
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title font-bold"></span>Usuarios activos</h4>
+                    <ul class="feeds scrollbox" style="font-size: 12px; height: 310px; max-height: 310px;">
+
+                        {% for cliente in clientes %}
+
+                        <li class="bg-proyecto-color">
+                            <div class="justify-content-between align-items-center w-100">
+                                <div class="d-flex text-left">
+                                    <img src="{% if cliente.imagen %}{{cliente.imagen.url}}{% else %}{% static 'img/userlog2.png' %}{% endif %}" width="25px" height="25px"
+                                        alt="user" class="mr-2"><span class="font-bold">{{cliente.apellido}}, {{cliente.nombre}}</span>
+                                </div>
+                                <div><span class="text-muted font-bold" id="{{actividad.id}}"></span</div>
+                            </div>
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-8 col-xlg-3">
+        <div class="col-6 col-lg-8">
+
             <div class="card">
-                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active">
-                            <div class="d-flex">
-                                <div class="col-7 card-body text-center">
-                                    <img class="d-block img-fluid" src="https://picsum.photos/id/4/400/300" alt="Second slide">
+                <div class="card-body">
+                    <h4 class="card-title font-bold"></span>Historial de pagos</h4>
+                    <ul class="feeds scrollbox" style="font-size: 12px; height: 310px; max-height: 310px;">
+
+                        {% for pago in pagos %}
+
+                        <li class="bg-proyecto-color">
+                            <div class="justify-content-between w-100">
+                                <div class="d-flex text-left align-items-center">
+                                    <i class="fa fa-lg fa-check-circle text-success mr-2"></i><span class="font-bold">{{pago.prestamo.cliente.apellido}}, {{pago.prestamo.cliente.nombre}} - Monto:  ${{pago.monto|floatformat:2|intcomma}} - <span class="text-muted font-bold">{{pago.fecha}}</span></span>
+                                    
                                 </div>
-    
-                                <div class="col-5 card-body text-left">
-                                    <h5 class="mt-4">Te compartimos nuestro informe social sobre la calidad de vida de la gente que confia en nosotros y te acompañan dia a dia</h5>
-    
-                                    <h5 class="mt-4">Todas las preguntas puedes verlas <a href="#">aqui</a></h5>
-                                </div>
-
+       
                             </div>
-                            
-                            
-                          </div>
+                        </li>
 
-                          <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                        {% endfor %}
 
-                    {% for program in programa %}
-                      <div class="carousel-item ">
-                        <div class="card-body">
-                            <div class="d-flex">
-                              <div>
-                                <h5 class="card-title m-b-5"><span class="lstick"></span>{{program.1}}</h5>
-
-                              </div>
-                            </div>
-                  
-                            <canvas id="chat{{program.1}}" height="130px"></canvas>
-
-                            {% if program.2 == program.3 %}
-
-                            
-                            <script>
-                                var ctx = document.getElementById("chat{{program.1}}").getContext("2d");
-
-                                var scatterChart = new Chart(ctx, {
-                                    type: "scatter",
-                                    data: {
-                                        datasets: [{
-                                            label: "Comportamiento",
-                                            data: [
-                                            {% for punto in program.4 %}
-                                                {
-                                            x: {{punto.0|floatformat:0}},
-                                            y: {{punto.1}},
-                                            
-                                            },
-                                        
-                                            {% endfor %}],
-                                            backgroundColor: "rgba(146, 77, 241)",
-                                            pointRadius: 10,
-                                            }]
-                                    },
-                                    options: {
-                                        scales: {
-                                            xAxes: [{
-                                                gridLines: {
-                                                    color: "rgba(0, 0, 0, 0)",
-                                                }
-                                            }],
-                                            yAxes: [{
-                                                ticks: {
-                                                    stepSize: 1
-                                                },
-                                                gridLines: {
-                                                    color: "rgba(42, 39, 46, 0.2)",
-                                                }   
-                                            }]
-                                        },
-                                    }
-                                });
-                                                                
-                            </script>
-
-                            {% endif %}
-
-                            {% if program.2 == 0 %}
-
-                            <script>
-                                
-                                var ctx = document.getElementById("chat{{program.1}}").getContext("2d");
-
-                                var chart = new Chart(ctx, {
-                                    type: "bar",
-                                    data: {
-                                        labels: ["No", "Si"],
-                                        datasets: [{
-                                            label: "Respuestas",                                        
-                                            data: [5, 3],
-                                            backgroundColor: ["rgba(146, 77, 241, 0.6)", "rgba(146, 77, 241, 0.6)"],
-                                            borderColor: ["rgb(146, 77, 241)", "rgb(146, 77, 241)"],
-                                            }]
-                                    },
-                                    options: {
-                                        scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                        }
-                                    }
-                                },
-                                });
-                                
-                             
-                                </script>
-
-                            {% endif %}
-                  
-                          </div>
-                      </div>
-                      {% endfor %}
-                      <a class="carousel-control-prev" href="#carouselExampleSlidesOnly" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                      </a>
-                      <a class="carousel-control-next" href="#carouselExampleSlidesOnly" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                      </a>
-                    </div>
-                  </div>
- 
-
+                    </ul>
+                </div>
             </div>
         </div>
      
     </div>
-    <div class="row">
-        <!-- Column -->
-        <!-- Column -->
-        <div class="col-12">
-            <div class="card">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs profile-tab" role="tablist">
-                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#actividad" role="tab">Empleados activos</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#actividad" role="tab">Historial de cobros</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#actividad" role="tab">Agenda de contactos</a> </li>
 
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane active" id="actividad" role="tabpanel">
-                        <div class="card-body">
-                            <div>
-                                <div>
-                                    
-                                    {% for cliente in clientes %}
-                                    <div class="mt-2">
-                                        {% if cliente.imagen %}<img src="{{cliente.imagen.url}}" style="width: 30px; margin-right: 10px;" alt="usuario">{% else %}<img src="{% static 'img/userlog2.png' %}" style="width: 30px; margin-right: 10px" alt="usuario">{% endif %}
-                                        {{cliente.apellido}}, {{cliente.nombre}}</div>
-                                    {% endfor %}
-                                    <hr>
-                                    
-                                </div>
+    <a id="add2" href="#" data-toggle="modal" data-target="#Agregarempresa" class="btn btn-primary btn-circle ">
+        <i data-toggle="tooltip" data-placement="left" title="Agregar una nueva empresa"
+        class="fa fa-pencil-square-o"></i>
+    </a>
 
-                            </div>
-                        </div>
-                    </div>
-                    <!--second tab-->
-                    <div class="tab-pane" id="perfil" role="tabpanel">
-                        <div class="card-body">
-                            <h5><a href="#" data-toggle="modal" data-target="#EditarLegajo">Información personal</a></h5>
+    <style>
+        @keyframes example {
+            0% {
+                transform: scale(0.9);
+            }
+    
+            50% {
+                transform: scale(1);
+            }
+    
+            100% {
+                transform: scale(0.9);
+            }
+        }
+    
+        #add {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            animation: example 1s ease-in-out infinite;
+        }
+    
+        #add2{
+            position: fixed;
+            bottom: 40px;
+            right: 20px;
+            z-index: 10;
+        }
+    
+    
+        .scrollbox {
+    
+            overflow: hidden;
+        }
+    
+        .scrollbox:hover {
+            overflow: auto;
+        }
+    
+        .scrollbox::-webkit-scrollbar {
+            width: 6px;
+        }
+    
+        .scrollbox::-webkit-scrollbar-thumb {
+            background-color: rgb(201, 201, 201);
+            border-radius: 100px;
+        }
+    
+    
+        .arrow_box:hover {
+            transform: scaleX(1.07);
+    
+        }
+    
+        .arrow_box {
+            position: absolute;
+            transform: scaleX(1);
+            transform-origin: left center;
+            transition: transform 0.7s;
+    
+            background: rgba({{proyecto.color}}, 0.5);
+            width: 130px;
+            height: 30px;
+            margin-top:-5px;
+        }
+    
+        .arrow_box:after {
+            left: 100%;
+            top: 50%;
+            border: solid transparent;
+            content: "";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-color: rgba(136, 183, 213, 0);
+    
+            border-left-color: rgba({{proyecto.color}}, 0.5);
+            border-width: 14px;
+            margin-top: -14px;
+        }
+    
+        .bg-proyecto-color:nth-child(odd) {
+            border-bottom: white solid 2px;
+            background-color: rgba(160, 160, 160, 0.25);
+        }
+    
+        .bg-proyecto-color:nth-child(even) {
+            border-bottom: white solid 2px;
+            background-color: rgba(160, 160, 160, 0.1);
+        }
+    </style>
 
-                            <div class="mt-3">
-                                <p class="ml-2"> Nombre y Apellido: <i>{{data.nombre}}, {{data.apellido}}</i></p>
-                                <p class="ml-2"> Telefono: <i>{% if data.telefono %}{{data.telefono}}{% else %} Sin registrar{% endif %}</i></p>
-                                <p class="ml-2"> Email: <i>{% if data.email %}{{data.email}}{% else %} Sin registrar{% endif %}</i></p>
-                                <p class="ml-2"> Dirección: <i>{% if data.email %}{{data.direccion}}{% else %} Sin registrar{% endif %}</i></p>
-                                <p class="ml-2"> Empresa: <i>{% if data.empresa %}{{data.empresa}}{% else %} Sin registrar{% endif %}</i></p>
-                                <p class="ml-2"> Cuil: <i>{% if data.email %}{{data.cuil}}{% else %} Sin registrar{% endif %}</i></p>
 
-                            </div>
-                            
-                            <hr>
-                            <h5><a href="#" data-toggle="modal" data-target="#EditarComentarios">Anotaciones</i></a> </h5>
-                            <p class="m-t-30" style="white-space: pre-wrap;">{% if data.otros_datos %}{{data.otros_datos}}{% else %} Sin registrar{% endif %}</p>
-
-
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="programa" role="tabpanel">
-                        <div class="card-body">
-                            <h4>Programa social</h4>
-                            <small>Para completar el formulario presione <a href="https://docs.google.com/forms/d/e/1FAIpQLScoefSpECuKtmI15QaQkFJcjrh4uVXbLMPU5ByfxGkj1TvdCg/viewform?usp=sf_link">aqui</a></small>
-                            <hr>
-                            <div>
-                                {% for ps in programa_social %}
-
-                                <h6 class="mt-1">{{ps.0}}</h6>
-                                <small class="ml-3"><b>Respuesta:</b> {{ps.1}}</small>
-                                
-                                {% endfor %}
-                            </div>
-                            
-                            <hr>
-     
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="documentos" role="tabpanel">
-                        <div class="card-body">
-                            <h4>Documentos</h4>
-
-                            <div class="sl-item">
-                                <div class="sl-left"> <i class="fa fa-address-card-o"></i> {% if data.dni %}<a href="{{data.dni.url}}" target="_blank">Documento nacional de identidad</a>{% else %}Documento nacional de identidad{% endif %} {% if data.dni %}<a href="#" data-toggle="modal" data-target="#ModificarDNI"><i class="fa fa-check"></i></a>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarDNI"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
-                            </div>
-                            <div class="sl-item" style="margin-top: 10px;">
-                                <div class="sl-left"> <i class="fa fa-file-o"></i> {% if data.servicio %}<a href="{{data.servicio.url}}" target="_blank">Boleta de servicio</a>{% else %}Boleta de servicio{% endif %} {% if data.servicio %}<a href="#" data-toggle="modal" data-target="#ModificarSERVICIO"><i class="fa fa-check"></i></a></i>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarSERVICIO"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
-                            </div>
-
-                            <div class="sl-item" style="margin-top: 10px;">
-                                <div class="sl-left"> <i class="fa fa-university"></i> {% if data.informe_crediticio %}<a href="{{data.informe_crediticio.url}}" target="_blank">Informe crediticio</a>{% else %}Informe crediticio{% endif %} {% if data.informe_crediticio %}<a href="#" data-toggle="modal" data-target="#ModificarIC"><i class="fa fa-check"></i></a></i>{% else %}<a href="#" data-toggle="modal" data-target="#ModificarIC"><i class="fa fa-exclamation"></i></a>{% endif %}</div>
-                            </div>
-
-                        </div>
-
-                        <!-- Aqui empiezo la parte de los modales para cambiar los documentos -->
-
-                        <!-- Modal  -->
-                        <div class="modal fade" id="ModificarDNI" tabindex="-1" role="dialog" aria-labelledby="ModificarDNI"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header"
-                                style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Documento nacional</h5>
-                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-
-                                        <p class="my-2">Cargar un archivo</p>
-                                        <div class="mb-3">
-                                            <input type="file" class="form-control form-control" name="dni"
-                                                required>
-                                        </div>
-
-                                        <div>
-                                            <button class="btn btn-primary" type="submit" name="dni" value="1"
-                                                style="margin-top: 10px;">Actualizar</button>
-
-                                        </div>
-                                        {{ form.as_p }}
-                                    </form>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-                        <div class="modal fade" id="ModificarSERVICIO" tabindex="-1" role="dialog" aria-labelledby="ModificarSERVICIO"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header"
-                                style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Boleta de servicio</h5>
-                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
-
-                                        {% csrf_token %}
-
-                                        <p class="my-2">Cargar un archivo</p>
-                                        <div class="mb-3">
-                                            <input type="file" class="form-control form-control" name="servicio"
-                                                required>
-                                        </div>
-
-                                        <div>
-                                            <button class="btn btn-primary" type="submit" ame="servicios" value="1"
-                                                style="margin-top: 10px;">Actualizar</button>
-
-                                        </div>
-                                        {{ form.as_p }}
-                                    </form>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-                        <div class="modal fade" id="ModificarIC" tabindex="-1" role="dialog" aria-labelledby="ModificarIC"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header"
-                                style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Informe crediticio</h5>
-                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
-
-                                        {% csrf_token %}
-
-                                        <p class="my-2">Cargar un archivo</p>
-                                        <div class="mb-3">
-                                            <input type="file" class="form-control form-control" name="informe_crediticio"
-                                                required>
-                                        </div>
-
-                                        <div>
-                                            <button class="btn btn-primary" type="submit" name="informe_crediticio" value="1"
-                                                style="margin-top: 10px;">Actualizar</button>
-
-                                        </div>
-                                        {{ form.as_p }}
-                                    </form>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-                        
-
-                    </div>
-
-                    <div class="modal fade" id="EditarComentarios" tabindex="-1" role="dialog" aria-labelledby="EditarComentarios"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header"
-                                style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Comentarios</h5>
-                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
-
-                                        {% csrf_token %}
-
-                                        <p class="my-2">Comentarios</p>
-                                        <div class="mb-3">
-                                            <textarea class="form-control form-control" name="otros_datos" >{{data.otros_datos}}</textarea>
-            
-                                        </div>
-
-                                        <div>
-                                            <button class="btn btn-primary" type="submit" 
-                                                style="margin-top: 10px;">Actualizar</button>
-
-                                        </div>
-                                        {{ form.as_p }}
-                                    </form>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-
-                    <div class="modal fade" id="EditarLegajo" tabindex="-1" role="dialog" aria-labelledby="EditarLegajo"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header"
-                                    style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Legajo personal</h5>
-                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-
-                                        <div class="form-group">
-                                            <label class="col-md-12">Nombre</label>
-                                            <div class="col-md-12">
-                                                <input type="text" name="nombre" value="{{data.nombre}}" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12">Apellido</label>
-                                            <div class="col-md-12">
-                                                <input type="text" name="apellido" value="{{data.apellido}}" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="example-email" class="col-md-12">Cuil</label>
-                                            <div class="col-md-12">
-                                                <input type="number" value="{{data.cuil}}" class="form-control form-control-line" name="cuil">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="example-email" class="col-md-12">Score</label>
-                                            <div class="col-md-12">
-                                                <input type="number" value="{{data.score}}" class="form-control form-control-line" name="score">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="example-email" class="col-md-12">Email</label>
-                                            <div class="col-md-12">
-                                                <input type="text" value="{{data.email}}" class="form-control form-control-line" name="email">
-                                            </div>
-                                        </div>
-        
-                                        <div class="form-group">
-                                            <label for="example-email" class="col-md-12">Dirección</label>
-                                            <div class="col-md-12">
-                                                <input type="text" value="{{data.direccion}}" class="form-control form-control-line" name="direccion">
-                                            </div>
-                                        </div>
-        
-                                        <div class="form-group">
-                                            <label class="col-md-12">Numero de celular</label>
-                                            <div class="col-md-12">
-                                                <input type="text" name="telefono" value="{{data.telefono}}" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12">Empleador</label>
-                                            <div class="col-md-12">
-                                                <input type="text" name="empleador" value="{{data.empleador}}" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-12">Empresa</label>
-                                            <div class="col-sm-12">
-                                                <select name="empresa" class="form-control form-control-line">
-                                                    {% for i in empresas %}
-                                                    <option {% if data.empresa == i%} selected {% endif %}>{{i.nombre}}</option>
-                                                    {% endfor %}
-        
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <button class="btn btn-primary" type="submit" 
-                                                style="margin-top: 10px;">Actualizar</button>
-
-                                        </div>
-                                        {{ form.as_p }}
-                                    </form>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-                </div>
-            </div>
-        </div>
-
-    {% endblock %}
+{% endblock %}

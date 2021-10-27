@@ -14,6 +14,18 @@ class Proveedor(models.Model):
     def __str__(self):
         return self.razon_social
 
+class TasaParaCreditos(models.Model):
+
+    nombre = models.CharField(max_length=200, verbose_name="Nombre tasa")
+    valor_tasa = models.FloatField(verbose_name="Valor de la tasa")
+
+    class Meta:
+        verbose_name="Tasa para credito"
+        verbose_name_plural="Tasas para creditos"
+
+    def __str__(self):
+        return self.nombre
+
 class Empresa(models.Model):
     nombre = models.CharField(max_length=200, verbose_name="Nombre")
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
@@ -138,6 +150,27 @@ class Prestamos(models.Model):
     cuotas = models.IntegerField(verbose_name="Cuotas")
     regimen = models.CharField(choices=Regimen.choices, max_length=20, verbose_name="Regimen")
     adjunto = models.FileField(verbose_name="Adjunto", blank=True, null=True)
+    entregado = models.BooleanField(default=False, verbose_name="Se entrego el material/ dinero")
+
+
+    def pagado_credito(self):
+
+        pagado = sum(Pagos.objects.filter(prestamo = self).values_list("monto", flat=True))
+
+        return pagado
+
+
+    def saldo_credito(self):
+
+        interes = sum(CuotasPrestamo.objects.filter(prestamo = self).values_list("monto_interes", flat=True))
+
+        bonificacion = sum(CuotasPrestamo.objects.filter(prestamo = self).values_list("monto_bonificado", flat=True))
+
+        pagos = sum(Pagos.objects.filter(prestamo = self).values_list("monto", flat=True))
+
+        saldo = self.monto - pagos + interes + bonificacion
+
+        return saldo
 
     class Meta:
         verbose_name="Prestamo"
@@ -154,8 +187,11 @@ class CuotasPrestamo(models.Model):
         PARCIAL = "PARCIAL"
 
     prestamo = models.ForeignKey(Prestamos, on_delete=models.CASCADE, verbose_name = "Prestamo asociado")
-    fecha = models.DateField(verbose_name="Fecha del pago")
+    fecha = models.DateField(verbose_name="Fecha de vencimiento")
+    fecha_pago = models.DateField(verbose_name="Fecha de pago", blank=True, null=True)
     monto = models.FloatField(verbose_name="Monto")
+    monto_interes = models.FloatField(verbose_name="Monto interes", blank=True, null=True, default=0)
+    monto_bonificado = models.FloatField(verbose_name="Monto bonificado", blank=True, null=True, default=0)
     numero = models.IntegerField(verbose_name= "Numero", blank=True, null=True, default=1)
     estado = models.CharField(choices=Pagado.choices, max_length=20, verbose_name="Estado", blank=True, null=True)
 
@@ -166,7 +202,10 @@ class CuotasPrestamo(models.Model):
     def __str__(self):
         return self.estado
 
+
 class Pagos(models.Model):
+
+    comentarios = models.CharField(max_length=100, blank=True, null=True, verbose_name="Comentarios")
     prestamo = models.ForeignKey(Prestamos, on_delete=models.CASCADE, verbose_name = "Prestamo")
     fecha = models.DateField(verbose_name="Fecha del pago")
     monto = models.FloatField(verbose_name="Monto")

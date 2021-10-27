@@ -3,20 +3,17 @@
 {% load humanize %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Pagos por empresas</h3>
+    </div>
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">Pagos por empresas</h3>
-        </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'Panel de empresas' %}">Empresas</a></li>
-                <li class="breadcrumb-item">Pagos</li>
-            </ol>
-        </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'Panel de empresas' %}">Empresas</a></li>
+            <li class="breadcrumb-item">Pagos</li>
+        </ol>
     </div>
 </div>
 
@@ -214,7 +211,9 @@
 
                         </table>
 
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button id="add" type="submit"
+                    data-toggle="tooltip" data-placement="left" title="Cargar los pagos seleccionados"
+                     class="btn btn-success btn-circle fa fa-paper-plane-o"></button>
 
                     </form>
 
@@ -225,6 +224,21 @@
         </div>
     </div>
 </div>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+    tbody{
+        font-weight: 400;
+    }
+
+
+</style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

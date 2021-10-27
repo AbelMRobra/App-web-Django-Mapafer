@@ -20,174 +20,187 @@
 <div class="row">
 
     <div class="col-lg-4 col-xlg-3 col-md-5">
+
         <div class="card">
             <div class="card-body">
-                <center class="m-t-30"> <img src="{% if credito.cliente.imagen %}{{credito.cliente.imagen.url}}{% else %}{% static 'img/anonimo2.png' %}{% endif %}" class="img-circle" width="150" />
-                    <h4 class="card-title m-t-10">{{credito.cliente.nombre}},  {{credito.cliente.apellido}}</h4>
-                    <h5 class="card-title m-t-10">Score: {{credito.cliente.score}}</h5>
-                    <h5 class="card-title m-t-10">{{credito.cliente.estado}}</h5>
-                </center>
-            </div>
-            <div>
-                <hr> </div>
-            <div class="card-body"> <small class="text-muted">Cliente</small>
-                <h6>{{credito.cliente.nombre}}, {{credito.cliente.apellido}}</h6> 
-                <small class="text-muted p-t-30 db">Email</small>
-                <h6>{{credito.cliente.email}}</h6> 
-
+                <h6 class="mb-4">Credito otorgado a</h6>
+                <h4 class="card-title m-t-10"><i class="fa fa-user-circle-o text-info mr-2"></i> {{credito.cliente.nombre}},  {{credito.cliente.apellido}}</h4>
             </div>
         </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-8 col-xlg-9 col-md-7">
+
         <div class="card">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs profile-tab" role="tablist">
-                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#ddatos" role="tab">Resumen</a> </li>
-                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cuotas" role="tab">Cuotas</a> </li>
-                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#pagos" role="tab">Pagos</a> </li>
-                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab">Editar</a> </li>
-            </ul>
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div class="tab-pane active" id="ddatos" role="tabpanel">
-                    <div class="card-body">
-                        <div class="card-body">
-                            <h6>Proveedor del credito</h6> 
-                            <p>{{credito.proveedor.razon_social}}</p>
-                            <h6>Fecha del credito</h6> 
-                            <p>{{credito.fecha|date:"d/m/Y"}}</p>
-                            <h6>Información del interes y plan de pago</h6> 
-                            <p>Monto: $ {{credito.monto|floatformat:2|intcomma}} - Regimen: {{credito.regimen}} - Cuotas: {{credito.cuotas}}</p>
-                            <h6>Información original</h6> 
-                            <p>El monto solicitado: ${{credito.valor_original|floatformat:2|intcomma}}</p>
-                            <h6>Total pagado a la fecha</h6> 
-                            <p>${{total_pagado|floatformat:2|intcomma}}</p>
-                           
-                        </div>
-                    </div>
-                </div>
-                <!--second tab-->
-                <div class="tab-pane" id="cuotas" role="tabpanel">
-                    <div class="card-body">
-                        {% if cuotas %}
-                            {% for c in cuotas %}
-                            <div class="mt-2" style="font-size: 14px;"> <i class="{% if c.estado == 'SI' %}fa fa-check-circle text-success{% else %}fa fa-info-circle text-info{% endif %} mr-2"></i>  Cuota ${{c.monto|floatformat:2|intcomma}} con vencimiento {{c.fecha|date:"d/m/Y"}}
-                                    </div>
-    
-                            {% endfor %}
-
-                            {% else %}
-
-                            No tiene un plan de cuotas registrado
-
-                            {% endif %}
-                    </div>
-                </div>
-
-            <div class="tab-pane" id="pagos" role="tabpanel">
-                <div class="card-body">
-                    <div class="profiletimeline">
-                        {% if pagos %}
-                        {% for p in pagos %}
-                        <div class="sl-item">
-                            <div class="sl-left"> <i class="fa fa-lg fa-check-circle text-success mt-1"></i> </div>
-                            <div class="sl-right">
-                                <div style="font-size: 14px;">Monto  ${{p.monto|floatformat:2|intcomma}}
-                                    <p><span class="sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</span></p>
-
-                                </div>
-                            </div>
-                        </div>
-    
-                        {% endfor %}
-                        {% else %}
-                        <h6>No tienes pagos registrados</h6>
-                        {% endif %}
-
-                    </div>
-                </div>
+            <div class="card-body">
+                <img src="{% static 'img/profile.gif' %}" class="img-circle" width="250" />
             </div>
-                <div class="tab-pane" id="editar" role="tabpanel">
-                    <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data">
 
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label class="col-sm-12">Proveedor</label>
-                                <div class="col-sm-12">
-                                    <select name="proveedor" class="form-control form-control-line">
-                                        {% for i in proveedores %}
-                                        <option {% if credito.proveedor == i%} selected {% endif %}>{{i.id}}-{{i.fantasia}}</option>
-                                        {% endfor %}
+        </div>
+    </div>
 
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Valor original</label>
-                                <div class="col-md-12">
-                                    <input type="number" step="any" name="valor_original" value="{{credito.valor_original}}" class="form-control form-control-line">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="example-email" class="col-md-12">Valor del presupuesto del cliente</label>
-                                <div class="col-md-12">
-                                    <input type="number" step="any" value="{{credito.presupuesto_cliente}}" class="form-control form-control-line" name="presupuesto_cliente">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="example-email" class="col-md-12">Monto del credito</label>
-                                <div class="col-md-12">
-                                    <input type="number" step="any" value="{{credito.monto}}" class="form-control form-control-line" name="monto">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="example-email" class="col-md-12">Cantidad de cuotas</label>
-                                <div class="col-md-12">
-                                    <input type="number" step="any" value="{{credito.cuotas}}" class="form-control form-control-line" name="cuotas">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="example-email" class="col-md-12">Fecha del credito</label>
-                                <div class="col-md-12">
-                                    <input type="date" step="any" value="{{credito.fecha|date:'Y-m-d'}}" class="form-control form-control-line" name="fecha">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="example-email" class="col-md-12">Primera cuota</label>
-                                <div class="col-md-12">
-                                    <input type="date" step="any" value="{{credito.primera_cuota|date:'Y-m-d'}}" class="form-control form-control-line" name="primera_cuota">
-                                </div>
-                            </div>
+    <div class="col-lg-8">
 
-                            
-
-
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button class="btn btn-success">Subir</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <div class="card">
+            <div class="card-body d-flex">
+                <div class="col-4">
+                    <h4 class="card-title m-t-10"> <i class="fa fa-check-circle text-success mr-2"></i> Cuotas pagas</h4>
+                    <h4 class="text-center">{{cuotas_pagadas}}/{{cuotas_totales}}</h4>
                 </div>
+
+                <div class="col-4">
+                    <h4 class="card-title m-t-10"> <i class="fa fa-exclamation-circle text-warning mr-2"></i> Cuotas vencidas</h4>
+                    <h4 class="text-center">{{cuotas_vencidas}}/{{cuotas_totales}}</h4>
+                </div>
+
+                <div class="col-4">
+                    <h4 class="card-title m-t-10"> <i class="fa fa-info-circle text-info mr-2"></i> Cuotas pend.</h4>
+                    <h4 class="text-center">{{cuotas_pendientes}}/{{cuotas_totales}}</h4>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="d-flex">
+            <div class="card col-6 col-lg-6">
+                <div class="card-body">
+                    <h4 class="card-title font-bold"></span>Datos generales</h4>
+
+                    <p>Proveedor: {{credito.proveedor.razon_social}}</p>
+                    <p>Fecha: {{credito.fecha|date:"d/m/Y"}}</p>
+                    <p>Regimen: {{credito.regimen}} - </p>
+                    <p>Cuotas: {{credito.cuotas}}</p>
+                    <p>Base: $ {{credito.valor_original|floatformat:2|intcomma}}</p>
+                    <p>Prestado: $ {{credito.monto|floatformat:2|intcomma}}</p>
+                    <p>Pagado: $ {{total_pagado|floatformat:2|intcomma}}</p>
+
+                </div>
+
+            </div>
+
+        <div class="card col-6 col-lg-6">
+            <div class="card-body">
+                <h4 class="card-title font-bold"></span>Pagos realizados</h4>
+
+                <ul class="feeds scrollbox" style="font-size: 12px; height: 130px; max-height: 130px;">
+                    {% if pagos %}
+                    {% for p in pagos %}
+                    <div style="font-size: 14px;"><i class="fa fa-lg fa-check-circle text-success mt-1 mr-2"></i>Monto:  ${{p.monto|floatformat:2|intcomma}}
+                        <p class="text-right sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</p>
+
+                    </div>
+
+                    {% endfor %}
+                    {% else %}
+                    <h6>No tienes pagos registrados</h6>
+                    {% endif %}
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="EditarPrestamo" tabindex="-1" role="dialog" aria-labelledby="EditarPrestamo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+            style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos del prestamo</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+
+                    <p class="my-2">Nombre</p>
+                    <div class="mb-3">
+                        <input type="text" name="nombre" value="{{data.nombre}}" class="form-control form-control-line">
+
+                    </div>
+
+                    <div>
+                        <button class="btn btn-primary" type="submit" 
+                            style="margin-top: 10px;">Crear</button>
+
+                    </div>
+                    {{ form.as_p }}
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
             </div>
         </div>
     </div>
-    <!-- Column -->
-</div>
 
+    </div>
+        
 {% if credito.adjunto %}
-<a id="add" href="{{credito.adjunto.url}}" class="btn btn-lg btn-danger btn-circle fa fa-file-pdf-o"></a>
+<a id="add3" href="{{credito.adjunto.url}}" 
+data-toggle="tooltip" data-placement="left" title="Adjunto del prestamo"
+    class="btn btn-danger btn-circle fa fa-file-pdf-o"></a>
+
+{% else %}
+<a id="add3" href="#" 
+data-toggle="tooltip" data-placement="left" title="Agregar un adjunto"
+    class="btn btn-secondary btn-circle fa fa-file-pdf-o"></a>
 {% endif %}
 
+<a id="add2" href="#" data-toggle="modal" data-target="#EditarPrestamo" 
+ class="btn btn-warning btn-circle "><i class="fa fa-pencil"
+ data-toggle="tooltip" data-placement="left" title="Editar datos del credito"></i> </a>
+
+<a id="add" href="{% url 'Principal Prestamos' %}"
+data-toggle="tooltip" data-placement="left" title="Volver al panel principal"
+ class="btn btn-primary btn-circle fa fa-arrow-left"></a>
+
 <style>
+
+    #add3{
+        position: fixed;
+        bottom: 140px;
+        right: 20px;
+     
+    }      
+    #add2{
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+    }
+
     #add{
         position: fixed;
-        bottom: 60px;
+        bottom: 40px;
         right: 20px;
+        z-index: 10;
+    }
+
+    .scrollbox{
+
+    overflow: hidden;
+    }
+
+    .scrollbox:hover {
+    overflow: auto;
+    }
+
+    .scrollbox::-webkit-scrollbar {
+    width: 6px;
+    }
+
+    .scrollbox::-webkit-scrollbar-track {
+        background-color: rgb(201, 201, 201);
+        border-radius: 100px;
+    }
+
+    p {
+        font-size: 14px;
+        font-weight: 400;
+        margin: 2px;
     }
 
 

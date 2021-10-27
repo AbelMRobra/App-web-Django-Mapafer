@@ -30,7 +30,7 @@
 
                         <table id="example2" class="table">
 
-                            <thead style="font-size: 14px;">
+                            <thead class="font-bold" style="font-size: 14px;">
                                 <tr>
 
                                     <th>Cliente</th>
@@ -38,14 +38,15 @@
                                     <th>Monto</th>
                                     <th>N°c</th>
                                     <th>Pagado</th>
-                                    <th>Mora</th>                   
+                                    <th>Deuda</th>                   
                                     <th>Saldo</th>
                                     <th>Prox. Ven*</th>
+                                    <th></th>
   
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 13px;">
+                            <tbody style="font-size: 13px; ">
 
                                 {% for i in data %}
                                 <tr>
@@ -73,10 +74,44 @@
                                             <div class="progress-bar bg-primary " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{i.5}}%; height:6px;"> <span class="sr-only">50% Complete</span></div>
                                             </div>
                                     </td>
-                                    <td class="text-danger"><b>$ {{i.4|floatformat:2|intcomma}}</b></td>
+
+                                    {% if i.4 > 0.01 %}
+                                    <td class="text-danger">$ {{i.4|floatformat:2|intcomma}}</td>
+                                    {% else %}
+                                    <td>$ 0.00 <i
+                                        data-toggle="tooltip" data-placement="top" title="No presenta deuda"
+                                        class="fa fa-lg fa-check-circle text-success"></i></td>
+                                    {% endif %}
+
+                                    {% if i.2 > 0.01 %}
+
                                     <td>${{i.2|floatformat:2|intcomma}}</td>
+
+                                    {% else %}
+                                    <td>$ 0.00 <i
+                                        data-toggle="tooltip" data-placement="top" title="Prestamo pagado"
+                                        class="fa fa-lg fa-check-circle text-success"></i></td>
+                                    {% endif %}
+
+
                                     
                                     <td>{{i.3|date:"d/m/Y"}}</td>
+                                    <td>
+
+                                        {% if i.0.entregado %}
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <button type="submit" name="entregado_no" value="{{i.0.id}}" data-toggle="tooltip" data-placement="top" title="Credito entregado"
+                                            class="btn fa fa-inbox text-success"></button>
+                                        </form>
+                                        {% else %}
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <button type="submit" name="entregado_si" value="{{i.0.id}}" data-toggle="tooltip" data-placement="top" title="Credito pendiente de entrega"
+                                            class="btn fa fa-inbox text-secondary"></button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
 
                                 </tr>
 
@@ -135,20 +170,38 @@
     </div>
 </div>
 
-<a id="add" href="{% url 'Calculadora' %}" class="btn btn-lg btn-primary btn-circle fa fa-5x fa-plus"></a>
+<a id="add" href="{% url 'Calculadora' %}"
+data-toggle="tooltip" data-placement="left" title="Agregar un nuevo credito"
+ class="btn btn-primary btn-circle fa fa-plus"></a>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <style>
     #add{
         position: fixed;
-        bottom: 60px;
+        bottom: 40px;
         right: 20px;
+        z-index: 10;
+    }
+
+    tbody{
+        font-weight: 400;
     }
 
 
 </style>
 
+<script>
+
+    $(window).scroll(function () {
+        sessionStorage.scrollTop = $(this).scrollTop();
+    });
+    $(document).ready(function () {
+        if (sessionStorage.scrollTop != "undefined") {
+            $(window).scrollTop(sessionStorage.scrollTop);
+        }
+    });
+</script>
 
 
 {% if mensaje %}

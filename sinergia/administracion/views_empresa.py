@@ -9,6 +9,7 @@ def perfilempresa(request, id_empresa):
     context = {}
     context['programa'] = programa_social_empresa(id_empresa)
     context['empresa'] = Empresa.objects.get(id = id_empresa)
+    context['pagos'] = Pagos.objects.filter(prestamo__cliente__empresa__id = id_empresa).order_by("-fecha")
     context['clientes'] = Clientes.objects.filter(empresa__id = id_empresa).order_by("apellido").exclude(estado = "Potencial")
 
     return render(request, "empresa/perfil_empresa.html", context)

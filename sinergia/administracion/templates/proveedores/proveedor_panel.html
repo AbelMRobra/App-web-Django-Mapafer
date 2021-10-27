@@ -42,7 +42,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 14px;">
+                            <tbody style="font-size: 14px; font-weight: 350;">
 
                                 {% for i in proveedores %}
                                 <tr>
@@ -59,7 +59,7 @@
                                                 data-target="#ModalBorrar{{i.0.id}}"><i
                                                     class="fa fa-angle-right mr-2"></i>Borrar</a>
                                         </div>
-                                    </div><a href="{% url 'Editar proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
+                                    </div><a href="{% url 'Pago proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     <td>${{i.2|floatformat:2|intcomma}}</td>
                                     <td>${{i.3|floatformat:2|intcomma}}</td>
@@ -123,15 +123,18 @@
 </div>
 
 
-<a id="add" href="{% url 'Nuevo proveedor' %}" class="btn btn-lg btn-primary btn-circle fa fa-5x fa-plus"></a>
+<a id="add" href="{% url 'Nuevo proveedor' %}"
+data-toggle="tooltip" data-placement="left" title="Agregar un nuevo proveedor" 
+class="btn btn-primary btn-circle fa fa-plus"></a>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <style>
     #add{
         position: fixed;
-        bottom: 60px;
+        bottom: 40px;
         right: 20px;
+        z-index: 10;
     }
 
 

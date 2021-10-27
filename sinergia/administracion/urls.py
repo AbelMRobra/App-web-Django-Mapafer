@@ -36,6 +36,8 @@ urlpatterns = [
     # URL de Prestamos
     url(r'^prestamo_principal$', login_required(views_prestamos.prestamos_panel), name = 'Principal Prestamos'),
     url(r'^prestamo_agregar$', login_required(views_prestamos.prestamos_agregar), name = 'Calculadora'),
+    url(r'^prestamo_refinanciar$', login_required(views_prestamos.prestamos_refinanciar), name = 'Refinanciar'),
+    url(r'^prestamo_cargado/(?P<id_credito_nuevo>\d+)/(?P<id_credito_anterior>\d+)/$', login_required(views_prestamos.prestamos_credito_cargado), name = 'Cargado'),
     url(r'^prestamo_info/(?P<id_credito>\d+)/$', login_required(views_prestamos.prestamos_detalle_completo), name = 'Administrar credito'),
     url(r'^infoprestamo$', login_required(views_prestamos.prestamos_informacion), name = 'Información Prestamos'),
     url(r'^cashflow$', login_required(views.cashflow), name = 'Cash Flow'),

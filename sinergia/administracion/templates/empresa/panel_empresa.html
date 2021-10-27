@@ -219,8 +219,25 @@
     </div>
 </div>
 
-<a id="add" href="#" data-toggle="modal" data-target="#Agregarempresa" class="btn btn-lg btn-primary btn-circle fa fa-5x fa-plus"></a>
+<a id="add" href="#" data-toggle="modal" data-target="#Agregarempresa" class="btn btn-primary btn-circle ">
+    <i data-toggle="tooltip" data-placement="left" title="Agregar una nueva empresa"
+    class="fa fa-plus"></i>
+</a>
 
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+    tbody{
+        font-weight: 400;
+    }
+
+
+</style>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -277,14 +294,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<style>
-    #add{
-        position: fixed;
-        bottom: 60px;
-        right: 20px;
-    }
 
-
-</style>
 
 {% endblock %}

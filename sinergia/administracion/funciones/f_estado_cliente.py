@@ -92,7 +92,7 @@ def estado_cliente(cliente):
     estados = []
     if len(prestamos_cliente) > 0:
         for prestamo in prestamos_cliente:
-            crear_cuotas_prestamo(prestamo)
+
             cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).order_by("fecha").exclude(estado = "SI")
             if len(cuotas) == 0:
                 estados.append(0)
