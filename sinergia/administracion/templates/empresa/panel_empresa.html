@@ -1,6 +1,7 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
+{% load apptags_extras %}
 {% block content %}
 
 <div class="row page-titles">
@@ -23,7 +24,7 @@
                 <div class="col-12 justify-content-center">
 
                     <div class="d-flex">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Empresas asociadas</h4>
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Empresas asociadas</b></h4>
                         
                         <div class="btn-group ml-auto">
                             <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
@@ -48,22 +49,26 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
-
-                                        {% csrf_token %}
+                                    
+                                    <form id="create_empresa">
 
                                         <p class="my-2">Nombre</p>
                                         <div class="mb-3">
-                                            <input type="text" name="nombre" value="{{data.nombre}}" class="form-control form-control-line">
+                                            <input 
+                                            id = "empresa_agregar"
+                                            type="text"  
+                                            class="form-control form-control-line">
             
                                         </div>
 
                                         <div>
-                                            <button class="btn btn-primary" type="submit" 
-                                                style="margin-top: 10px;">Crear</button>
+                                            <button 
+                                            class="btn btn-primary" 
+                                            onclick="crear_empresa()"
+                                            style="margin-top: 10px;">Crear</button>
 
                                         </div>
-                                        {{ form.as_p }}
+                     
                                     </form>
 
                                 </div>
@@ -79,7 +84,7 @@
 
                     <div class="table-responsive">
 
-                        <table id="example" class="table" style="width:100%">
+                        <table id="tabla_empresa" class="table" style="width:100%">
 
                             <thead>
                                 <tr>
@@ -95,21 +100,40 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 14px;">
+                            <tbody 
+                            id = "tabla_body"
+                            style="font-size: 14px;">
 
                                 {% for i in informacion %}
-                                <tr>
+                                <tr id="fila_{{i.0.id}}">
                                     <td>{{i.0.id}}</td>
                                     <td><a href="{% url 'Perfil empresa' i.0.id %}">{{i.0.nombre|lower|capfirst}}</a></td>
-                                    <td>{{i.0.rubro|lower|capfirst}}</td>
-                                    <td>{{i.0.contacto|lower|capfirst}}</td>
+                                    <td>
+                                        {% if i.0.rubro %}
+                                        {{i.0.rubro|lower|capfirst}}
+                                        {% else %}
+                                        Sin especificar
+                                        {% endif %}
+                                                       
+                                    </td>
+                                    <td>
+
+                                        {% if i.0.contacto %}
+                                        {{i.0.contacto|lower|capfirst}}
+                                        {% else %}
+                                        Sin especificar
+                                        {% endif %}
+                                    </td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     {% if i.3 == 0 and i.2 == 0 %}
-                                    <td style="text-align: center;">No tiene vencimientos proximos </td>
+                                    <td 
+                                    style="text-align: center;">No tiene vencimientos proximos </td>
                                     {% else %}
-                                    <td style="text-align: center;"><a href="{% url 'Pagos por empresas' i.0.id %}">Se vence ${{i.3|floatformat:2|intcomma}} ({{i.2}} cuotas)</a></td>
+                                    <td 
+                                    style="text-align: center;"><a href="{% url 'Pagos por empresas' i.0.id %}">Se vence ${{i.3|floatformat:2|intcomma}} ({{i.2}} cuotas)</a></td>
                                     {% endif %}
-                                    <td><div class="btn-group ml-auto">
+                                    <td>
+                                    <div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
@@ -122,13 +146,13 @@
                                         </div>
                                     </div></td>
 
-                                    <div class="modal fade" id="Editar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="Editar{{i.0.id}}"
+                    <div class="modal fade" id="Editar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="Editar{{i.0.id}}"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header"
                                 style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar nombre</h5>
+                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos</h5>
                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -139,6 +163,12 @@
                                         {% csrf_token %}
 
                                         <p class="my-2">Nombre</p>
+                                        <div class="mb-3">
+                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
+            
+                                        </div>
+
+                                        <p class="my-2">Rubro</p>
                                         <div class="mb-3">
                                             <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
             
@@ -220,7 +250,7 @@
 </div>
 
 <a id="add" href="#" data-toggle="modal" data-target="#Agregarempresa" class="btn btn-primary btn-circle ">
-    <i data-toggle="tooltip" data-placement="left" title="Agregar una nueva empresa"
+    <i data-toggle="tooltip" data-placement="left" title="Agregar una empresa"
     class="fa fa-plus"></i>
 </a>
 
@@ -240,6 +270,122 @@
 </style>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+// Deshabilitamos los post
+
+document.getElementById("create_empresa").addEventListener("click", function(event){
+event.preventDefault()
+});
+
+//
+
+
+// libreria sweet
+
+function sweet_alert(mensaje, estado) {
+
+    const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+    })
+
+    Toast.fire({
+    icon: estado,
+    title: mensaje
+    })
+
+}
+
+//
+
+// Script para crear una empresa
+
+async function crear_empresa() {
+
+    const url = `{% host %}api/api_empresa/`;
+
+    var respuesta = await fetch(url ,{
+        method: "POST",
+        headers: {
+            'X-CSRFToken' : "{{ csrf_token }}",
+            'Content-Type': 'application/json',
+        },
+
+    body: JSON.stringify({
+        'nombre' : document.getElementById("empresa_agregar").value,
+
+
+    })
+    });
+
+    var response = await respuesta.json();
+    var status = await respuesta.status
+    return validar_creacion(response, status);
+}
+
+function validar_creacion(response, status) {
+
+    if (status >= 200 && status <300){
+        sweet_alert("Empresa creada", "success");
+        modificar_template_create(response);
+        
+
+
+    } else {
+        sweet_alert("No permitido", "warning")
+    }
+}
+
+function modificar_template_create(response) {
+
+    var tabla_body = document.getElementById('tabla_body');
+    var fila = document.createElement('tr');
+    fila.id = `fila_${response.id}`;
+    tabla_body.appendChild(fila);
+
+
+    var fila = document.getElementById(`fila_${response.id}`);
+    
+    var celda_id = document.createElement('td');
+    celda_id.innerHTML = `${response.id}`;
+    fila.appendChild(celda_id);
+    
+    var celda_nombre = document.createElement('td');
+    celda_nombre.innerHTML = `${response.nombre}`;
+    fila.appendChild(celda_nombre);
+
+    var celda_rubro = document.createElement('td');
+    celda_rubro.innerHTML = 'Sin especificar';
+    fila.appendChild(celda_rubro);
+
+    var celda_contacto = document.createElement('td');
+    celda_contacto.innerHTML = 'Sin especificar';
+    fila.appendChild(celda_contacto);
+
+    var celda_cliente = document.createElement('td');
+    celda_cliente.innerHTML = 0;
+    celda_cliente.style = "text-align: center;"
+    fila.appendChild(celda_cliente);
+
+    var celda_cuotas = document.createElement('td');
+    celda_cuotas.innerHTML = 'Necesita refrescar la pagina para opciones';
+    celda_cuotas.style = "text-align: center;"
+    fila.appendChild(celda_cuotas);
+
+
+}
+
+</script>
 
 
 {% if mensaje %}

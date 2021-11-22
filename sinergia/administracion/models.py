@@ -1,4 +1,6 @@
+import datetime
 from django.db import models
+from django.db.models.deletion import CASCADE
 from numpy import mod
 
 # Create your models here.
@@ -20,6 +22,7 @@ class TasaParaCreditos(models.Model):
     valor_tasa = models.FloatField(verbose_name="Valor de la tasa")
 
     class Meta:
+        unique_together = (("nombre", "valor_tasa"))
         verbose_name="Tasa para credito"
         verbose_name_plural="Tasas para creditos"
 
@@ -27,7 +30,8 @@ class TasaParaCreditos(models.Model):
         return self.nombre
 
 class Empresa(models.Model):
-    nombre = models.CharField(max_length=200, verbose_name="Nombre")
+
+    nombre = models.CharField(max_length=200, verbose_name="Nombre", unique=True)
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
     code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
 
@@ -43,6 +47,21 @@ class Empresa(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class ContactosEmpresa(models.Model):
+
+    empresa = models.ForeignKey(Empresa, verbose_name="Empresa", on_delete=CASCADE)
+    contacto = models.CharField(max_length=30, verbose_name="Contacto")
+    numero = models.CharField(max_length=20, verbose_name="Telfono")
+    email = models.CharField(max_length=30, verbose_name="Email")
+
+    class Meta:
+        unique_together = (("contacto", "numero"))
+        verbose_name="Contacto"
+        verbose_name_plural="Contactos"
+
+    def __str__(self):
+        return self.contacto
 
 class Clientes(models.Model):
 
@@ -63,17 +82,17 @@ class Clientes(models.Model):
         ADENTRO = "ADENTRO"
         AFUERA = "AFUERA"
 
-    class Estado(models.TextChoices):
+    # class Estado(models.TextChoices):
 
-        potencial = "Potencial"
-        rechazado = "Rechazado"
-        no_activo = "No activo"
-        moroso_1 = "Situación 1"
-        moroso_2 = "Situación 2"
-        moroso_3 = "Situación 3"
-        moroso_4 = "Situación 4"
-        moroso_5 = "Situación 5"
-        moroso_6 = "Situación 6"
+    #     potencial = "Potencial"
+    #     rechazado = "Rechazado"
+    #     no_activo = "No activo"
+    #     moroso_1 = "Situación 1"
+    #     moroso_2 = "Situación 2"
+    #     moroso_3 = "Situación 3"
+    #     moroso_4 = "Situación 4"
+    #     moroso_5 = "Situación 5"
+    #     moroso_6 = "Situación 6"
 
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
     nombre = models.CharField(max_length=200, verbose_name="Nombre")
@@ -86,7 +105,7 @@ class Clientes(models.Model):
     telefono = models.CharField(max_length=200, verbose_name="Telefono", blank=True, null=True)
     email = models.CharField(max_length=200, verbose_name="Email", blank=True, null=True)
     score = models.IntegerField(verbose_name="Score", blank=True, null=True)
-    estado = models.CharField(choices=Estado.choices, max_length=20, verbose_name="Estado", default="Potencial")
+    # estado = models.CharField(choices=Estado.choices, max_length=20, verbose_name="Estado", default="Potencial")
     otros_datos = models.TextField(verbose_name="Otros datos", blank=True, null=True)
     code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
     dni = models.FileField(verbose_name="Dni", blank=True, null=True)
@@ -94,21 +113,80 @@ class Clientes(models.Model):
     informe_crediticio = models.FileField(verbose_name="Informe crediticio", blank=True, null=True)
     imagen = models.ImageField(verbose_name="Imagen", blank=True, null=True)
 
-    # Parte social
-    habitantes_hogar = models.IntegerField(verbose_name="Habitantes del hogar", blank=True, null=True)
-    trabajadores_hogar = models.IntegerField(verbose_name="Trabajadores del hogar", blank=True, null=True)
-    ingreso_hogar = models.IntegerField(verbose_name="Ingreso hogar", blank=True, null=True)
-    cuartos = models.IntegerField(verbose_name="Ambientes", blank=True, null=True)
-    bathrooms = models.IntegerField(verbose_name="Dormitorios", blank=True, null=True)
+    def estado_cliente(self):
+        
+        prestamos = Prestamos.objects.filter(cliente = self)
+        today = datetime.date.today()
 
-    partiente_discapacidad = models.CharField(choices=siono.choices, max_length=20, verbose_name="Pariente con discapacidad", blank=True, null=True)
-    gas = models.CharField(choices=siono.choices, max_length=20, verbose_name="Gas", blank=True, null=True)
-    cloaca = models.CharField(choices=siono.choices, max_length=20, verbose_name="Cloaca", blank=True, null=True)
-    agua_corriente = models.CharField(choices=siono.choices, max_length=20, verbose_name="Agua corriente", blank=True, null=True)
-    deuda = models.CharField(choices=siono.choices, max_length=20, verbose_name="Deuda entidad bancaria", blank=True, null=True)
+        estados = []
+        
+        if len(prestamos) > 0:
+            
+            for prestamo in prestamos:
 
-    titulo_vivienda = models.CharField(choices=vivienda.choices, max_length=100, verbose_name="Vivienda", blank=True, null=True)
-    bath_sit = models.CharField(choices=situacionbath.choices, max_length=100, verbose_name="Baño situación", blank=True, null=True)
+                cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).order_by("fecha").exclude(estado = "SI")
+                
+                if len(cuotas) == 0:
+                    
+                    estados.append(0)
+                
+                else:
+                    dif_dias = (today - cuotas[0].fecha).days
+
+                    if dif_dias < 31:
+                        estados.append(1)
+                    elif dif_dias < 90:
+                        estados.append(2)
+                    elif dif_dias < 180:
+                        estados.append(3)
+                    elif dif_dias < 365:
+                        estados.append(4)
+                    else:
+                        estados.append(5)
+            
+            estados.sort(reverse=True)
+            
+            estado_cliente = estados[0]
+            
+            if estado_cliente == 0:
+                estado_cliente = "No activo"
+            
+            if estado_cliente == 1:
+                estado_cliente = "Situación 1"
+            
+            if estado_cliente == 2:
+                estado_cliente = "Situación 2"
+            
+            if estado_cliente == 3:
+                estado_cliente = "Situación 3"
+            
+            if estado_cliente == 4:
+                estado_cliente = "Situación 4"
+            
+            if estado_cliente == 5:
+                estado_cliente = "Situación 5"
+
+            
+        else:
+            estado_cliente = "Potencial"
+
+        return estado_cliente
+
+    # # Parte social
+    # habitantes_hogar = models.IntegerField(verbose_name="Habitantes del hogar", blank=True, null=True)
+    # trabajadores_hogar = models.IntegerField(verbose_name="Trabajadores del hogar", blank=True, null=True)
+    # ingreso_hogar = models.IntegerField(verbose_name="Ingreso hogar", blank=True, null=True)
+    # cuartos = models.IntegerField(verbose_name="Ambientes", blank=True, null=True)
+    # bathrooms = models.IntegerField(verbose_name="Dormitorios", blank=True, null=True)
+
+    # partiente_discapacidad = models.CharField(choices=siono.choices, max_length=20, verbose_name="Pariente con discapacidad", blank=True, null=True)
+    # gas = models.CharField(choices=siono.choices, max_length=20, verbose_name="Gas", blank=True, null=True)
+    # cloaca = models.CharField(choices=siono.choices, max_length=20, verbose_name="Cloaca", blank=True, null=True)
+    # agua_corriente = models.CharField(choices=siono.choices, max_length=20, verbose_name="Agua corriente", blank=True, null=True)
+    # deuda = models.CharField(choices=siono.choices, max_length=20, verbose_name="Deuda entidad bancaria", blank=True, null=True)
+
+    # titulo_vivienda = models.CharField(choices=vivienda.choices, max_length=100, verbose_name="Vivienda", blank=True, null=True)
+    # bath_sit = models.CharField(choices=situacionbath.choices, max_length=100, verbose_name="Baño situación", blank=True, null=True)
 
 
 
@@ -201,7 +279,6 @@ class CuotasPrestamo(models.Model):
 
     def __str__(self):
         return self.estado
-
 
 class Pagos(models.Model):
 

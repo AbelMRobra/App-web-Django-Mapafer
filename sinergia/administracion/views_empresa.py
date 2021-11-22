@@ -1,16 +1,19 @@
 from django.shortcuts import render, redirect
-from .models import Empresa, Clientes, Pagos, CuotasPrestamo
+from .models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa
 import datetime
 from datetime import timedelta
 from .google_sheet import programa_social_empresa
 
 def perfilempresa(request, id_empresa):
 
+    con_clientes = Clientes.objects.filter(empresa__id = id_empresa).order_by("apellido")
+
     context = {}
     context['programa'] = programa_social_empresa(id_empresa)
     context['empresa'] = Empresa.objects.get(id = id_empresa)
+    context['contactos_empresa'] = ContactosEmpresa.objects.filter(empresa = context['empresa'])
     context['pagos'] = Pagos.objects.filter(prestamo__cliente__empresa__id = id_empresa).order_by("-fecha")
-    context['clientes'] = Clientes.objects.filter(empresa__id = id_empresa).order_by("apellido").exclude(estado = "Potencial")
+    context['clientes'] = [cliente for cliente in con_clientes if cliente.estado_cliente != "Potencial"]
 
     return render(request, "empresa/perfil_empresa.html", context)
 

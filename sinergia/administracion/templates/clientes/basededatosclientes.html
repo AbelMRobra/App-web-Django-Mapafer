@@ -80,7 +80,7 @@
                                     <td {% if i.estado == 'Activo' %} class = "text-info" 
                                     {% elif i.estado == 'Potencial' %} class = "text-secondary"
                                     {% elif i.estado == 'Moroso' %} class = "text-danger" 
-                                    {% else %} class = "text-dark" {% endif %}><b>{{i.estado}}</b></td>
+                                    {% else %} class = "text-dark" {% endif %}><b>{{i.estado_cliente}}</b></td>
                                     <td {% if i.score < 300 %} class = "text-danger" {% else %} class = "text-secondary" {% endif %}><b>{{i.score}}</b></td>
                                     <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
                                     {% if i.telefono %}

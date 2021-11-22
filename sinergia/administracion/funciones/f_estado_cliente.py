@@ -85,54 +85,54 @@ def crear_cuotas_prestamo(prestamo):
             else:
                 fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
 
-def estado_cliente(cliente):
+# def estado_cliente(cliente):
     
-    today = datetime.date.today()
-    prestamos_cliente = Prestamos.objects.filter(cliente = cliente)
-    estados = []
-    if len(prestamos_cliente) > 0:
-        for prestamo in prestamos_cliente:
+#     today = datetime.date.today()
+#     prestamos_cliente = Prestamos.objects.filter(cliente = cliente)
+#     estados = []
+#     if len(prestamos_cliente) > 0:
+#         for prestamo in prestamos_cliente:
 
-            cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).order_by("fecha").exclude(estado = "SI")
-            if len(cuotas) == 0:
-                estados.append(0)
-            else:
-                dif_dias = (today - cuotas[0].fecha).days
+#             cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).order_by("fecha").exclude(estado = "SI")
+#             if len(cuotas) == 0:
+#                 estados.append(0)
+#             else:
+#                 dif_dias = (today - cuotas[0].fecha).days
 
-                if dif_dias < 31:
-                    estados.append(1)
-                elif dif_dias < 90:
-                    estados.append(2)
-                elif dif_dias < 180:
-                    estados.append(3)
-                elif dif_dias < 365:
-                    estados.append(4)
-                else:
-                    estados.append(5)
-        estados.sort(reverse=True)
-        estado_cliente = estados[0]
-        if estado_cliente == 0:
-            estado_cliente = "No activo"
-        if estado_cliente == 1:
-            estado_cliente = "Situación 1"
-        if estado_cliente == 2:
-            estado_cliente = "Situación 2"
-        if estado_cliente == 3:
-            estado_cliente = "Situación 3"
-        if estado_cliente == 4:
-            estado_cliente = "Situación 4"
-        if estado_cliente == 5:
-            estado_cliente = "Situación 5"
+#                 if dif_dias < 31:
+#                     estados.append(1)
+#                 elif dif_dias < 90:
+#                     estados.append(2)
+#                 elif dif_dias < 180:
+#                     estados.append(3)
+#                 elif dif_dias < 365:
+#                     estados.append(4)
+#                 else:
+#                     estados.append(5)
+#         estados.sort(reverse=True)
+#         estado_cliente = estados[0]
+#         if estado_cliente == 0:
+#             estado_cliente = "No activo"
+#         if estado_cliente == 1:
+#             estado_cliente = "Situación 1"
+#         if estado_cliente == 2:
+#             estado_cliente = "Situación 2"
+#         if estado_cliente == 3:
+#             estado_cliente = "Situación 3"
+#         if estado_cliente == 4:
+#             estado_cliente = "Situación 4"
+#         if estado_cliente == 5:
+#             estado_cliente = "Situación 5"
 
         
-    else:
-        estado_cliente = "Potencial"
+#     else:
+#         estado_cliente = "Potencial"
 
-    cliente = Clientes.objects.get(id = cliente.id)
-    cliente.estado = estado_cliente
-    cliente.save()
+#     cliente = Clientes.objects.get(id = cliente.id)
+#     cliente.estado = estado_cliente
+#     cliente.save()
 
-    return estado_cliente
+#     return estado_cliente
 
 def calcular_estado(cliente):
 

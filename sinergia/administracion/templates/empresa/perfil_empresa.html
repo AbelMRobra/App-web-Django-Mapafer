@@ -1,12 +1,12 @@
 {% extends "home.html" %}
-
+{% load apptags_extras %}
 {% load static %}
 {% load humanize %}
 {% block content %}
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">Perfil de la empresa</h3>
+        <h3 class="text-themecolor">Perfil de {{empresa.nombre}}</h3>
     </div>
     <div class="col-md-7 align-self-center">
         <ol class="breadcrumb">
@@ -21,6 +21,73 @@
     <div class="row">
 
         <div class="col-6 col-lg-4">
+            
+            <div class="modal fade" id="Editar_datos" tabindex="-1" role="dialog" aria-labelledby="Editar_datos"
+                        aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header"
+                        style="background-color: #2a3e52;">
+                            <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos</h5>
+                            <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="modificar_datos">
+
+                                <p class="my-2">Rubro de la empresa</p>
+                                <div class="mb-3">
+                                    <input type="text"  id="empresa_rubro" value="{% if empresa.rubro %}{{empresa.rubro}}{% endif %}" class="form-control form-control-line">
+
+                                </div>
+
+                                <p class="my-2">Dirección</p>
+                                <div class="mb-3">
+                                    <input type="text"  id="empresa_direccion" value="{% if empresa.direccion %}{{empresa.direccion}}{% endif %}" class="form-control form-control-line">
+
+                                </div>
+
+                                <p class="my-2">Telefono</p>
+                                <div class="mb-3">
+                                    <input type="text" id="empresa_telefono" value="{% if empresa.telefono %}{{empresa.telefono}}{% endif %}" class="form-control form-control-line">
+
+                                </div>
+
+                                <div>
+                                    <button onclick="editar_datos()" class="btn btn-primary" style="margin-top: 10px;">Editar</button>
+
+                                </div>
+ 
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title font-bold"></span><a 
+                        href="#" data-toggle="modal" data-target="#Editar_datos"
+                        class="fa size-1 fa-pencil"></a> Datos de la empresa</h4>
+
+                    <p>Rubro</p>
+                    <p><b id="template_rubro" style="font-weight: 450;">{% if empresa.rubro %}{{empresa.rubro}}{% else %}Sin especificar{% endif %}</b></p>
+
+                    <p>Dirección</p>
+                    <p><b id="template_direccion" style="font-weight: 450;">{% if empresa.direccion %}{{empresa.direccion}}{% else %}Sin especificar{% endif %}</b></p>
+
+                    <p>Telefono</p>
+                    <p><b id="template_telefono" style="font-weight: 450;">{% if empresa.telefono %}{{empresa.telefono}}{% else %}Sin especificar{% endif %}</b></p>
+
+                </div>
+            </div>
 
             <div class="card">
                 <div class="card-body">
@@ -51,7 +118,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title font-bold"></span>Historial de pagos</h4>
-                    <ul class="feeds scrollbox" style="font-size: 12px; height: 310px; max-height: 310px;">
+                    <ul class="feeds scrollbox" style="font-size: 12px; height: 650px; max-height: 650px;">
 
                         {% for pago in pagos %}
 
@@ -74,9 +141,73 @@
      
     </div>
 
-    <a id="add2" href="#" data-toggle="modal" data-target="#Agregarempresa" class="btn btn-primary btn-circle ">
-        <i data-toggle="tooltip" data-placement="left" title="Agregar una nueva empresa"
-        class="fa fa-pencil-square-o"></i>
+    <div class="modal fade" id="Contactos" tabindex="-1" role="dialog" aria-labelledby="Contactos"
+                        aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header"
+                        style="background-color: #2a3e52;">
+                            <h5 class="modal-title text-light" id="exampleModalLongTitle">Contactos</h5>
+                            <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="contactos">
+
+                                <input id="nuevo_contacto_contacto" type="text" placeholder="Contacto"
+                                class="form-control form-control-line" style="margin: 2px;"/>
+                                <input id="nuevo_contacto_numero" type="text" placeholder="Numero"
+                                class="form-control form-control-line" style="margin: 2px;"/>
+                                <input id="nuevo_contacto_email" type="text" placeholder="Email"
+                                class="form-control form-control-line" style="margin: 2px;"/>
+
+                                <div style="text-align: center; margin: 5px;">
+                                    <button
+                                    onclick="crear_contacto()"
+                                    data-toggle="tooltip" data-placement="bottom" title="Cargar contacto"
+                                    class="btn btn-primary btn-circle fa fa-cloud-upload"></button>
+                                </div>
+
+                                
+
+                                <br>
+
+                                <ol id="lista_contacto" class="list-group list-group-numbered">
+                                    {% for contacto in contactos_empresa %}
+
+                                    <li 
+                                    id = "contacto_{{contacto.id}}"
+                                    class="list-group-item d-flex justify-content-between align-items-start">
+                                      <div class="ms-2 me-auto">
+                                        <div class="fw-bold">{{contacto.contacto}}</div>
+                                        <small><b>email: </b> {{contacto.email}} / <b>tel: </b>{{contacto.numero}}</small> 
+                                      </div>
+                                      <span class="badge bg-danger rounded-pill"
+                                      onclick="borrar_contacto({{contacto.id}})"><i 
+                                        data-toggle="tooltip" data-placement="left" title="Borrar contacto"
+                                        class="fa fa-trash-o"></i> </span>
+                                    </li>
+                                    
+                                    {% endfor %}
+ 
+                                  </ol>
+ 
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+    <a id="add2" href="#" data-toggle="modal" data-target="#Contactos" class="btn btn-primary btn-circle ">
+        <i data-toggle="tooltip" data-placement="left" title="Lista de contactos"
+        class="fa fa-users"></i>
     </a>
 
     <style>
@@ -171,6 +302,218 @@
             background-color: rgba(160, 160, 160, 0.1);
         }
     </style>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+// Deshabilitamos los post
+
+document.getElementById("modificar_datos").addEventListener("click", function(event){
+event.preventDefault()
+});
+
+document.getElementById("contactos").addEventListener("click", function(event){
+event.preventDefault()
+});
+
+//
+
+// libreria sweet
+
+function sweet_alert(mensaje, estado) {
+
+    const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+    })
+
+    Toast.fire({
+    icon: estado,
+    title: mensaje
+    })
+
+}
+
+//
+
+// Script para modificar datos
+
+async function editar_datos() {
+
+    id_empresa = {{empresa.id}}
+
+    const url = `{% host %}api/api_empresa/${id_empresa}/editar_datos/`;
+
+    var respuesta = await fetch(url ,{
+        method: "POST",
+        headers: {
+            'X-CSRFToken' : "{{ csrf_token }}",
+            'Content-Type': 'application/json',
+        },
+
+    body: JSON.stringify({
+        'rubro' : document.getElementById("empresa_rubro").value,
+        'direccion' : document.getElementById("empresa_direccion").value,
+        'telefono' : document.getElementById("empresa_telefono").value,
+
+
+    })
+});
+
+    var response = await respuesta.json();
+    var status = await respuesta.status
+    return validar_edicion(response, status);
+}
+
+function validar_edicion(response, status) {
+
+    if (status >= 200 && status <300){
+        sweet_alert("Datos editados", "success");
+        modificar_template_edicion(response);
+        
+
+
+    } else {
+        sweet_alert("No permitido", "warning")
+    }
+}
+
+function modificar_template_edicion(response) {
+
+
+    var p_rubro = document.getElementById('template_rubro');
+    p_rubro.innerHTML = `${response.rubro}`
+
+    var p_direccion = document.getElementById('template_direccion');
+    p_direccion.innerHTML = `${response.direccion}`
+
+    var p_telefono = document.getElementById('template_telefono');
+    p_telefono.innerHTML = `${response.telefono}`
+
+
+}
+
+//
+
+// Script para crear contacto
+
+async function crear_contacto() {
+
+    id_empresa = {{empresa.id}}
+
+    const url = `{% host %}api/api_contacto/`;
+
+    var respuesta = await fetch(url ,{
+        method: "POST",
+        headers: {
+            'X-CSRFToken' : "{{ csrf_token }}",
+            'Content-Type': 'application/json',
+        },
+
+    body: JSON.stringify({
+        'empresa': id_empresa,
+        'contacto' : document.getElementById("nuevo_contacto_contacto").value,
+        'numero' : document.getElementById("nuevo_contacto_numero").value,
+        'email' : document.getElementById("nuevo_contacto_email").value,
+
+
+    })
+    });
+
+    var response = await respuesta.json();
+    var status = await respuesta.status
+    return validar_contacto_creacion(response, status);
+}
+
+function validar_contacto_creacion(response, status) {
+
+    if (status >= 200 && status <300){
+        sweet_alert("Contacto creado", "success");
+        modificar_template_contacto(response);
+        
+
+
+    } else {
+        sweet_alert("No permitido", "warning")
+    }
+}
+
+function modificar_template_contacto(response) {
+
+
+    var contactos = document.getElementById('lista_contacto');
+    var nuevo_contacto = document.createElement('li')
+    nuevo_contacto.className = "list-group-item d-flex justify-content-between align-items-start"
+    nuevo_contacto.id = `contacto_${response.id}`
+    nuevo_contacto.innerHTML = `
+        <div class="ms-2 me-auto">
+            <div class="fw-bold">${response.contacto}</div>
+            <small><b>email: </b> ${response.email} / <b>tel: </b>${response.numero}</small> 
+        </div>
+        <span class="badge bg-danger rounded-pill"
+        onclick="borrar_contacto(${response.id})"><i 
+            data-toggle="tooltip" data-placement="left" title="Borrar contacto"
+            class="fa fa-trash-o"></i> </span>
+    
+    
+    `
+    contactos.appendChild(nuevo_contacto);
+
+
+
+}
+
+async function borrar_contacto(id_contacto) {
+
+    const url = `{% host %}api/api_contacto/${id_contacto}/`;
+
+    var respuesta = await fetch(url ,{
+        method: "DELETE",
+        headers: {
+            'X-CSRFToken' : "{{ csrf_token }}",
+            'Content-Type': 'application/json',
+        },
+
+
+    });
+
+    var status = await respuesta.status
+    return validar_contacto_delete(id_contacto, status);
+}
+
+function validar_contacto_delete(id_contacto, status) {
+
+    if (status >= 200 && status <300){
+        sweet_alert("Contacto eliminado", "success");
+        modificar_template_contacto_delete(id_contacto);
+        
+
+
+    } else {
+        sweet_alert("No permitido", "warning")
+    }
+}
+
+function modificar_template_contacto_delete(id_contacto) {
+    
+    var contacto = document.getElementById(`contacto_${id_contacto}`);
+    contacto.removeAttribute("class");
+    contacto.style = "display: none";
+}
+
+//
+
+</script>
+
+
+
 
 
 {% endblock %}

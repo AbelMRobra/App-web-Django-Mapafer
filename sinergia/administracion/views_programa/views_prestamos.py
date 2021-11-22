@@ -173,8 +173,8 @@ def prestamos_agregar(request):
 
                 estado_del_calculo = 0
 
-                cliente.estado = estado_cliente(cliente)
-                cliente.save()
+                # cliente.estado = estado_cliente(cliente)
+                # cliente.save()
 
                 context["mensaje"] = [1, "Credito generado correctamente"]
 
@@ -277,8 +277,8 @@ def prestamos_refinanciar(request):
                     context["mensaje"] = context["mensaje"][0]
 
 
-                cliente.estado = estado_cliente(cliente)
-                cliente.save()
+                # cliente.estado = estado_cliente(cliente)
+                # cliente.save()
 
                 return redirect('Cargado', id_credito_nuevo = id_credito, id_credito_anterior = id_credito_anterior)
 

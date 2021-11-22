@@ -1,7 +1,7 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
-
+{% load apptags_extras %}
 {% block content %}
 
 <div class="row page-titles">
@@ -336,9 +336,9 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="mt-2"  for="">Tasa de interes anual (%)</label>
-                                            <select name="tasa" class="form-control form-control">
+                                            <select id="select_formulario" name="tasa" class="form-control form-control">
                                                 {% for tasa in tasas %}
-                                                <option value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
+                                                <option id="option_formulario_{{tasa.id}}" value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
                                                 {% endfor %}
         
                                             </select>
@@ -408,36 +408,87 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" enctype="multipart/form-data">
-
-                    {% csrf_token %}
+   
                     <div style="text-align: left;">
                         <h3>Ingese los valores</h3>
 
                         <p class="my-2">Nombre</p>
                         <div class="mb-3">
-                            <input required type="text" name="nombre" placeholder="Nombre de referencia" class="form-control form-control-line">
+                            <input id="campo_nombre_newtasa" 
+                            required type="text" name="nombre" 
+                            placeholder="Nombre de referencia" 
+                            class="form-control form-control-line">
 
                         </div>
 
                         <p class="my-2">Valor</p>
                         <div class="mb-3">
-                            <input required type="number" step="any" name="valor" placeholder="Valor porcentual" class="form-control form-control-line">
+                            <input id="campo_valor_newtasa" 
+                            required type="number" step="any" n
+                            ame="valor" placeholder="Valor porcentual" 
+                            class="form-control form-control-line">
 
                         </div>
 
 
                         <div class="text-right">
-                            <button class="btn btn-success" type="submit" name="carga_tasa" value="1"
-                                style="margin-top: 10px;">Cargar</button>
+                            <button class="btn btn-success btn-circle fa fa-plus" 
+                            data-toggle="tooltip" data-placement="top" title="Agregar tasa"
+                            onclick="crear_tasa()"
+                            style="margin-top: 10px;"></button>
 
                         </div>
                     </div>
 
-                    
-                    {{ form.as_p }}
-                </form>
+                    <div class="row d-flex" style="text-align: left;">
 
+                        <div class="col-12">
+                            <h3>Modificar una tasa</h3>
+                        </div>
+                        
+
+                        <div class="col-8">
+
+                            <p class="my-2">Tasa</p>
+                            <div class="mb-3">
+                                <select id="campo_nombre_tasa" onchange="edicion_tasas_valor()" class="form-control form-control">
+                                    {% for tasa in tasas %}
+                                    <option id = "modal_option_{{tasa.id}}" value="{{tasa.id}}">{{tasa.nombre}}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <p class="my-2">Valor</p>
+                            <div class="mb-3">
+                                <input id="campo_valor_tasa" required type="number" step="any" placeholder="Valor porcentual" class="form-control form-control-line">
+                                <input id="campo_id_tasa" type="number" style="display: none;">
+                            </div>
+
+                        </div>
+
+                        <div class="text-center col-12">
+                            <button 
+                            class="btn btn-success btn-circle fa fa-pencil-square-o" 
+                            data-toggle="tooltip" data-placement="top" title="Editar el valor de la tasa seleccionada"
+                            onclick="modificar_tasa()" 
+                            style="margin-top: 10px;"></button>
+
+                            <button 
+                            data-toggle="tooltip" data-placement="top" title="Eliminar tasa seleccionada"
+                            class="btn btn-danger btn-circle fa fa-trash-o" 
+                            onclick="eliminar_tasa()" 
+
+                            style="margin-top: 10px;"></button>
+
+                        </div>
+
+
+                    </div>
             </div>
 
         </div>
@@ -448,7 +499,7 @@
 <a id="add2" href="{% url 'Refinanciar' %}" class="btn btn-info btn-circle">
     <i data-toggle="tooltip" data-placement="left" title="Recalcular un prestamo existente" class="fa fa-university"></i></a>
 
-<a id="add" href="#" data-toggle="modal" data-target="#ModalTasas" class="btn btn-warning btn-circle">
+<a id="add" onclick="edicion_tasas_valor()" href="#" data-toggle="modal" data-target="#ModalTasas" class="btn btn-warning btn-circle">
     <i data-toggle="tooltip" data-placement="left" title="Ingresar una nueva tasa" class="fa fa-coffee"></i></a>
 
 
@@ -500,6 +551,232 @@
 </style>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    function sweet_alert(mensaje, estado) {
+
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: estado,
+        title: mensaje
+        })
+
+    }
+
+    const data_tasas = [
+            {% for tasa in tasas %}
+
+            {'id':{{tasa.id}}, 'nombre':'{{tasa.nombre}}', 'valor_tasa':{{tasa.valor_tasa}}, },
+            
+            {% endfor %}
+        ];
+
+    function traer_nombre () {
+        for (let i=0; i <= data_tasas.length -1; i++){
+
+            if (data_tasas[i].id == document.getElementById("campo_id_tasa").value) {
+                return data_tasas[i].nombre;
+
+                
+            }
+
+        }
+    }
+
+    async function modificar_tasa() {
+
+        const url = `{% host %}api/api_tasas/${document.getElementById("campo_id_tasa").value}/`;
+
+        var nombre = traer_nombre();
+
+        var respuesta = await fetch(url ,{
+            method: "PUT",
+            headers: {
+                'X-CSRFToken' : "{{ csrf_token }}",
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({
+                'nombre' : nombre,
+                'valor_tasa' : document.getElementById("campo_valor_tasa").value,
+
+            })
+            });
+
+        var response = await respuesta.json();
+        var status = await respuesta.status
+        return validar_respuesta(response, status);
+        }
+
+    function validar_respuesta(response, status){
+        
+        if (status >= 200 && status <300){
+
+            sweet_alert("Tasa editada", "success");
+
+
+            for (let i=0; i <= data_tasas.length -1; i++){
+
+                if (data_tasas[i].id == response.id) {
+                    data_tasas[i].valor_tasa = response.valor_tasa;
+
+                    
+                } 
+
+            }
+
+            var option = document.getElementById(`option_formulario_${response.id}`);
+            option.value = response.valor_tasa;
+            option.text = `${response.nombre} (${response.valor_tasa}%)`;
+
+            edicion_tasas_valor();
+        } else {
+            sweet_alert("Hubo un problema!", "warning")
+        }
+    }
+
+    function edicion_tasas_valor() {
+
+        
+        var campo_nombre_tasa = document.getElementById("campo_nombre_tasa");
+        var campo_valor_tasa = document.getElementById("campo_valor_tasa");
+        var campo_id_tasa = document.getElementById("campo_id_tasa");
+
+        for (let i=0; i <= data_tasas.length -1; i++){
+
+            if (data_tasas[i].id == campo_nombre_tasa.value) {
+                campo_valor_tasa.value = data_tasas[i].valor_tasa;
+                campo_id_tasa.value = data_tasas[i].id;
+                console.log(data_tasas[i].id);
+                
+            }
+            
+        }
+
+
+
+    }
+
+    async function crear_tasa() {
+
+        const url = `{% host %}api/api_tasas/`;
+
+        var nombre = traer_nombre();
+
+        var respuesta = await fetch(url ,{
+            method: "POST",
+            headers: {
+                'X-CSRFToken' : "{{ csrf_token }}",
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({
+                'nombre' : document.getElementById("campo_nombre_newtasa").value,
+                'valor_tasa' : document.getElementById("campo_valor_newtasa").value,
+
+            })
+            });
+
+        var response = await respuesta.json();
+        var status = await respuesta.status
+        return validar_creacion(response, status);
+    }
+
+    function validar_creacion(response, status) {
+        if (status >= 200 && status <300){
+
+            sweet_alert("Tasa creada", "success");
+
+            modificar_select(response);
+
+
+            edicion_tasas_valor();
+        } else {
+            sweet_alert("Hubo un problema!", "warning")
+        }
+    }
+
+    function modificar_select(response) {
+
+        var select = document.getElementById('campo_nombre_tasa');
+        var option = document.createElement('option');
+        option.id = `modal_option_${response.id}`;
+        option.value = response.id;
+        option.text = response.nombre;
+        select.appendChild(option);
+
+        var select = document.getElementById('select_formulario');
+        var option = document.createElement('option');
+        option.id = `option_formulario_${response.id}`;
+        option.value = response.valor_tasa;
+        option.text = `${response.nombre} (${response.valor_tasa}%)`;
+        select.appendChild(option);
+
+        data_tasas.unshift(response);
+        console.log(data_tasas);
+
+    }
+
+    async function eliminar_tasa() {
+
+        var id_tasa = document.getElementById("campo_id_tasa").value
+
+        const url = `{% host %}api/api_tasas/${id_tasa}/`;
+
+        var respuesta = await fetch(url ,{
+            method: "DELETE",
+            headers: {
+                'X-CSRFToken' : "{{ csrf_token }}",
+                'Content-Type': 'application/json',
+            },
+
+            });
+
+
+        var status = await respuesta.status
+        return validar_delete(id_tasa, status);
+    }
+
+    function validar_delete(id_tasa, status) {
+        if (status >= 200 && status <300){
+
+            sweet_alert("Tasa eliminada", "success");
+
+            modificar_select_delete(id_tasa);
+
+
+            edicion_tasas_valor();
+        } else {
+            sweet_alert("Hubo un problema!", "warning")
+        }
+    }
+
+    function modificar_select_delete(id_tasa) {
+
+        var option = document.getElementById(`modal_option_${id_tasa}`);
+        option.remove()
+
+        var option = document.getElementById(`option_formulario_${id_tasa}`);
+        option.remove()
+        
+        data_tasas.unshift(response);
+
+
+    }
+
+</script>
 
 {% if mensaje %}
 <script>

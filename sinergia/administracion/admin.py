@@ -37,7 +37,7 @@ class PrestamosResource(resources.ModelResource):
         model = Prestamos
 
 class PrestamosAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('monto', 'regimen')
+    list_display = ('cliente', 'monto', 'regimen')
     search_fields = ('monto', 'regimen')
     resources_class = PrestamosResource
 

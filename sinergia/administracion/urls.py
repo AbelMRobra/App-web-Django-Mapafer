@@ -1,14 +1,28 @@
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
+from django.urls.conf import include
 from . import views
 from .views_programa import views_proveedores, views_prestamos, views_pagos
 from . import views_empresa
 from . import views_clientes
 from django.contrib.auth.decorators import login_required
+from rest_framework import routers
+from administracion.viewsets import viewsets_tasas, viewsets_empresa
+
+
+router = routers.DefaultRouter()
+router.register(r'api_tasas', viewsets_tasas.TasasViewset)
+router.register(r'api_empresa', viewsets_empresa.EmpresaViewset)
+router.register(r'api_contacto', viewsets_empresa.ContactosEmpresaViewset)
 
 
 urlpatterns = [
+
+    path("api/", include(router.urls)),
+
+
+
     url(r'^login$', views.login, name = 'Login'),
     url(r'^logout$', views.logout, name = 'Logout'),
     url(r'^$', views.welcome, name = 'Welcome'),

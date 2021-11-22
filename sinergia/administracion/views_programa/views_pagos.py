@@ -9,8 +9,8 @@ def pagos_panel(request):
         consulta_borrar = Pagos.objects.get(id = int(request.POST['borrar']))
         cliente = consulta_borrar.prestamo.cliente
         consulta_borrar.delete()
-        cliente.estado = estado_cliente(cliente)
-        cliente.save()
+        # cliente.estado = estado_cliente(cliente)
+        # cliente.save()
 
     context = {}
     context['pagos'] = Pagos.objects.all().order_by("-fecha")
@@ -28,9 +28,9 @@ def pagos_agregar(request, id_prestamo):
         )
         new_pago.save()
         
-        cliente = new_pago.prestamo.cliente
-        cliente.estado = estado_cliente(cliente)
-        cliente.save()
+        # cliente = new_pago.prestamo.cliente
+        # cliente.estado = estado_cliente(cliente)
+        # cliente.save()
         
         return redirect('Panel de pagos')
 
@@ -57,9 +57,9 @@ def pagos_editar(request, id_pago):
         pago.fecha = request.POST['fecha']
         pago.save()
 
-        cliente = pago.prestamo.cliente
-        cliente.estado = estado_cliente(cliente)
-        cliente.save()
+        # cliente = pago.prestamo.cliente
+        # cliente.estado = estado_cliente(cliente)
+        # cliente.save()
         
         return redirect('Panel de pagos')
 

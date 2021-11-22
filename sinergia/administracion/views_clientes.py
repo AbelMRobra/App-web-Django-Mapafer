@@ -10,19 +10,19 @@ def clientes(request):
 
     if request.method == 'POST':
 
-        try:
-            cliente = Clientes.objects.get(id = request.POST['borrar'])
-            cliente.delete()
+        # try:
+        cliente = Clientes.objects.get(id = request.POST['borrar'])
+        cliente.delete()
         
-        except:
+        # except:
 
-            data = Clientes.objects.all().order_by("nombre")
+        #     data = Clientes.objects.all().order_by("nombre")
 
-            for d in data:
+        #     for d in data:
 
-                cliente_Estado = estado_cliente(d)
-                d.estado = cliente_Estado
-                d.save()
+        #         cliente_Estado = estado_cliente(d)
+        #         d.estado = cliente_Estado
+        #         d.save()
 
     context = {}
     context["data"] = Clientes.objects.all().order_by("nombre")

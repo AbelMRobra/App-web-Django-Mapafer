@@ -33,7 +33,7 @@ def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, valor_or
         )
         prestamo_nuevo.save()
 
-        estado_cliente(prestamo_nuevo.cliente)
+        # estado_cliente(prestamo_nuevo.cliente)
         crear_cuotas_prestamo(prestamo_nuevo)
 
         return ([1, "Prestamo agregado correctamente"], prestamo_nuevo.id)
@@ -71,7 +71,7 @@ def prestamos_editar_credito(id_credito, proveedor, fecha, primera_cuota, valor_
             
             eliminar_cuotas_prestamo(credito)
 
-        estado_cliente(credito.cliente)
+        # estado_cliente(credito.cliente)
 
         return [1, "Prestamo editado correctamente"]
 
@@ -89,7 +89,7 @@ def prestamos_borrar_prestamo(id_prestamo):
         
         prestamo_a_borrar.delete()
         
-        estado_cliente(cliente)
+        # estado_cliente(cliente)
 
         return [1, "Prestamo borrado correctamente"]
 
@@ -221,5 +221,5 @@ def prestamos_cancelar_refinanciamiento(id_prestamo, tasa_deuda, tasa_saldo):
         monto = (monto_deuda_actual + monto_saldo_actual)
     )
 
-    estado_cliente(cliente)
+    # estado_cliente(cliente)
     pago_final.save()
