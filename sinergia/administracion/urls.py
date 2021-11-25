@@ -8,19 +8,20 @@ from . import views_empresa
 from . import views_clientes
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
-from administracion.viewsets import viewsets_tasas, viewsets_empresa
+from administracion.viewsets import viewsets_tasas, viewsets_empresa, viewsets_pagos, viewsets_prestamos
 
 
 router = routers.DefaultRouter()
 router.register(r'api_tasas', viewsets_tasas.TasasViewset)
 router.register(r'api_empresa', viewsets_empresa.EmpresaViewset)
 router.register(r'api_contacto', viewsets_empresa.ContactosEmpresaViewset)
+router.register(r'api_pagos', viewsets_pagos.PagosViewset)
+router.register(r'api_prestamos', viewsets_prestamos.PrestamosViewset)
 
 
 urlpatterns = [
 
     path("api/", include(router.urls)),
-
 
 
     url(r'^login$', views.login, name = 'Login'),

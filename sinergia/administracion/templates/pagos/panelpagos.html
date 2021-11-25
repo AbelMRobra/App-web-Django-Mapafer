@@ -1,7 +1,9 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
+{% load apptags_extras %}
 {% block content %}
+
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
@@ -23,7 +25,7 @@
                 <div class="col-12 justify-content-center">
 
                     <div class="d-flex">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Pagos de creditos registrados</h4>
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Pagos de creditos registrados</b></h4>
                         
                         <div class="btn-group ml-auto">
                             <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
@@ -59,20 +61,22 @@
                             <tbody style="font-size: 12px;">
 
                                 {% for i in pagos %}
-                                <tr>
+                                <tr id="fila_{{i.id}}">
                                     <td>{{i.fecha|date:"Y/m/d"}}</td>
                                     <td><a href="{% url 'Administrar credito' i.prestamo.id %}">{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}}</a></td>
                                     <td>{{i.prestamo.cliente.empresa}}</td>
                                     <td>{{i.prestamo.regimen|lower|capfirst}}</td>
-                                    <td>${{i.monto|floatformat:2|intcomma}}</td>
+                                    <td id="pago_{{i.id}}">${{i.monto|floatformat:2|intcomma}}</td>
                                     <td><div class="btn-group ml-auto">
                                         <a href="JavaScript:void(0)" class="icon-options-vertical link"
+                                            onclick="datos_para_editar({{i.id}})"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="{% url 'Editar pagos' i.id %}"><i
+                                            <a class="dropdown-item" href="#"
+                                            data-toggle="modal"  data-target="#ModalEditarPago"><i
                                                 class="fa fa-pencil"></i> Editar</a>
                                             <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                                                data-target="#ModalBorrar{{i.id}}"><i
+                                                data-target="#ModalBorrar"><i
                                                     class="fa fa-trash-o mr-2"></i> Borrar</a>
                                         </div>
                                     </div></td>
@@ -80,49 +84,7 @@
 
 
                                 </tr>
-
-                                <div class="modal fade" id="ModalBorrar{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header"
-                                                style="background-color: #2a3e52;">
-                                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
-                                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form method="POST" enctype="multipart/form-data">
-
-                                                        {% csrf_token %}
-                                                        <div style="text-align: left;">
-                                                            <h3>Advertencia</h3>
-
-                                                            <h6>Esta acción no se puede deshacer, toda la información asociada al cliente sera eliminada. Recomendamos analizar esta acción</h6>
-
-                        
-
-                                                            <div>
-                                                                <button class="btn btn-danger" type="submit" name="borrar" value="{{i.id}}"
-                                                                    style="margin-top: 10px;">Continuar</button>
-
-                                                            </div>
-                                                        </div>
-
-                                                        
-                                                        {{ form.as_p }}
-                                                    </form>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
+                             
                                 {% endfor %}
                             </tbody>
 
@@ -136,7 +98,214 @@
     </div>
 </div>
 
+<div class="modal fade" id="ModalBorrar" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar"
+                                        aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+            style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el pago</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div style="text-align: left;">
+                    <h3>Advertencia</h3>
+
+                    <h6>Esta acción no se puede deshacer, toda la información asociada al cliente sera eliminada. Recomendamos analizar esta acción</h6>
+
+
+
+                    <div>
+                        <button class="btn btn-danger" onclick="borrar_pago()"
+                            style="margin-top: 10px;">Continuar</button>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="ModalPagos" tabindex="-1" role="dialog" aria-labelledby="ModalPagos"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Agregar un pago</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+   
+                    <div style="text-align: left;">
+                        <h3>Ingese los datos</h3>
+
+                        <p class="my-2">Prestamo</p>
+                        <div class="mb-3 d-flex">
+                            <div class="col-6">
+                                <input id="nuevo_prestamo" 
+                                onchange="consulta_datos_prestamo()"
+                                required type="search" list="prestamos" 
+                                placeholder="ID del prestamo" 
+                                class="form-control form-control-line">
+                            </div>
+
+                            <div class="col-6">
+                                <div>
+                                    <p id="cliente" style="display: none;"></p>
+                                </div>
+                                <div>
+                                    <p id="cuota" style="display: none;"></p>
+                                </div>
+                                <div>
+                                    <p id="pagado" style="display: none;"></p>
+                                </div>
+                                <div>
+                                    <p id="saldo" style="display: none;"></p>
+                                </div>
+                                
+                                
+                            </div>
+                            
+
+                        </div>
+
+                        <p class="my-2">Valor</p>
+                        <div class="mb-3">
+                            <input id="nuevo_monto" 
+                            required type="number" step="any" n
+                            ame="valor" placeholder="Valor cobrado" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Fecha</p>
+                        <div class="mb-3">
+                            <input id="nuevo_fecha" 
+                            required type="date" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+
+                        <div class="text-right">
+                            <button class="btn btn-success btn-circle fa fa-plus" 
+                            data-toggle="tooltip" data-placement="top" title="Agregar pago"
+                            onclick="agregar_pago()"
+                            style="margin-top: 10px;"></button>
+
+                        </div>
+                    </div>
+
+  
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="ModalEditarPago" tabindex="-1" role="dialog" aria-labelledby="ModalEditarPago"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar un pago</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+   
+                    <div style="text-align: left;">
+                        <h3>Modifique los datos</h3>
+
+
+                        <p class="my-2">Valor</p>
+                        <div class="mb-3">
+                            <input id="monto_modal" 
+                            required type="number" step="any" n
+                            ame="valor" placeholder="Valor cobrado" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Fecha</p>
+                        <div class="mb-3">
+                            <input id="fecha_modal" 
+                            required type="date" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <input type="hidden" id="pago_modal" value="">
+                        <input type="hidden" id="prestamo_modal" value="">
+
+
+                        <div class="text-right">
+                            <button class="btn btn-success btn-circle fa fa-pencil-square-o" 
+                            data-toggle="tooltip" data-placement="top" title="Editar los datos"
+                            onclick="editar_pago()"
+                            style="margin-top: 10px;"></button>
+
+                        </div>
+                    </div>
+
+  
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
+
+<datalist id="prestamos">
+    {% for prestamo in prestamos %}
+    <option value="{{prestamo.id}}">{{prestamo.id}}-{{prestamo.cliente.nombre}}, {{prestamo.cliente.apellido}} - ${{prestamo.monto|floatformat:2|intcomma}}</option>
+    {% endfor %}
+</datalist>
+
+<a id="add" href="#" data-toggle="modal" data-target="#ModalPagos" class="btn btn-primary btn-circle ">
+    <i data-toggle="tooltip" data-placement="left" title="Agregar un pago"
+    class="fa fa-plus"></i>
+</a>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+    tbody{
+        font-weight: 400;
+    }
+
+
+</style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_pagos.js' %}"></script>
 
 
 <script>
