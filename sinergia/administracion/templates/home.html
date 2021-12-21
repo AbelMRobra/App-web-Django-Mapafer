@@ -1,12 +1,13 @@
 {% load static %}
 {% load humanize %}
+{% load apptags_extras %}
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="{% static 'css/styleabel.css' %}" />
+
   <link rel="stylesheet" href="extensions/sticky-header/bootstrap-table-sticky-header.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -17,7 +18,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 
-  <link rel="stylesheet" href="{% static 'css/styleabel.css' %}">
+
   <link rel="stylesheet" href="{% static 'css/registro_contable.css' %}">
   <link href="{% static 'adminpro/assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
   <link href="{% static 'adminpro/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -77,7 +78,9 @@
               alt="" class="light-logo" id="light-logo" />
             </b>
             <span>
+              
               <img src="{% static 'img/Mapafer.png' %}" style="max-width: 60px; vertical-align: bottom; margin-bottom: 12px;" alt="" class="dark-logo" />
+              
               <img src="{% static 'img/Mapafer.png' %}" class="mb-3" style="max-width: 120px; vertical-align: bottom;" class="light-logo"
                 alt="" />
             </span>
@@ -101,6 +104,9 @@
           </ul>
           <ul class="navbar-nav my-lg-0">
             <li>
+              {% if request.user|has_rol:"ADM" %}
+              <a class="nav-link waves-effect waves-dark" href="{% url 'Gestion de usuarios' %}" ><i data-toggle="tooltip" data-placement="left" title="Gestión de usuarios" class="fa fa-users text-light"></i></a>
+              {% endif %}
               <a class="nav-link waves-effect waves-dark" href="{% url 'Logout' %}" ><i class="fa fa-power-off text-light"></i></a>
               
             </li>
@@ -118,6 +124,13 @@
           <ul id="sidebarnav">
             <li class="nav-small-cap">MENÚ</li>
             <li class="nav-devider"></li>
+            {% if request.user|has_rol:"EMPRESA" %}
+            <li class="nav-small-cap">TU ESPACIO</li>
+
+            <li> <a href="#"><i class="fa fa-angle-right"></i><span class="hide-menu"> Empleados activos</span></a></li>
+
+            <li> <a href="#}"><i class="fa fa-angle-right"></i><span class="hide-menu"> Pagos realizados</span></a></li>
+            {% else %}
             <li class="nav-small-cap">BASE DE DATOS</li>
 
             <li> <a href="{% url 'BBDD clientes' %}"><i class="fa fa-angle-right"></i><span class="hide-menu"> Clientes</span></a></li>
@@ -137,6 +150,7 @@
             <li class="nav-small-cap">INFORMACIÓN</li>
 
             <li> <a href="{% url 'Aclaraciones' %}"><i class="fa fa-info"></i><span class="hide-menu"> Uso</span></a></li>
+            {% endif %}
 
           </ul>
         </nav>
@@ -144,7 +158,10 @@
     </aside>
 
     <div class="page-wrapper">
+
+        {% if request.user|has_rol:"EMPRESA" %}
        
+        {% else %}
         <div class="container-fluid">
         {% block content %}  
 
@@ -549,6 +566,10 @@
           {% endif %}
           {% endblock %}
         </div>
+        {% endif %}
+
+        <input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+        <input id="host" type="text" value="{% host %}" style="display: none;"></input>
         
         <footer class="footer"> © 2021 Soft Mapafer </footer>
     </div>
@@ -556,6 +577,7 @@
 </div>
 
 <style>
+
       .go-corner {
 	 display: flex;
 	 align-items: center;
@@ -621,6 +643,7 @@
 
     <!-- PRUEBA IMPORTACIONES -->
 
+<script src="{% static 'js/f_home.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js" defer></script>
 <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js" defer></script>
@@ -638,7 +661,6 @@
 <script src="{% static 'adminpro/main/js/custom.min.js' %}"></script>
 <script src="{% static 'adminpro/assets/plugins/jquery/jquery.min.js' %}"></script>
 
-<script src="{% static 'adminpro/assets/plugins/jquery/jquery.min.js' %}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script src="{% static 'adminpro/assets/plugins/bootstrap/js/popper.min.js' %}"></script>
 <script src="{% static 'adminpro/assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>

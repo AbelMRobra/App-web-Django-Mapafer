@@ -3,12 +3,13 @@ from django.urls import path
 from django.conf.urls import url
 from django.urls.conf import include
 from . import views
-from .views_programa import views_proveedores, views_prestamos, views_pagos
+from .views_programa import views_proveedores, views_prestamos, views_pagos, views_usuarios
 from . import views_empresa
 from . import views_clientes
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
-from administracion.viewsets import viewsets_tasas, viewsets_empresa, viewsets_pagos, viewsets_prestamos
+from administracion.viewsets import viewsets_tasas, viewsets_empresa, viewsets_pagos, viewsets_prestamos, \
+    viewsets_user
 
 
 router = routers.DefaultRouter()
@@ -17,6 +18,7 @@ router.register(r'api_empresa', viewsets_empresa.EmpresaViewset)
 router.register(r'api_contacto', viewsets_empresa.ContactosEmpresaViewset)
 router.register(r'api_pagos', viewsets_pagos.PagosViewset)
 router.register(r'api_prestamos', viewsets_prestamos.PrestamosViewset)
+router.register(r'api_users', viewsets_user.UserViewset)
 
 
 urlpatterns = [
@@ -28,6 +30,9 @@ urlpatterns = [
     url(r'^logout$', views.logout, name = 'Logout'),
     url(r'^$', views.welcome, name = 'Welcome'),
     url(r'^home$', login_required(views.home), name = 'Home'),
+
+    # URL de usuarios
+    url(r'^usuariosadmin$', login_required(views_usuarios.usuarios_panel), name = 'Gestion de usuarios'),
 
     # URL de empresas
     url(r'^panelempresas$', login_required(views_empresa.panelempresas), name = 'Panel de empresas'),

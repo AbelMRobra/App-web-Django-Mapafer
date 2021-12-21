@@ -157,6 +157,8 @@
 
                                 <input id="nuevo_contacto_contacto" type="text" placeholder="Contacto"
                                 class="form-control form-control-line" style="margin: 2px;"/>
+                                <input id="nuevo_contacto_cargo" type="text" placeholder="Cargo que ocupa"
+                                class="form-control form-control-line" style="margin: 2px;"/>
                                 <input id="nuevo_contacto_numero" type="text" placeholder="Numero"
                                 class="form-control form-control-line" style="margin: 2px;"/>
                                 <input id="nuevo_contacto_email" type="text" placeholder="Email"
@@ -181,7 +183,7 @@
                                     class="list-group-item d-flex justify-content-between align-items-start">
                                       <div class="ms-2 me-auto">
                                         <div class="fw-bold">{{contacto.contacto}}</div>
-                                        <small><b>email: </b> {{contacto.email}} / <b>tel: </b>{{contacto.numero}}</small> 
+                                        <small><b>{{contacto.cargo}}</b> - <b>email: </b> {{contacto.email}} / <b>tel: </b>{{contacto.numero}}</small> 
                                       </div>
                                       <span class="badge bg-danger rounded-pill"
                                       onclick="borrar_contacto({{contacto.id}})"><i 
@@ -422,6 +424,7 @@ async function crear_contacto() {
         'contacto' : document.getElementById("nuevo_contacto_contacto").value,
         'numero' : document.getElementById("nuevo_contacto_numero").value,
         'email' : document.getElementById("nuevo_contacto_email").value,
+        'cargo' : document.getElementById("nuevo_contacto_cargo").value,
 
 
     })
@@ -455,7 +458,7 @@ function modificar_template_contacto(response) {
     nuevo_contacto.innerHTML = `
         <div class="ms-2 me-auto">
             <div class="fw-bold">${response.contacto}</div>
-            <small><b>email: </b> ${response.email} / <b>tel: </b>${response.numero}</small> 
+            <small><b>${response.cargo}</b> - <b>email: </b> ${response.email} / <b>tel: </b>${response.numero}</small> 
         </div>
         <span class="badge bg-danger rounded-pill"
         onclick="borrar_contacto(${response.id})"><i 

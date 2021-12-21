@@ -1,9 +1,19 @@
 import datetime
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.contrib.auth.models import User
 from numpy import mod
+from administracion.variables import *
 
 # Create your models here.
+
+class UserProfile(models.Model):
+
+    user = models.OneToOneField(User, on_delete=CASCADE, verbose_name="User", related_name='user')
+    user_rol = models.CharField(choices=USER_ROL, default=USUARIO, max_length=10)
+
+    def __str__(self):
+        return self.user.username
 
 class Proveedor(models.Model):
     razon_social = models.CharField(max_length=200, verbose_name="Razón social")
@@ -52,6 +62,7 @@ class ContactosEmpresa(models.Model):
 
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa", on_delete=CASCADE)
     contacto = models.CharField(max_length=30, verbose_name="Contacto")
+    cargo = models.CharField(max_length=30, verbose_name="Cargo que ocupa", blank=True, null=True)
     numero = models.CharField(max_length=20, verbose_name="Telfono")
     email = models.CharField(max_length=30, verbose_name="Email")
 

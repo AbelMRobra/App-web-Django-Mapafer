@@ -218,10 +218,14 @@ function validar_respuesta_delete(id_pago, status){
     }
 }
 
-function modificar_tabla_editar(id_pago){
+function modificar_tabla_delete(id_pago){
 
+    console.log("Estoy en la parte de eliminar")
     var fila = document.getElementById(`fila_${id_pago}`)
+    console.log(fila)
+    fila.removeAttribute("class")
     fila.style = "display: none;"
+    $('#ModalBorrar').modal('toggle')
 
 }
 

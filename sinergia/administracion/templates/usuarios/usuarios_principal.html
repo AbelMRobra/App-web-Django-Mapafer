@@ -1,0 +1,206 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+{% load apptags_extras %}
+{% block content %}
+
+
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Gestión de usuarios</h3>
+    </div>
+
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Usuarios</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-12" style="display: flex;">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title font-bold">Usuarios</h4>
+                    <hr>
+                    <div id="users" class="scrollbox" style="max-height: 65vh; overflow-y: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="principal_tree" class="col-7">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="{% static 'img/gif_tree.gif' %}" class="img-circle" width="250" />
+                    <h3 class="text-primary font-bold">Seleccione un usuario</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="principal_detail" class="col-7" style="display: none; max-height: 65vh;">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title font-bold" >Datos del perfil</h4>
+                    <div class="mt-4 box" onclick="upload_data()">
+                        <input style="display: none;" id="id_upload" type="number" value="">
+                        <h4 class="mt-4">Nombre de usuario: <b id="username"></b></h4>
+                        <input style="display: none;" id="username_edit" type="text"  value="" onchange="service_upload_user()"
+                            class="form-control form-control" aria-label="Amount">
+                        <h4 class="mt-4">Email: <b id="email"></b></h4>
+                        <input style="display: none;" id="email_edit" type="text"  value="" onchange="service_upload_user()"
+                            class="form-control form-control" aria-label="Amount">
+                        <h4 class="mt-4">Rol: <b id="user_rol"></b></h4>
+                        <select style="display: none;" id="user_rol_edit" class="form-control" onchange="service_upload_user()">
+                            <option hidden selected>Selecciona una opción</option>
+                            <option value="ADM">ADM</option>
+                            <option value="USER">USER</option>
+                            <option value="EMPRESA">EMPRESA</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <button id="button_delete" onclick="service_delete_user()" style="display: none;" class="btn btn-danger fa fa-trash-o"
+                        data-toggle="tooltip" data-placement="bottom" title="Eliminar usuario"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Usuarios" tabindex="-1" role="dialog" aria-labelledby="Usuarios"
+                        aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+            style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Usuarios</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="usuarios">
+
+                    <div class="form-group">
+                    <label class="form-control-label" for="username_create">Username</label>
+                    <input type="text" class="form-control" id="username_create">
+                    </div>
+
+                    <div class="form-group">
+                    <label class="form-control-label" for="email_create">Email</label>
+                    <input type="text" class="form-control" id="email_create">
+                    </div>
+
+                    <div class="form-group">
+                    <label class="form-control-label" for="user_rol_create">Rol del usuario</label>
+                    <select id="user_rol_create" class="custom-select bg-white">
+                        <option hidden selected>Selecciona una opción</option>
+                        <option value="ADM">ADM</option>
+                        <option value="USER">USER</option>
+                        <option value="EMPRESA">EMPRESA</option>
+                    </select>
+                </div>
+                    
+                    <div class="form-group">
+                        <label class="form-control-label" for="pass">Contraseña (minimo 8 caracteres)</label>
+                        <input type="password" onkeyup="validar_password()" class="form-control" id="pass">
+                    </div>
+
+                    <div id="container_pass_2" class="form-group">
+                        <label class="form-control-label" for="pass_2">Repetir contraseña</label>
+                        <input type="password" onkeyup="validar_password()" class="form-control form-control-danger" id="pass_2">
+                    </div>
+                    
+
+                    <div style="text-align: center; margin: 5px;">
+                        <button
+                        onclick="service_create_user()"
+                        data-toggle="tooltip" data-placement="bottom" title="Crear usuario"
+                        class="btn btn-primary btn-circle fa fa-cloud-upload mt-2"></button>
+                    </div>
+
+                    
+
+                    <br>
+
+                    <ol id="lista_contacto" class="list-group list-group-numbered">
+                        {% for contacto in contactos_empresa %}
+
+                        <li 
+                        id = "contacto_{{contacto.id}}"
+                        class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">{{contacto.contacto}}</div>
+                            <small><b>{{contacto.cargo}}</b> - <b>email: </b> {{contacto.email}} / <b>tel: </b>{{contacto.numero}}</small> 
+                            </div>
+                            <span class="badge bg-danger rounded-pill"
+                            onclick="borrar_contacto({{contacto.id}})"><i 
+                            data-toggle="tooltip" data-placement="left" title="Borrar contacto"
+                            class="fa fa-trash-o"></i> </span>
+                        </li>
+                        
+                        {% endfor %}
+
+                        </ol>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<a id="add_user" href="#"
+            data-toggle="modal" data-target="#Usuarios"
+            class="btn btn-primary btn-circle">
+          <i data-toggle="tooltip" data-placement="left" title="Agregar un usuario"
+          class="fa fa-plus"></i></a>
+
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
+
+<style>
+
+#add_user{
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    z-index: 10;
+}
+
+.box:hover {
+cursor: pointer;
+
+}
+
+.scrollbox {
+
+overflow: hidden;
+}
+
+.scrollbox:hover {
+overflow: auto;
+}
+
+.scrollbox::-webkit-scrollbar {
+width: 6px;
+}
+
+.scrollbox::-webkit-scrollbar-thumb {
+background-color: rgb(201, 201, 201);
+border-radius: 100px;
+}
+</style>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_home.js' %}"></script>
+
+
+{% endblock %}

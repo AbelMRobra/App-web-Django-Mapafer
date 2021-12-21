@@ -8,7 +8,7 @@ import numpy as np
 import numpy_financial as npf
 import datetime
 from .funciones.f_estado_cliente import *
-
+from administracion.variables import *
 from .functions_home import montos_situaciones, cantidad_situaciones
 
 
@@ -95,6 +95,7 @@ def home(request):
     context = {}
     context["monto_situaciones"] = montos_situaciones()
     context["cantidad_situaciones"] = cantidad_situaciones()
+    context["roles"] = USER_ROL
     
 
     today = datetime.date.today()
