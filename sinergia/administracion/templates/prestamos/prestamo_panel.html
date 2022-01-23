@@ -46,7 +46,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 13px; ">
+                            <tbody style="font-size: 14px; font-weight: 450;">
 
                                 {% for i in data %}
                                 <tr>
@@ -164,11 +164,14 @@
 
                     </div>
 
+                    
+                    
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <a id="add" href="{% url 'Calculadora' %}"
 data-toggle="tooltip" data-placement="left" title="Agregar un nuevo credito"
@@ -190,6 +193,8 @@ data-toggle="tooltip" data-placement="left" title="Agregar un nuevo credito"
 
 
 </style>
+
+
 
 <script>
 
@@ -235,6 +240,9 @@ data-toggle="tooltip" data-placement="left" title="Agregar un nuevo credito"
 <script>
     $(document).ready(function () {
         $('#example2').DataTable({
+            "language": {
+                "search": "Buscar"
+            },
             "paging": false,
             "info": false,
             dom: 'Bfrtip',

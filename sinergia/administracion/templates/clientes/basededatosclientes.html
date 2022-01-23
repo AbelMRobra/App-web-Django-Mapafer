@@ -24,47 +24,29 @@
                 <div class="col-12 justify-content-center">
 
                     <div class="d-flex">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Base de datos</b></h4>
-                        
-                        <div class="btn-group ml-auto">
-                            <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{% url 'Nuevo cliente' %}"><i
-                                    class="fa fa-plus-circle mr-2"></i>Agregar cliente</a>
-                                <form method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <button class="dropdown-item" type="submit" name="subir_item"><i
-                                    class="fa fa-refresh mr-2"></i>Recalculo</button></form>
-                                    
-                            </div>
-                        </div>
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Base de datos</b></h4>                    
                     </div>
+
                     <h6 class="card-subtitle">Información sobre los clientes activos y potenciales</h6>
 
                     <div class="table-responsive">
 
                         <table id="example" class="table" style="width:100%">
-
                             <thead>
                                 <tr>
                                     <th>Usuario</th>
-                                    <th>Estado</th>
                                     <th>Score</th>
+                                    <th>Estado</th>
                                     <th>Email</th>
                                     <th>Telefono</th>
                                     <th>Empresa</th>
-        
-
                                 </tr>
                             </thead>
-
-                            <tbody style="font-size: 14px; font-weight: 350;">
-
+                            <tbody style="font-size: 14px; font-weight: 450;">
                                 {% for i in data %}
                                 <tr>
                                     <td>
-                                        <div class="btn-group ml-auto mr-2">
+                                        <div class="btn-group ml-auto mr-3">
                                             <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -76,36 +58,17 @@
                                             </div>
                                         </div>
                                         
-                                        {% if i.imagen %}<img src="{{i.imagen.url}}" style="width: 30px; margin-right: 10px;" alt="usuario">{% else %}<img src="{% static 'img/userlog2.png' %}" style="width: 30px; margin-right: 10px" alt="usuario">{% endif %} <a href="{% url 'Perfil del cliente' i.id %}">{{i.nombre}}, {{i.apellido}}</a></td>
-                                    <td {% if i.estado == 'Activo' %} class = "text-info" 
-                                    {% elif i.estado == 'Potencial' %} class = "text-secondary"
-                                    {% elif i.estado == 'Moroso' %} class = "text-danger" 
-                                    {% else %} class = "text-dark" {% endif %}><b>{{i.estado_cliente}}</b></td>
-                                    <td {% if i.score < 300 %} class = "text-danger" {% else %} class = "text-secondary" {% endif %}><b>{{i.score}}</b></td>
+                                        <a href="{% url 'Perfil del cliente' i.id %}">{{i.nombre}}, {{i.apellido}}</a></td>
+                                    <td {% if i.score < 300 %} class = "text-danger" {% endif %}>{{i.score}}</td>
+                                    <td> {{i.estado_cliente}} </td>
                                     <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
-                                    {% if i.telefono %}
-                                    <td>{{i.telefono|floatformat:0}}</td>
-                                    {% else %}
-                                    <td>-</td>
-                                    {% endif %}
-                                    {% if i.empresa %}
-                                    <td>{{i.empresa}}</td>
-                                    {% else %}
-                                    <td>-</td>
-                                    {% endif %}
-            
+                                    <td>{% if i.telefono %}{{i.telefono|floatformat:0}} {% else %}-{% endif %}</td>                            
+                                    <td>{% if i.empresa %}{{i.empresa}} {% else %}-{% endif %}</td>
                                 </tr>
-
-
                                 {% endfor %}
                             </tbody>
-
                         </table>
-
-                
-
                     </div>
-
                 </div>
             </div>
         </div>
@@ -133,8 +96,11 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
-            "info": false,
+            "language": {
+                "search": "Buscar"
+            },
 
+            "info": false,
             dom: 'Bfrtip',
             buttons: [
             {

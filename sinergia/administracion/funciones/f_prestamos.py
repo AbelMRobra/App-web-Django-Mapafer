@@ -1,4 +1,5 @@
 import numpy_financial as npf
+import numpy as np
 from administracion.models import Prestamos
 from ..funciones.f_estado_cliente import *
 from django.db.models import Q
@@ -16,7 +17,29 @@ def prestamos_validacion_cuotas():
         if cuota.monto_bonificado == None:
             cuota.monto_bonificado = 0
             cuota.save()
+
+def prestamos_cuotas_pagos(id_prestamo):
+
+    prestamo = Prestamos.objects.get(id = id_prestamo)
+    cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo)
+    pagos = sum(np.array(Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat=True)))
+    print(pagos)
+
+    for cuota in cuotas:
+        monto_cuota = cuota.monto + cuota.monto_interes - cuota.monto_bonificado
+
+        if pagos > monto_cuota:
+            cuota.estado = "SI"
+            pagos -= monto_cuota
+        elif pagos > 0:
+            cuota.estado = "PARCIAL"
+            pagos = 0
+        else:
+            cuota.estado = "NO"
         
+        cuota.save()
+
+    
 def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, valor_original, presupuesto_cliente, monto, cuotas, regimen):
 
     try:
@@ -223,3 +246,30 @@ def prestamos_cancelar_refinanciamiento(id_prestamo, tasa_deuda, tasa_saldo):
 
     # estado_cliente(cliente)
     pago_final.save()
+
+def simular_cuotas_prestamo(regimen, cantidad_cuotas, primer_pago):
+
+    fecha_primer_pago = datetime.date(int(primer_pago[0:4]), int(primer_pago[5:7]), int(primer_pago[8:10]))
+    fechas =  []
+    
+    if regimen == "QUINCENAL":
+        cuotas_pasadas = 0
+        fecha_aux = fecha_primer_pago
+        while cuotas_pasadas < cantidad_cuotas:
+            cuotas_pasadas +=1
+            fechas.append(fecha_aux)
+            fecha_aux = fecha_aux + datetime.timedelta(days=15)
+
+
+    if regimen == "MENSUAL":
+        cuotas_pasadas = 0
+        fecha_aux = fecha_primer_pago
+        while cuotas_pasadas < cantidad_cuotas:
+            cuotas_pasadas +=1
+            fechas.append(fecha_aux)
+            if fecha_aux.month != 12:
+                    fecha_aux = datetime.date(fecha_aux.year, fecha_aux.month +1, fecha_aux.day)
+            else:
+                fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
+
+    return fechas

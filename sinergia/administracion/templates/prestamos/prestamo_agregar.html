@@ -7,7 +7,7 @@
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">Agregar credito</h3>
+        <h3 class="text-themecolor">Cartera activa</h3>
     </div>
 
     <div class="col-md-7 align-self-center">
@@ -21,300 +21,6 @@
 
 {% if estado_del_calculo %}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body row">
-                <div class="col-12 justify-content-center">
-                    <div class="d-flex">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Generar un nuevo credito</h4>
-                        
-                    </div>
-                    <h6 class="card-subtitle">Complete el formulario</h6>
-                    
-
-                    <div class="row d-flex justify-content-center">
-                        <div class="col col-md-12 col-lg-12">
-                            <div class="row">
-                                <div class="col bg-light border rounded p-4 ">
-
-                                    <form method="POST" enctype="multipart/form-data">
-
-                                        {% csrf_token %}
-
-                                        <div class="campoctacte">
-
-                                            <div class="campo">
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Monto base</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="precio1" required type="number" step="any" value="{{monto_base}}"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Monto con intereses</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="precio2" required type="number" step="any" value="{{monto}}"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Monto de la cuota</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="monto_cuota" required type="number" step="any" value="{{monto_cuota}}"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Cantidad de cuotas (<b class="font-bold">{{regimen}}</b>)</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="cuotas" type="number" value="{{cuota}}"
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Proveedor</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="proveedor" type="search" list="proveedores" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Cliente que recibe</label>
-          
-                                                            <div class="col-sm-12">
-                                                                <input name="cliente" type="search" list="clientes" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Fecha del credito</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="fecha" type="date" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Primera cuota</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="priimeracuota" type="date" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Presupuesto del cliente</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="precio3" required type="number" step="any"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Adjunto</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="adjunto" type="file" 
-                                                                        class="form-control"  aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-12 text-center">
-                                                        <div class="form-group">
-
-                                                            <input style="display: none;" type="text" name="regimen" value="{{regimen}}" />
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
- 
-                                            <div class="row d-flex justify-content-center mt-4">
-                                                <div class="col-lg-6 text-center">
-
-                                                    <button name="calculo_final" value="1" type="submit" class="btn btn-primary">Cargar</button>
-
-                                                </div>
-                                            </div>
-
-                                    </form>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="ModalTasas" tabindex="-1" role="dialog" aria-labelledby="ModalTasas"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header"
-                style="background-color: #2a3e52;">
-                <h5 class="modal-title text-light" id="exampleModalLongTitle">Recalculo de credito</h5>
-                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" enctype="multipart/form-data">
-
-                    {% csrf_token %}
-                    <div style="text-align: left;">
-                        <h3>Modifique los valores</h3>
-
-                        <p class="my-2">Monto inical</p>
-                        <div class="mb-3">
-                            <select name="tasa" class="form-control form-control">
-                                {% for tasa in tasas %}
-                                <option value="{{tasa.valor_tasa}}" {% if tasa == tasa_seleccionada %} selected {% endif %}>{{tasa.nombre}} ({{tasa.valor_tasa}})</option>
-                                {% endfor %}
-
-                            </select>
-                        </div>
-
-                        <p class="my-2">Monto inical</p>
-                        <div class="mb-3">
-                            <input type="number" step="any" name="monto" value="{{monto_base}}" class="form-control form-control-line">
-
-                        </div>
-
-                        <p class="my-2">Cuotas</p>
-                        <div class="mb-3">
-                            <input type="number" step="1" name="cuotas" value="{{cuota}}" class="form-control form-control-line">
-
-                        </div>
-
-                        <input style="display: none;" type="text" name="regimen" value="{{regimen}}">
-
-
-                        <div class="text-right">
-                            <button class="btn btn-success" type="submit" name="calculo_inicial" value="1"
-                                style="margin-top: 10px;">Recalcular</button>
-
-                        </div>
-                    </div>
-
-                    
-                    {{ form.as_p }}
-                </form>
-
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-<a id="add2" href="#" data-toggle="modal" data-target="#ModalTasas" class="btn btn-warning btn-circle ">
-    <i data-toggle="tooltip" data-placement="left" title="Recalcular prestamo" class="fa fa-calculator"></i>
-</a>
-
-<a id="add" href="{% url 'Calculadora' %}"  class="btn btn-primary btn-circle">
-<i data-toggle="tooltip" data-placement="left" title="Volver al inicio" class="fa fa-arrow-left"></i></a>
 
 
 {% else %}
@@ -329,65 +35,70 @@
 
                     </div>
                     <h6 class="card-subtitle">Complete los datos para realizar el calculo, luego se generara un formulario para cargar el credito</h6>
+                    
+                    <div class="row col-12" style="font-weight: 450; display: flex;" >
+
+                        <div class="col-6">
+
+                            <label class="mt-2">Cliente que recibe</label>
+                            <input id="cliente" type="search" list="clientes" required
+                            class="form-control form-control" aria-label="Amount"
+                            >
+
+                            <label class="mt-2">Proveedor</label>
+                
+                            <input id="proveedor" type="search" list="proveedores" required
+                            class="form-control form-control" aria-label="Amount"
+                            >
+                            <label class="mt-2"  for="">Tasa de interes anual (%)</label>
+                            <select id="select_formulario" name="tasa" onchange="service_datos_prestamo()" class="form-control form-control">
+                                {% for tasa in tasas %}
+                                <option id="option_formulario_{{tasa.id}}" value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
+                                {% endfor %}
+
+                            </select>
+                            <label class="mt-2" for="">Monto inicial</label>
+                            <input required id="monto_inicial" onblur="service_datos_prestamo()" type="number" class="form-control form-control"
+                                step="any" value="100000">
+                            <label class="mt-2" for="">Cuotas</label>
+                            <input required id="cuotas" onblur="service_datos_prestamo()" type="number" class="form-control form-control"
+                            step="any" value="24">
+                            <label class="mt-2" for="">Regimen</label>
+                            <select id="regimen"  onchange="service_datos_prestamo()" class="form-control form-control">
+                                <option value="MENSUAL">MENSUAL</option>
+                                <option value="QUINCENAL">QUINCENAL</option>
+                            </select>
+                            <label class="mt-2" for="">Peridos de gracia</label>
+                            <input required onblur="service_datos_prestamo()" id="periodo_gracia" type="number" class="form-control form-control"
+                            step="any" value="0">
+                            <label class="mt-2">Fecha del credito</label>
+                            <input id="fecha" type="date" class="form-control form-control" aria-label="Amount">
+                            <label class="mt-2">Primera cuota</label>
+                            <input id="primera_cuota" onchange="service_datos_prestamo()" type="date" class="form-control form-control" aria-label="Amount">
+                            <label class="mt-2">Presupuesto del cliente</label>
+                            <input id="presupuesto_cliente" type="number" step="any" class="form-control form-control" aria-label="Amount" placeholder="El precio que el cliente consigio">
+                        </div>
+
+                        <div class="col-6">
+                            <label class="mt-2" for="">Monto con interes</label>
+                            <h6 id="monto_con_interes"></h6>
+
+                            <label class="mt-2" for="">Valor de la cuota</label>
+                            <h6 id="valor_cuota"></h6>
+
+                            <label class="mt-2" for="">Desglose de las cuotas</label>
+                            <div id="contenedor_simulacion"></div>
+    
+                        </div>
+
+                    </div>
+
+                
+                    
                     <div class="row d-flex justify-content-center mt-4">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="mt-2"  for="">Tasa de interes anual (%)</label>
-                                            <select id="select_formulario" name="tasa" class="form-control form-control">
-                                                {% for tasa in tasas %}
-                                                <option id="option_formulario_{{tasa.id}}" value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
-                                                {% endfor %}
-        
-                                            </select>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Monto inicial</label>
-                                            <input required name="monto" type="number" class="form-control form-control"
-                                                step="any" value="100000">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Cuotas</label>
-                                            <input required name="cuotas" type="number" class="form-control form-control"
-                                            step="any" value="24">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Regimen</label>
-                                            <select name="regimen" class="form-control form-control">
-                                                <option value="MENSUAL">MENSUAL</option>
-                                                <option value="QUINCENAL">QUINCENAL</option>
-                                            </select>
-                                        </div>
-                                        
-                                    </div>
-
-                                    <div class="row">
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Peridos de gracia</label>
-                                            <input required name="periodo_gracia" type="number" class="form-control form-control"
-                                            step="any" value="0">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row mt-4 d-flex justify-content-center">
-                                        <button type="submit" name="calculo_inicial" value="1" class="btn btn-primary">Enviar</button>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </form>
+                        <div class="row mt-4 d-flex justify-content-center">
+                            <button onclick="service_crear_prestamo()" class="btn btn-primary">Cargar</button>
+                        </div>
                     </div>
 
 
@@ -569,6 +280,7 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{% static 'js/f_alert.js' %}"></script>
 <script src="{% static 'js/f_tasas.js' %}"></script>
+<script src="{% static 'js/f_prestamo.js' %}"></script>
 
 
 {% if mensaje %}

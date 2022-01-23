@@ -22,7 +22,7 @@
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
-                    <h4 class="card-title"><span class="lstick m-r-20"></span> Proveedores</h4>
+                    <h4 class="card-title"><span class="lstick m-r-20"></span><b>Panel principal</b></h4>
                     <h6 class="card-subtitle">Listado de proveedores activos</h6>
 
                     <div class="table-responsive">
@@ -42,7 +42,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 14px; font-weight: 350;">
+                            <tbody style="font-size: 14px; font-weight: 450;">
 
                                 {% for i in proveedores %}
                                 <tr>
@@ -143,7 +143,9 @@ class="btn btn-primary btn-circle fa fa-plus"></a>
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
-
+            "language": {
+                "search": "Buscar"
+            },
             "info": false,
             dom: 'Bfrtip',
             buttons: [

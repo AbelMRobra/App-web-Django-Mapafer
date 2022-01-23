@@ -308,20 +308,23 @@ def prestamos_detalle_completo(request, id_credito):
         context['credito'] = Prestamos.objects.get(id = id_credito)
 
 
-    context['cuotas_totales'] = CuotasPrestamo.objects.filter(prestamo = credito).count()
-    context['cuotas_pagadas'] = CuotasPrestamo.objects.filter(prestamo = credito, estado = "SI").count()
-    context['cuotas_vencidas'] = CuotasPrestamo.objects.filter(prestamo = credito, fecha__lt = datetime.date.today()).exclude(estado = "SI").count()
-    context['cuotas_pendientes'] = CuotasPrestamo.objects.filter(prestamo = credito, fecha__gte = datetime.date.today() ).exclude(estado = "SI").count()
-    context['pagos'] = Pagos.objects.filter(prestamo = credito)
-    context['total_pagado'] = sum(Pagos.objects.filter(prestamo = credito).values_list("monto", flat=True))
+    cuotas = CuotasPrestamo.objects.filter(prestamo = credito)
+    pagos = Pagos.objects.filter(prestamo = credito)
+    context['cuotas'] = cuotas
+    context['intereses'] = sum(np.array(cuotas.values_list("monto_interes", flat=True)))
+    context['bonificacion'] = sum(np.array(cuotas.values_list("monto_bonificado", flat=True)))
+    context['cuotas_totales'] = cuotas.count()
+    context['cuotas_pagadas'] = cuotas.filter(estado = "SI").count()
+    context['cuotas_vencidas'] = cuotas.filter(fecha__lt = datetime.date.today()).exclude(estado = "SI").count()
+    context['cuotas_pendientes'] = cuotas.filter(fecha__gte = datetime.date.today() ).exclude(estado = "SI").count()
+    context['pagos'] = pagos
+    context['total_pagado'] = sum(pagos.values_list("monto", flat=True))
     context['proveedores'] = Proveedor.objects.all()
 
     return render(request, 'prestamos/prestamo_detalle.html', context)
 
 def prestamos_informacion(request):
-
     data = []
-
     data_aux = Prestamos.objects.all()
 
     for d in data_aux:
@@ -335,3 +338,19 @@ def prestamos_informacion(request):
         data.append((d, interes, avance, cuota, tae, tna))
 
     return render(request, "prestamos/informacion.html", {'data':data})
+
+def prestamos_consulta_user(request):
+    
+    context = {}
+    prestamos = Prestamos.objects.filter(cliente__usuario__user__id = request.user.id).order_by('-id')
+
+    if len(prestamos) > 0:
+        prestamo = prestamos[0]
+        prestamos_cuotas_pagos(prestamo.id)
+        context['prestamo'] = prestamo.id
+        context['cuotas'] = CuotasPrestamo.objects.filter(prestamo = prestamo)
+    else:
+        context['prestamo'] = "Sin asignar"
+        context['cuotas'] = []
+
+    return render(request, "prestamos/prestamo_cuotas_pendientes.html", context)

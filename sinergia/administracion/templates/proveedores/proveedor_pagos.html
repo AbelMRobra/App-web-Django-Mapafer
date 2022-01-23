@@ -5,7 +5,7 @@
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">{{proveedor.fantasia}}</h3>
+        <h3 class="text-themecolor">Proveedores</h3>
     </div>
 
     <div class="col-md-7 align-self-center">
@@ -24,7 +24,7 @@
                 <div class="col-12 justify-content-center">
 
                     <div class="d-flex">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Pagos y deudas al proveedor</h4>
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>{{proveedor.fantasia}}: Pagos y deudas</b></h4>
                         <div class="btn-group ml-auto">
                             <a href="JavaScript:void(0)" class="icon-options-vertical link" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"></a>
@@ -109,7 +109,7 @@
 
                 <div class="col-12 col-lg-6 mt-2" >
                     
-                    <div class="table-responsive feeds scrollbox" style="height: 350px; max-height: 350px;">
+                    <div class="table-responsive feeds scrollbox" style="height: 75vh; max-height: 75vh;">
  
                      {% if pagos%}
  
@@ -122,7 +122,7 @@
                              </tr>
                          </thead>
                      
-                         <tbody style="font-size: 14px; font-weight: 350;">
+                         <tbody style="font-size: 14px; font-weight: 450;">
  
                              {% for i in pagos %}
                              <tr>
@@ -137,7 +137,7 @@
                                              data-target="#ModalBorrar{{i.id}}"><i
                                                  class="fa fa-angle-right mr-2"></i> Borrar</a>
                                      </div>
-                                 </div> Pago realizado el: {{i.fecha|date:"d-m-Y"}} {% if i.deuda %} al prestamo Nº {{i.deuda.id}} {% else %} sin asignar {% endif %}</td>
+                                 </div> Pago realizado el: {{i.fecha|date:"d-m-Y"}} {% if i.deuda %} al prestamo codeID {{i.deuda.id}} {% else %} sin asignar {% endif %}</td>
                                  <td>${{i.monto|floatformat:2|intcomma}}</td>
  
                              </tr>
@@ -263,7 +263,7 @@
 
                 <div class="col-12 col-lg-6 mt-2" >
                     
-                    <div class="table-responsive feeds scrollbox" style="height: 350px; max-height: 350px;">
+                    <div class="table-responsive feeds scrollbox" style="height: 75vh; max-height: 75vh;">
                         <table class="table" >
 
                             <thead>
@@ -272,10 +272,10 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 14px; font-weight: 350;" >
+                            <tbody style="font-size: 14px; font-weight: 450;">
                                 {% for detalle in deudas %}
                                 <tr>
-                                    <td><i class="mr-3 {% if detalle.0.estado_pagado %}fa fa-check-circle text-success{% else %}fa fa-exclamation-circle text-warning{% endif %}"></i>Nº {{detalle.0.id}} a {{detalle.0.prestamo.cliente.apellido}}, {{detalle.0.prestamo.cliente.nombre}} monto de ${{detalle.0.prestamo.valor_original|floatformat:2|intcomma}} vence: <b>{{detalle.0.fecha|date:"d/m/Y"}}</b>
+                                    <td><i class="mr-3 {% if detalle.0.estado_pagado %}fa fa-check-circle text-success{% else %}fa fa-exclamation-circle text-warning{% endif %}"></i>CodeID {{detalle.0.id}} a {{detalle.0.prestamo.cliente.apellido}}, {{detalle.0.prestamo.cliente.nombre}} monto de ${{detalle.0.prestamo.valor_original|floatformat:2|intcomma}} vence: <b>{{detalle.0.fecha|date:"d/m/Y"}}</b>
                                         <div class="mt-1 progress" style="height: 6px;">
                                             <div class="progress-bar bg-primary " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{detalle.1|floatformat:0}}%; height:6px;"> <span class="sr-only">{{detalle.1|floatformat:0}}% Complete</span></div>
                                             </div></td>

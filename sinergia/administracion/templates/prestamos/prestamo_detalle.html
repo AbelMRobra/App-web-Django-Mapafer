@@ -30,7 +30,7 @@
 
         <div class="card">
             <div class="card-body">
-                <img src="{% static 'img/profile.gif' %}" class="img-circle" width="250" />
+                <img src="{% static 'img/profile.gif' %}" class="img-circle m-2" width="250" />
             </div>
 
         </div>
@@ -60,43 +60,66 @@
         </div>
 
         <div class="d-flex">
-            <div class="card col-6 col-lg-6">
+
+            <div id="contenedor_plan_cuotas" class="row card col-12" style="display: none;">
                 <div class="card-body">
-                    <h4 class="card-title font-bold"></span>Datos generales</h4>
+                    <h4 class="card-title font-bold"></span><button class="btn btn-sm btn-dark fa fa-undo mr-2" onclick="mostrar_detalles()"></button> Plan de cuotas</h4>
+                    <div class="feeds scrollbox" style="font-size: 12px; height: 37vh; max-height: 37vh;">
+                        {% for cuota in cuotas %}
+                        <div class="m-1" style="font-size: 14px;"><i class="fa fa-lg fa-angle-double-right text-success mt-1 mr-2"></i>
+                            <b>{{cuota.fecha|date:"d/m/Y"}}</b> - Pagado: {{cuota.estado}}, Monto:  ${{cuota.monto|floatformat:2|intcomma}}, Intereses: ${{cuota.monto_interes|floatformat:2|intcomma}}, Bonificación: ${{cuota.monto_bonificado|floatformat:2|intcomma}}
+  
+                        </div>
+                        {% endfor %}
 
-                    <p>Proveedor: {{credito.proveedor.razon_social}}</p>
-                    <p>Fecha: {{credito.fecha|date:"d/m/Y"}}</p>
-                    <p>Regimen: {{credito.regimen}} - </p>
-                    <p>Cuotas: {{credito.cuotas}}</p>
-                    <p>Base: $ {{credito.valor_original|floatformat:2|intcomma}}</p>
-                    <p>Prestado: $ {{credito.monto|floatformat:2|intcomma}}</p>
-                    <p>Pagado: $ {{total_pagado|floatformat:2|intcomma}}</p>
+                    </div>
+                </div>
+            </div>
 
+            <div id="contenedor_detalle" class="row col-12">
+
+                <div class="card col-6 col-lg-6">
+                    <div class="card-body">
+                        <h4 class="card-title font-bold"></span>Datos generales</h4>
+    
+                        <p>Proveedor: {{credito.proveedor.razon_social}}</p>
+                        <p>Fecha: {{credito.fecha|date:"d/m/Y"}}</p>
+                        <p>Regimen: {{credito.regimen}} - </p>
+                        <p>Base: $ {{credito.valor_original|floatformat:2|intcomma}}</p>
+                        <p>Prestado: $ {{credito.monto|floatformat:2|intcomma}}</p>
+                        <p>Intereses: $ {{intereses|floatformat:2|intcomma}}</p>
+                        <p>Bonificaciones: $ {{bonificacion|floatformat:2|intcomma}}</p>
+                        <p>Pagado: $ {{total_pagado|floatformat:2|intcomma}}</p>
+                        <p class="box text-primary font-bold" onclick="mostrar_plan_cuotas()">Cuotas: {{credito.cuotas}}</p>
+    
+                    </div>
+    
+                </div>
+    
+                <div class="card col-6 col-lg-6">
+                    <div class="card-body">
+                        <h4 class="card-title font-bold"></span>Pagos realizados</h4>
+    
+                        <ul class="feeds scrollbox" style="font-size: 12px; height: 37vh; max-height: 37vh;">
+                            {% if pagos %}
+                            {% for p in pagos %}
+                            <div style="font-size: 14px;"><i class="fa fa-lg fa-check-circle text-success mt-1 mr-2"></i>Monto:  ${{p.monto|floatformat:2|intcomma}}
+                                <p class="text-right sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</p>
+    
+                            </div>
+    
+                            {% endfor %}
+                            {% else %}
+                            <h6>No tienes pagos registrados</h6>
+                            {% endif %}
+    
+                        </ul>
+                    </div>
+    
                 </div>
 
             </div>
-
-        <div class="card col-6 col-lg-6">
-            <div class="card-body">
-                <h4 class="card-title font-bold"></span>Pagos realizados</h4>
-
-                <ul class="feeds scrollbox" style="font-size: 12px; height: 130px; max-height: 130px;">
-                    {% if pagos %}
-                    {% for p in pagos %}
-                    <div style="font-size: 14px;"><i class="fa fa-lg fa-check-circle text-success mt-1 mr-2"></i>Monto:  ${{p.monto|floatformat:2|intcomma}}
-                        <p class="text-right sl-date">Pagado el: {{p.fecha|date:"d/m/Y"}}</p>
-
-                    </div>
-
-                    {% endfor %}
-                    {% else %}
-                    <h6>No tienes pagos registrados</h6>
-                    {% endif %}
-
-                </ul>
-            </div>
-
-        </div>
+           
     </div>
 
     <div class="modal fade" id="EditarPrestamo" tabindex="-1" role="dialog" aria-labelledby="EditarPrestamo"
@@ -203,33 +226,17 @@ data-toggle="tooltip" data-placement="left" title="Volver al panel principal"
         margin: 2px;
     }
 
+    .box:hover {
+        cursor: pointer;
+    }
+
 
 </style>
 
 
-{% if mensaje %}
-
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_prestamo.js' %}"></script>
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    })
-
-    Toast.fire({
-        icon: '{% if mensaje.0 == 1 %}success{% else %}warning{% endif %}',
-        title: '{{mensaje.1}}'
-    })
-
-</script>
-{% endif %}
 
 {% endblock %}

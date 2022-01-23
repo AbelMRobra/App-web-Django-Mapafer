@@ -3,7 +3,7 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as do_login
-from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
+from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo, UserProfile
 import numpy as np
 import numpy_financial as npf
 import datetime
@@ -15,71 +15,27 @@ from .functions_home import montos_situaciones, cantidad_situaciones
 # Create your views here.
 
 def login(request):
-    # Creamos el formulario de autenticación vacío
     form = AuthenticationForm()
     if request.method == "POST":
-        if len(Clientes.objects.filter(cuil = request.POST['username'], password = request.POST['password'])):
-
-            cliente = Clientes.objects.get(cuil = request.POST['username'], password = request.POST['password'])
-
-            code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
-
-            while len(Clientes.objects.filter(code_key = int(code_key_new))) > 0:
-
-                code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
-
-            cliente.code_key = int(code_key_new)
-            cliente.save()
-
-            return redirect('Consulta externo', code_key = cliente.code_key)
-
-        if len(Empresa.objects.filter(nombre = request.POST['username'], password = request.POST['password'])):
-
-            empresa = Empresa.objects.get(nombre = request.POST['username'], password = request.POST['password'])
-
-            code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
-
-            while len(Empresa.objects.filter(code_key = int(code_key_new))) > 0:
-
-                code_key_new = str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))+str(round(np.random.random()*9))
-
-            empresa.code_key = int(code_key_new)
-            empresa.save()
-
-            return redirect('Consulta externo', code_key = empresa.code_key)
-
-        # Añadimos los datos recibidos al formulario
         form = AuthenticationForm(data=request.POST)
-        # Si el formulario es válido...
+
         if form.is_valid():
-            # Recuperamos las credenciales validadas
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-
-            # Verificamos las credenciales del usuario
             user = authenticate(username=username, password=password)
 
-            # Si existe un usuario con ese nombre y contraseña
             if user is not None:
-                # Hacemos el login manualmente
                 do_login(request, user)
-                # Y le redireccionamos a la portada
                 return redirect('/')
 
         else:
-
             mensaje = "Usuario/contraseña incorrectos"
-
             return render(request, "login.html", {'form': form, 'mensaje':mensaje}) 
-
-    # Si llegamos al final renderizamos el formulario
 
     return render(request, "login.html", {'form': form})
 
 def logout(request):
-    # Finalizamos la sesión
     do_logout(request)
-    # Redireccionamos a la portada
     return redirect('/')
 
 def welcome(request):
@@ -336,8 +292,7 @@ def home(request):
         context["prestamos"] = prestamos
         context["total_saldo"] = total_saldo
         context["total_pago"] = total_pago
-
-
+        context["user"] = UserProfile.objects.get(user = request.user)
 
     return render(request, "home.html", context)
 

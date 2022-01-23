@@ -9,7 +9,7 @@ from . import views_clientes
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
 from administracion.viewsets import viewsets_tasas, viewsets_empresa, viewsets_pagos, viewsets_prestamos, \
-    viewsets_user
+    viewsets_user, viewsets_client
 
 
 router = routers.DefaultRouter()
@@ -19,6 +19,7 @@ router.register(r'api_contacto', viewsets_empresa.ContactosEmpresaViewset)
 router.register(r'api_pagos', viewsets_pagos.PagosViewset)
 router.register(r'api_prestamos', viewsets_prestamos.PrestamosViewset)
 router.register(r'api_users', viewsets_user.UserViewset)
+router.register(r'api_clientes', viewsets_client.ClientViewset)
 
 
 urlpatterns = [
@@ -41,6 +42,7 @@ urlpatterns = [
 
     # URL de pagos
     url(r'^panelpagos$', login_required(views_pagos.pagos_panel), name = 'Panel de pagos'),
+    url(r'^panelpagosusuario$', login_required(views_pagos.pagos_user), name = 'Panel de pagos para usuarios'),
     url(r'^agregarpago/(?P<id_prestamo>\d+)/$', login_required(views_pagos.pagos_agregar), name = 'Agregar pagos'),
     url(r'^editarpago/(?P<id_pago>\d+)/$', login_required(views_pagos.pagos_editar), name = 'Editar pagos'),
 
@@ -60,6 +62,7 @@ urlpatterns = [
     url(r'^prestamo_cargado/(?P<id_credito_nuevo>\d+)/(?P<id_credito_anterior>\d+)/$', login_required(views_prestamos.prestamos_credito_cargado), name = 'Cargado'),
     url(r'^prestamo_info/(?P<id_credito>\d+)/$', login_required(views_prestamos.prestamos_detalle_completo), name = 'Administrar credito'),
     url(r'^infoprestamo$', login_required(views_prestamos.prestamos_informacion), name = 'Información Prestamos'),
+    url(r'^prestamo_user$', login_required(views_prestamos.prestamos_consulta_user), name = 'Prestamo usuarios'),
     url(r'^cashflow$', login_required(views.cashflow), name = 'Cash Flow'),
 
     # URL de Info

@@ -1,4 +1,5 @@
 import datetime
+import numpy as np
 from genericpath import exists
 from django.shortcuts import render, redirect
 from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
@@ -98,24 +99,25 @@ def profileclient(request, id_cliente):
             pass 
 
     
-
     context['empresas'] = Empresa.objects.all()
      
-    data_credito = Prestamos.objects.filter(cliente = context['data'])
+    prestamos = Prestamos.objects.filter(cliente = context['data'])
 
     data_credite_complete = []
 
-    for d in data_credito:
+    for prestamo in prestamos:
 
-        pagos = sum(Pagos.objects.filter(prestamo = d).values_list("monto", flat=True))
+        pagos = sum(Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat=True))
 
         try:
-            ultimo_pago = Pagos.objects.filter(prestamo = d).order_by("-fecha")[0].fecha
+            ultimo_pago = Pagos.objects.filter(prestamo = prestamo).order_by("-fecha")[0].fecha
         except:
             ultimo_pago = 0
         
-        avance = pagos/d.monto*100
-        data_credite_complete.append((d, pagos, ultimo_pago, avance))
+        cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo)
+        monto_prestamo = sum(np.array(cuotas.values_list("monto", flat=True))) + sum(np.array(cuotas.values_list("monto_interes", flat=True))) - sum(np.array(cuotas.values_list("monto_bonificado", flat=True)))
+        avance = pagos/monto_prestamo*100
+        data_credite_complete.append((prestamo, pagos, ultimo_pago, avance))
 
     context['data_credite_complete'] = data_credite_complete
     context['citas'] = Citas.objects.filter(cliente = context['data'], inicio__gte = datetime.date.today()).order_by("-id")

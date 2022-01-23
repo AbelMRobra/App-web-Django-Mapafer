@@ -1,12 +1,12 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
-
+{% load apptags_extras %}
 {% block content %}
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">Refinanciar creditos</h3>
+        <h3 class="text-themecolor">Cartera activa</h3>
     </div>
 
     <div class="col-md-7 align-self-center">
@@ -19,426 +19,97 @@
 </div>
 
 
-<div class="row">
+<div class="row" id = "contenedor_prestamo">
     <div class="col-12">
         <div class="card">
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
 
                     <div class="d-flex">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Seleccione una cuenta y las tasas para calcular</h4>
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Refinanciar credito existente</b></h4>
                         
                     </div>
-                    <h6 class="card-subtitle">Se calculara la deuda a valores de hoy</h6>
+                    <h6 class="card-subtitle">Este proceso cerrada un credito actual, creando uno nuevo</h6>
 
+                    <div class="row col-12" style="font-weight: 450; display: flex;" >
 
-                    {% if paso_1 %}
+                        <div class="col-6">
 
-                    <div class="row d-flex justify-content-center mt-4">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <label class="mt-2"  for="">Prestamo a recalcular:</label>
-                                        <select name="credito" class="form-control form-control" disabled>
+                            <label class="mt-2"  for="">Prestamo a recalcular:</label>
+                            <select id="credito" class="form-control form-control" onchange="service_datos_refinanciar()">
+                                <option value="0" style="display: none;">Elija un credito</option>
+                                {% for credito in creditos %}
+                                <option value="{{credito.id}}">{{credito.cliente.apellido}}, {{credito.cliente.nombre}}: Monto: ${{credito.monto|floatformat:2|intcomma}} / Pagado: ${{credito.pagado_credito|floatformat:2|intcomma}} / Saldo:  ${{credito.saldo_credito|floatformat:2|intcomma}}  </option>
+                                {% endfor %}
+                            </select>
 
-                                            <option value="{{credito_seleccionado.id}}">{{credito_seleccionado.cliente.apellido}}, {{credito_seleccionado.cliente.nombre}}: Monto: ${{credito_seleccionado.monto|floatformat:2|intcomma}} / Pagado: ${{credito_seleccionado.pagado_credito|floatformat:2|intcomma}} / Saldo:  ${{credito_seleccionado.saldo_credito|floatformat:2|intcomma}}  </option>
+                            <label class="mt-2" for="">Tasa deuda</label>
+                            <select id="tasa_deuda" class="form-control form-control"  onchange="service_datos_refinanciar()">
+                                {% for tasa in tasas %}
+                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%) </option>
+                                {% endfor %}
+                            </select>
+                            <label class="mt-2" for="">Tasa del saldo</label>
+                            <select id="tasa_saldo" class="form-control form-control"  onchange="service_datos_refinanciar()">
+                                {% for tasa in tasas %}
+                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
+                                {% endfor %}
+                            </select>
 
-                                        </select>
-                                    </div>
-                                </div>
+                            <label class="mt-2"  for="">Tasa de interes anual (%)</label>
+                            <select id="tasa" class="form-control form-control" onchange="service_datos_refinanciar()">
+                                {% for tasa in tasas %}
+                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
+                                {% endfor %}
+                            </select>
+                            <label class="mt-2" for="">Monto inicial</label>
+                            <input  id="monto_inicial" type="number" class="form-control form-control"
+                                step="any" value="0" onblur="service_datos_refinanciar()">
+                            <label class="mt-2" for="">Cuotas</label>
+                            <input  id="cuotas" type="number" class="form-control form-control"
+                                step="any" value="24" onblur="service_datos_refinanciar()">
+                            <label class="mt-2" for="">Regimen</label>
+                            <select id="regimen" class="form-control form-control" onchange="service_datos_refinanciar()">
+                                <option value="MENSUAL">MENSUAL</option>
+                                <option value="QUINCENAL">QUINCENAL</option>
+                            </select>
+                            <label class="mt-2" for="">Peridos de gracia</label>
+                            <input  id="periodo_gracia" type="number" class="form-control form-control"
+                                step="any" value="0" onblur="service_datos_refinanciar()">
+                            <label class="mt-2">Proveedor</label>
+                            <input id="proveedor" type="search" list="proveedores" 
+                                     class="form-control form-control" aria-label="Amount">
+                            <label class="mt-2">Fecha del credito</label>
+                            <input id="fecha" type="date" class="form-control form-control" aria-label="Amount" >
+                            <label class="mt-2">Primera cuota</label>
+                            <input id="primera_cuota" type="date" class="form-control form-control" aria-label="Amount" onchange="service_datos_refinanciar()">
+                            <label class="mt-2">Presupuesto del cliente</label>
+                            <input id="presupuesto_cliente" type="number" step="any" class="form-control form-control" aria-label="Amount" placeholder="El precio que consiguio por su cuenta">
 
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label class="mt-2" for="">Tasa deuda</label>
-                                        <select name="tasa_deuda" class="form-control form-control" disabled>
-
-                                            <option value="{{tasa_deuda.id}}">{{tasa_deuda.nombre}} ({{tasa_deuda.valor_tasa}}%) </option>
-
-                                        </select>
-                                    </div>
-
-                                    <div class="col-6">
-                                        <label class="mt-2" for="">Tasa del saldo</label>
-                                        <select name="tasa_saldo" class="form-control form-control" disabled>
-
-                                            <option value="{{tasa_saldo.id}}">{{tasa_saldo.nombre}} ({{tasa_saldo.valor_tasa}}%)</option>
-
-                                        </select>
-                                    </div>
-                                    
-                                </div>
-
-                            </div>
 
                         </div>
-
-                    </div>
-
-
-                    {% else %}
-
-                    <div class="row d-flex justify-content-center mt-4">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label class="mt-2"  for="">Prestamo a recalcular:</label>
-                                            <select name="credito" class="form-control form-control">
-                                                {% for credito in creditos %}
-                                                <option value="{{credito.id}}">{{credito.cliente.apellido}}, {{credito.cliente.nombre}}: Monto: ${{credito.monto|floatformat:2|intcomma}} / Pagado: ${{credito.pagado_credito|floatformat:2|intcomma}} / Saldo:  ${{credito.saldo_credito|floatformat:2|intcomma}}  </option>
-                                                {% endfor %}
-        
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Tasa deuda</label>
-                                            <select name="tasa_deuda" class="form-control form-control">
-                                                {% for tasa in tasas %}
-                                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%) </option>
-                                                {% endfor %}
-        
-                                            </select>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Tasa del saldo</label>
-                                            <select name="tasa_saldo" class="form-control form-control">
-                                                {% for tasa in tasas %}
-                                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
-                                                {% endfor %}
-        
-                                            </select>
-                                        </div>
-                                        
-                                    </div>
-
-
-                                    <div class="row mt-4 d-flex justify-content-center">
-                                        <button type="submit" name="paso_1" value="1" class="btn btn-primary">Calcular</button>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </form>
-                    </div>
-
-                    {% endif %}
-
-
-
-                    {% if paso_2 %}
-
-                    <hr>
-
-                    <div class="d-flex mt-2">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Calculos para refinanciar</h4>
-
-                    </div>
-                    <h6 class="card-subtitle">Los resultado fueron <b class="font-bold text-danger">deuda actual: ${{datos_refinanciamiento.DeudaHistorica|floatformat:2|intcomma}} -> ${{datos_refinanciamiento.DeudaActual|floatformat:2|intcomma}} ({{datos_refinanciamiento.CantidadDeuda}})</b> y <b class="font-bold text-info">saldo actual: ${{datos_refinanciamiento.SaldoHistorica|floatformat:2|intcomma}} -> ${{datos_refinanciamiento.SaldoActual|floatformat:2|intcomma}} ({{datos_refinanciamiento.CantidadSaldo}})</b></h6>
-                    
-               
-                    
-                    <div class="row d-flex justify-content-center mt-4">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="mt-2"  for="">Tasa de interes anual (%)</label>
-                                            <select name="tasa" class="form-control form-control">
-                                                {% for tasa in tasas %}
-                                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
-                                                {% endfor %}
-        
-                                            </select>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Monto inicial</label>
-                                            <input required name="monto" type="number" class="form-control form-control"
-                                                step="any" value="{{total}}">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Cuotas</label>
-                                            <input required name="cuotas" type="number" class="form-control form-control"
-                                            step="any" value="24">
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Regimen</label>
-                                            <select name="regimen" class="form-control form-control">
-                                                <option value="MENSUAL">MENSUAL</option>
-                                                <option value="QUINCENAL">QUINCENAL</option>
-                                            </select>
-                                        </div>
-                                        
-                                    </div>
-
-                                    <div class="row">
-
-                                        <div class="col-6">
-                                            <label class="mt-2" for="">Peridos de gracia</label>
-                                            <input required name="periodo_gracia" type="number" class="form-control form-control"
-                                            step="any" value="0">
-                                        </div>
-
-                                    </div>
-
-                                    <input type="number" style="display: none;" name="credito" value="{{credito_seleccionado.id}}">
-                                    <input type="number" style="display: none;" name="tasa_deuda" value="{{tasa_deuda.id}}">
-                                    <input type="number" style="display: none;" name="tasa_saldo" value="{{tasa_saldo.id}}">
-                                    
-
-                                    <div class="row mt-4 d-flex justify-content-center">
-                                        <button type="submit" name="paso_3" value="1" class="btn btn-primary">Enviar</button>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </form>
-                    </div>
-
-                    {% endif %}
-
-                    {% if paso_3 %}
-
-                    <hr>
-
-                    <div class="d-flex mt-2">
-                        <h4 class="card-title"><span class="lstick m-r-20"></span>Generar un nuevo credito</h4>
-
-                    </div>
-      
-                    <div class="row d-flex justify-content-center">
-                        <div class="col col-md-12 col-lg-12">
-                            <div class="row">
-                                <div class="col bg-light border rounded p-4 ">
-
-                                    <form method="POST" enctype="multipart/form-data">
-
-                                        {% csrf_token %}
-
-                                        <div class="campoctacte">
-
-                                            <div class="campo">
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Monto base</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="precio1" required type="number" step="any" value="{{monto_base}}"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Monto con intereses</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="precio2" required type="number" step="any" value="{{monto}}"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Monto de la cuota</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="monto_cuota" required type="number" step="any" value="{{monto_cuota}}"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Cantidad de cuotas (<b class="font-bold">{{regimen}}</b>)</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="cuotas" type="number" value="{{cuota}}"
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Proveedor</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="proveedor" type="search" list="proveedores" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Cliente que recibe</label>
-          
-                                                            <div class="col-sm-12">
-                                                                <input name="cliente" type="search"
-                                                                value="{{credito_seleccionado.cliente.id}}-{{credito_seleccionado.cliente.nombre}}, {{credito_seleccionado.cliente.apellido}}, CUIL: {{credito_seleccionado.cliente.cuil}}"
-                                                                readonly required
-                                                                class="form-control form-control" aria-label="Amount" >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Fecha del credito</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="fecha" type="date" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Primera cuota</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="priimeracuota" type="date" required
-                                                                        class="form-control form-control" aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Presupuesto del cliente</label>
-                                                            <div class="col-sm-12">
-                                                                <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    
-                                                                        <span class="input-group-text">$</span>
-        
-                                                                        </div>
-                                                                        <input name="precio3" required type="number" step="any"
-                                                                                class="form-control form-control" aria-label="Amount">
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-12">Adjunto</label>
-                
-                                                            <div class="col-sm-12">
-                                                                <input name="adjunto" type="file" 
-                                                                        class="form-control"  aria-label="Amount"
-                                                                        >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="row d-flex">
-
-                                                    <div class="col-lg-12 text-center">
-                                                        <div class="form-group">
-
-                                                            <input style="display: none;" type="text" name="regimen" value="{{regimen}}" />
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            <input type="number" style="display: none;" name="credito" value="{{credito_seleccionado.id}}">
-                                            <input type="number" style="display: none;" name="tasa_deuda" value="{{tasa_deuda.id}}">
-                                            <input type="number" style="display: none;" name="tasa_saldo" value="{{tasa_saldo.id}}">
-
- 
-                                            <div class="row d-flex justify-content-center mt-4">
-                                                <div class="col-lg-6 text-center">
-
-                                                    <button name="calculo_final" value="1" type="submit" class="btn btn-primary">Cargar</button>
-
-                                                </div>
-                                            </div>
-
-                                    </form>
-
-                                </div>
-                            </div>
+                        <div class="col-6">
+                            <label class="mt-2" for="">Monto del credito original</label>
+                            <h6 id="monto_original"></h6>
+    
+                            <label class="mt-2" for="">Valor de la deuda y cuanto es con interes</label>
+                            <h6 id="deuda_original"></h6>
+    
+                            <label class="mt-2" for="">Valor del saldo y cuanto es con bonoficación</label>
+                            <h6 id="saldo_original"></h6>
+    
+                            <label class="mt-2" for="">Monto con interes</label>
+                            <h6 id="monto_con_interes"></h6>
+    
+                            <label class="mt-2" for="">Valor de la cuota</label>
+                            <h6 id="valor_cuota"></h6>
+    
+                            <label class="mt-2" for="">Desglose de las cuotas</label>
+                            <div id="contenedor_simulacion"></div>
+    
                         </div>
+                    
                     </div>
-
-                    {% endif %}
-
 
                 </div>
             </div>
@@ -446,100 +117,140 @@
     </div>
 </div>
 
-{% if paso_3 %}
+<div class="row" id = "contenedor_success" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
 
-<div class="modal fade" id="ModalRecalculo" tabindex="-1" role="dialog" aria-labelledby="ModalTasas"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header"
-                style="background-color: #2a3e52;">
-                <h5 class="modal-title text-light" id="exampleModalLongTitle">Recalculo de credito</h5>
-                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" enctype="multipart/form-data">
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Refinanciar credito existente</b></h4>
+                        
+                    </div>
+                    <h6 class="card-subtitle">El proceso se ha completado</h6>
 
-                    {% csrf_token %}
-                    <div style="text-align: left;">
-                        <h3>Modifique los valores</h3>
+                    <div class="row col-12" style="font-weight: 450; display: flex;" >
 
-                        <p class="my-2">Monto inical</p>
-                        <div class="mb-3">
-                            <select name="tasa" class="form-control form-control">
-                                {% for tasa in tasas %}
-                                <option value="{{tasa.id}}" {% if tasa.id == tasa_seleccionada.id %} selected {% endif %}>{{tasa.nombre}} ({{tasa.valor_tasa}})</option>
-                                {% endfor %}
+                        
 
-                            </select>
+                        <div class="col-6">
+
+                            <img src="{% static 'img/success.gif' %}" class="img-circle" width="250" />
                         </div>
+                        <div class="col-6">
+                            <p>El proceso se ha completado exitosamente, puedes ingresar a la cartera activa ingresando <a href="{% url 'Principal Prestamos' %}" class="text-primary font-bolt">aqui</a> y ver el nuevo credito</p>
 
-                        <p class="my-2">Monto inical</p>
-                        <div class="mb-3">
-                            <input type="number" step="any" name="monto" value="{{monto_base}}" class="form-control form-control-line">
+                            <p>Repaso un poco lo que implico el refinanciamiento</p>
 
+                            <ul>
+                                <li>El credito anterior se cancelo por completo</li>
+                                <li>Se creo un nuevo credito al <b>mismo</b> cliente</li>
+                                <li>Pudiste cambiar libremente al proveedor, pero si hay deuda con el proveedor anterior se mantendra</li>
+                            </ul>
+    
                         </div>
-
-                        <p class="my-2">Cuotas</p>
-                        <div class="mb-3">
-                            <input type="number" step="1" name="cuotas" value="{{cuota}}" class="form-control form-control-line">
-
-                        </div>
-
-                        <input style="display: none;" type="text" name="regimen" value="{{regimen}}">
-                        <input type="number" style="display: none;" name="credito" value="{{credito_seleccionado.id}}">
-                        <input type="number" style="display: none;" name="tasa_deuda" value="{{tasa_deuda.id}}">
-                        <input type="number" style="display: none;" name="tasa_saldo" value="{{tasa_saldo.id}}">
-                        <input type="number" style="display: none;" name="periodo_gracia" value="{{periodo_gracia}}">
-
-
-                        <div class="text-right">
-                            <button class="btn btn-success" type="submit" name="paso_3" value="1"
-                                style="margin-top: 10px;">Recalcular</button>
-
-                        </div>
+                    
                     </div>
 
-                    
-                    {{ form.as_p }}
-                </form>
-
+                </div>
             </div>
-
         </div>
     </div>
 
 </div>
 
-<a id="add" href="#" data-toggle="modal" data-target="#ModalRecalculo" class="btn btn-warning btn-circle ">
-    <i data-toggle="tooltip" data-placement="left" title="Recalcular prestamo" class="fa fa-calculator"></i>
-</a>
+<div class="middle" id="loader_mapafer" style="display: none;">
+    <div class="bar bar1"></div>
+    <div class="bar bar2"></div>
+    <div class="bar bar3"></div>
+    <div class="bar bar4"></div>
+    <div class="bar bar5"></div>
+    <div class="bar bar6"></div>
+    <div class="bar bar7"></div>
+    <div class="bar bar8"></div>
+  </div>
+
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
 
 
-{% elif paso_2 %}
-
-<a id="add" href="{% url 'Refinanciar' %}" class="btn btn-primary btn-circle">
-    <i data-toggle="tooltip" data-placement="left" title="Volver a la selección" class="fa fa-arrow-left"></i></a>
-
-
-{% else %}
+<a id="add2" href="#" onclick="service_crear_prestamo_refinanciado()" class="btn btn-success btn-circle">
+    <i data-toggle="tooltip" data-placement="left" title="Calcular" class="fa fa-paper-plane"></i></a>
 
 <a id="add" href="{% url 'Calculadora' %}" class="btn btn-primary btn-circle">
     <i data-toggle="tooltip" data-placement="left" title="Volver a la calculadora" class="fa fa-arrow-left"></i></a>
 
-{% endif %}
 
 <datalist id="proveedores">
-
     {% for i in proveedores %}
-
     <option value="{{i.id}}-{{i.fantasia}}"></option>
-
     {% endfor %}
-
 </datalist>
+
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: #000;
+  }
+  .middle {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
+  .bar {
+    width: 10px;
+    height: 70px;
+    background: #fff;
+    display: inline-block;
+    transform-origin: bottom center;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    /*   box-shadow:5px 10px 20px inset rgba(255,23,25.2); */
+    animation: loader 1.2s linear infinite;
+  }
+  .bar1 {
+    animation-delay: 0.1s;
+  }
+  .bar2 {
+    animation-delay: 0.2s;
+  }
+  .bar3 {
+    animation-delay: 0.3s;
+  }
+  .bar4 {
+    animation-delay: 0.4s;
+  }
+  .bar5 {
+    animation-delay: 0.5s;
+  }
+  .bar6 {
+    animation-delay: 0.6s;
+  }
+  .bar7 {
+    animation-delay: 0.7s;
+  }
+  .bar8 {
+    animation-delay: 0.8s;
+  }
+  
+  @keyframes loader {
+    0% {
+      transform: scaleY(0.1);
+      background: ;
+    }
+    50% {
+      transform: scaleY(1);
+      background: #9645C4;
+    }
+    100% {
+      transform: scaleY(0.1);
+      background: transparent;
+    }
+  }
+  </style>
 
 <style>
     #add{
@@ -560,11 +271,12 @@
         bottom: 140px;
         right: 20px;
     }
-
-
 </style>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_tasas.js' %}"></script>
+<script src="{% static 'js/f_prestamo.js' %}"></script>
 
 {% if mensaje %}
 <script>

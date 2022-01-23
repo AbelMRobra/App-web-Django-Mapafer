@@ -1,0 +1,92 @@
+{% extends "home.html" %}
+{% load static %}
+{% load humanize %}
+{% load apptags_extras %}
+{% block user %}
+
+
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Panel de pagos</h3>
+    </div>
+
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Pagos</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Pagos realizados</b></h4>
+                    </div>
+                    <h6 class="card-subtitle">Información historica</h6>
+                    <div class="table-responsive">
+
+                        <table id="example" class="table" style="width:100%">
+
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Prestamo</th>
+                                    <th>Regimen</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 14px; font-weight: 450;">
+
+                                {% for i in pagos %}
+                                <tr id="fila_{{i.id}}">
+                                    <td>{{i.fecha|date:"Y/m/d"}}</td>
+                                    <td>Codigo ID del prestamo: {{i.prestamo.id}}/{{i.prestamo.cliente.apellido}}/{{i.prestamo.cliente.nombre}}</td>
+                                    <td>{{i.prestamo.regimen|lower|capfirst}}</td>
+                                    <td id="pago_{{i.id}}">${{i.monto|floatformat:2|intcomma}}</td>
+                                </tr>
+                             
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "search": "Buscar"
+            },
+            "info": false,
+            "ordering":false,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'excelHtml5',
+                className: "btn btn-primary",
+                title: 'Pagos registrados',
+
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button buttons-excel buttons-html5')
+                    }
+            },
+            ]   
+        });
+    });
+</script>
+
+
+{% endblock %}

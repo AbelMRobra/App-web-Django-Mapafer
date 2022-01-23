@@ -1,4 +1,8 @@
 from django.shortcuts import render
+import requests
+import pandas as pd
+import json
+
 
 def usuarios_panel(request):
 

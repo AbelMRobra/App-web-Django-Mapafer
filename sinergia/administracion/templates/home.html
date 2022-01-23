@@ -129,7 +129,14 @@
 
             <li> <a href="#"><i class="fa fa-angle-right"></i><span class="hide-menu"> Empleados activos</span></a></li>
 
-            <li> <a href="#}"><i class="fa fa-angle-right"></i><span class="hide-menu"> Pagos realizados</span></a></li>
+            <li> <a href="#"><i class="fa fa-angle-right"></i><span class="hide-menu"> Pagos realizados</span></a></li>
+
+            {% elif request.user|has_rol:"USER" %}
+            <li class="nav-small-cap">TU ESPACIO</li>
+
+            <li> <a href="{% url 'Prestamo usuarios' %}"><i class="fa fa-angle-right"></i><span class="hide-menu"> Proximas cuotas</span></a></li>
+
+            <li> <a href="{% url 'Panel de pagos para usuarios' %}"><i class="fa fa-angle-right"></i><span class="hide-menu"> Pagos realizados</span></a></li>
             {% else %}
             <li class="nav-small-cap">BASE DE DATOS</li>
 
@@ -160,6 +167,200 @@
     <div class="page-wrapper">
 
         {% if request.user|has_rol:"EMPRESA" %}
+
+        <div class="container-fluid">
+
+          <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h3 class="text-themecolor">Bienvenido</h3>
+            </div>
+            <div class="col-md-7 align-self-center">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                </ol>
+            </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+            <div class="card">
+              <div class="card-body" style="height: 65vh;">
+                <h4><b>Tu staff</b></h4>
+                <div class="scrollbox mt-1" style="max-height: 50vh; overflow-y: auto;">
+                  <div class="row box mr-2">
+                    <div class="col-12">
+                        <div class="bg-light p-3 m-1">
+                            <div class="col-12">
+                                <div class="row" style="display: contents;">
+                                <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-light p-3 m-1">
+                          <div class="col-12">
+                              <div class="row" style="display: contents;">
+                              <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="bg-light p-3 m-1">
+                        <div class="col-12">
+                            <div class="row" style="display: contents;">
+                            <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-light p-3 m-1">
+                      <div class="col-12">
+                          <div class="row" style="display: contents;">
+                          <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="bg-light p-3 m-1">
+                    <div class="col-12">
+                        <div class="row" style="display: contents;">
+                        <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light p-3 m-1">
+                  <div class="col-12">
+                      <div class="row" style="display: contents;">
+                      <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="bg-light p-3 m-1">
+                <div class="col-12">
+                    <div class="row" style="display: contents;">
+                    <div><h6 class='ml-2'><b>Abel Maximiliano Robra</b></h6></div>
+                    </div>
+                </div>
+            </div>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="card">
+              <div class="card-body" style="height: 65vh;">
+                <h4><b>Un resumen</b></h4>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+        {% elif request.user|has_rol:"USER" %}
+
+        <input id="user_id" type="text" value="{{ request.user.id }}" style="display: none;"></input>
+
+        <div class="container-fluid">
+          {% block user %}
+          <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h3 class="text-themecolor">Bienvenido</h3>
+            </div>
+            <div class="col-md-7 align-self-center">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                </ol>
+            </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+            <div class="card">
+              <div class="card-body" style="height: 65vh;">
+                <div class="card-body">
+                  <center class="m-t-30"> <img id="profile_image" {% if user.imagen %} src="{{user.imagen.url}}" {% else %} src="{% static 'img/anonimo2.png'%}" {% endif %} class="img-circle" width="150" />
+                      <h4 class="card-title m-t-10">{{user.user.username}}</h4>
+                      <h6 class="card-subtitle">{{user.user.email}}</h6>
+                      <hr>
+                      <div class="text-left">
+                        <h4 class="card-title m-t-10">Nombre: {{user.user.first_name}}</h4>
+                        <h4 class="card-title m-t-10">Apellido: {{user.user.last_name}}</h4>
+                      </div>
+                      
+                  </center>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="card">
+              <div class="card-body" style="height: 65vh;">
+
+                <div class="row col-12 text-center justify-content-center p-3">
+
+                  <h4>Tu ejecutivo de cuenta: <b class="text-primary">Mariano Goldman</b></h4>
+
+                </div>
+
+                <div class="row col-12 mt-2">
+                    <div class="col-lg-6">
+                      <div class="card bg-primary">
+                          <div class="card-body">
+                              <div class="d-flex no-block">
+                                  <div class="m-r-20 align-self-center"><i class="fa fa-money fa-2x fa-lg text-light"></i></div>
+                                  <div class="align-self-center">
+                                      <h6 class="text-white m-t-10 m-b-0">Total prestado</h6>
+                                      <h2 id="monto" class="m-t-0 text-white">$953,000</h2></div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="card bg-info">
+                        <div class="card-body">
+                            <div class="d-flex no-block">
+                                <div class="m-r-20 align-self-center"><i class="fa fa-money fa-2x fa-lg text-light"></i></div>
+                                <div class="align-self-center">
+                                    <h6 class="text-white m-t-10 m-b-0">Cuotas pendientes</h6>
+                                    <h2 id="cuotas"  class="m-t-0 text-white">12/30</h2></div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="card bg-success">
+                        <div class="card-body">
+                            <div class="d-flex no-block">
+                                <div class="m-r-20 align-self-center"><i class="fa fa-money fa-2x fa-lg text-light"></i></div>
+                                <div class="align-self-center">
+                                    <h6 class="text-white m-t-10 m-b-0">Proximo vencimiento</h6>
+                                    <h2 id="monto_proxima_cuota" class="m-t-0 text-white">$953,000</h2></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-primary">
+                      <div class="card-body">
+                          <div class="d-flex no-block">
+                              <div class="m-r-20 align-self-center"><i class="fa fa-money fa-2x fa-lg text-light"></i></div>
+                              <div class="align-self-center">
+                                  <h6 class="text-white m-t-10 m-b-0">Fecha vencimiento</h6>
+                                  <h2 id="proximo_vencimiento" class="m-t-0 text-white">12/30</h2></div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endblock %}
+        </div>
        
         {% else %}
         <div class="container-fluid">
@@ -578,6 +779,36 @@
 
 <style>
 
+#add_user{
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    z-index: 10;
+}
+
+.box:hover {
+cursor: pointer;
+
+}
+
+.scrollbox {
+
+overflow: hidden;
+}
+
+.scrollbox:hover {
+overflow: auto;
+}
+
+.scrollbox::-webkit-scrollbar {
+width: 6px;
+}
+
+.scrollbox::-webkit-scrollbar-thumb {
+background-color: rgb(201, 201, 201);
+border-radius: 100px;
+}
+
       .go-corner {
 	 display: flex;
 	 align-items: center;
@@ -644,6 +875,9 @@
     <!-- PRUEBA IMPORTACIONES -->
 
 <script src="{% static 'js/f_home.js' %}"></script>
+{% if request.user|has_rol:"USER" %}
+<script src="{% static 'js/f_home_user.js' %}"></script>
+{% endif %}
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js" defer></script>
 <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js" defer></script>

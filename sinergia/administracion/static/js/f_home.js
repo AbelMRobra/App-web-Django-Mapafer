@@ -26,7 +26,6 @@ async function service_consulta_usuarios(){
     var status = await respuesta.status
 
     return validar_consulta_usuarios(response, status)
-
 }
     
 function validar_consulta_usuarios(response, status){
@@ -39,14 +38,13 @@ function validar_consulta_usuarios(response, status){
 
             if (response.length > 0) {
             
-                modificar_template_consulta_usuarios(response)
+                modificar_listado_usuarios(response)
             } 
         } else {
             if (response.length > 0) {
                 sweet_alert("Conexión exitosa a la BBDD", "info");
-                modificar_template_consulta_usuarios(response)
+                modificar_listado_usuarios(response)
             } 
-            
         }
 
         
@@ -54,10 +52,9 @@ function validar_consulta_usuarios(response, status){
     }
 }
     
-function modificar_template_consulta_usuarios(response){
+function modificar_listado_usuarios(response){
 
     var contenedor = document.getElementById('users');
-
     var listado= document.createElement('div');
     listado.id = `padre_listado`;
     contenedor.appendChild(listado);
@@ -67,27 +64,21 @@ function modificar_template_consulta_usuarios(response){
         componente.className = "bg-white shadow-sm mb-2 p-3"
         componente.id = `contedor_${response[i].id}`
         componente.innerHTML = `
-        
-            <div class="row box mr-4" onclick = "service_datos_usuario(${response[i].id})">
-                <div class="col-11">
-                    <div class="card card-inverse card-primary">
-                        <div class="col-10">
-                            <div class="row" style="display: contents;">
-                            <div><h6 class='ml-2'><b>${response[i].user.username}</b></h6></div>
-                                <div><small class='ml-4'>Rol del usuario: ${response[i].user_rol}</small></div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="bg-proyecto-color box" onclick = "service_datos_usuario(${response[i].id})">
+            <div class="justify-content-between w-100">
+                <div class="d-flex text-left align-items-center">
+                    <i class="fa fa-university text-info mr-2 mb-3"></i><span ><span class="font-bold w-100">${response[i].user.username}</span>  <span class="text-muted font-bold">
+                    Rol otorgado: ${response[i].user_rol}</span></span>
+                    
                 </div>
-            </div>
-        
-        `
 
+            </div>
+        </div>       
+        `
         listado.appendChild(componente);
     }
     
 }
-
 async function service_datos_usuario(id){
 
     host = document.getElementById("host").value;
@@ -108,7 +99,6 @@ async function service_datos_usuario(id){
     return validar_consulta_usuario(response, status)
 
 }
-
 function validar_consulta_usuario(response, status){
 
     if (status >= 200 && status <300){
@@ -116,7 +106,6 @@ function validar_consulta_usuario(response, status){
         modificar_template_consulta_usuario(response)   
     }
 }
-
 function modificar_template_consulta_usuario(response){
 
     var principal_tree = document.getElementById('principal_tree');
@@ -149,7 +138,6 @@ function modificar_template_consulta_usuario(response){
     user_rol_edit.value = response.user_rol;
 
 }
-
 function upload_data(){
 
     var username = document.getElementById('username');
@@ -174,7 +162,6 @@ function upload_data(){
     button_delete.style = "";
 
 }
-
 function upload_data_reverse(){
 
     var username = document.getElementById('username');
@@ -201,8 +188,6 @@ function upload_data_reverse(){
  
 
 }
-
-
 // Para modificar o editar los datos de los perfiles existentes
 
 async function service_upload_user(){

@@ -1,12 +1,12 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
-
+{% load apptags_extras %}
 {% block content %}
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">Nuevo cliente</h3>
+        <h3 class="text-themecolor">Clientes</h3>
     </div>
 
     <div class="col-md-7 align-self-center">
@@ -23,127 +23,71 @@
         <div class="card">
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
-                    <h4 class="card-title"><span class="lstick m-r-20"></span>Incorporar un cliente a la BBDD</h4>
+                    <h4 class="card-title"><span class="lstick m-r-20"></span><b>Nuevo cliente</b></h4>
                     <h6 class="card-subtitle">Complete el formulario</h6>
-                    
 
-                    <div class="row d-flex justify-content-center">
-                        <div class="col col-md-12 col-lg-6">
-                            <div class="row">
-                                <div class="col bg-light border rounded p-4 ">
+                    <div class="justify-content-center text-left" style="font-weight: 450;">
+                        <div class="row p-3">
 
-                                    {% if mensaje %}
-                                    <h6 class="text-danger">{{mensaje}}</h6>
-                                    {% endif %}
+                            <div class="form-group col-4">
+                                <label>Nombre</label>
+                                <input id="nombre" type="text" class="form-control form-material form-control-line"> </div>
 
-                                    <form method="POST">
+                            <div class="form-group col-4">
+                                <label>Apellido</label>
+                                <input id="apellido" type="text" class="form-control form-material form-control-line"> </div>
 
-                                        {% csrf_token %}
+                            <div class="form-group col-4">
+                                <label>Score</label>
+                                <input id="score" type="number" class="form-control form-material form-control-line"> </div>
 
-                                        <div class="campoctacte">
+                        </div>
 
-                                            <div class="campo">
+                        <div class="row p-3">
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Nombre</label>
-                                                    <div class="col-sm-12">
-                                                        <input name="nombre" type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
-                                                    </div>
-                                                </div>
+                            <div class="form-group col-4">
+                                <label>Email</label>
+                                <input id="email" type="text" class="form-control form-material form-control-line"> </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Apellido</label>
-                                                    <div class="col-sm-12">
-                                                        <input name="apellido" type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
-                                                    </div>
-                                                </div>
+                            <div class="form-group col-4">
+                                <label>Cuil</label>
+                                <input id="cuil" type="text" class="form-control form-material form-control-line"> </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">CUIL</label>
-                                                    <div class="col-sm-12">
-                                                        <input name="cuil" type="text" placeholder="Sin guiones, ejemplo 20377258305"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
-                                                    </div>
-                                                </div>
+                            <div class="form-group col-4">
+                                <label>Telefono</label>
+                                <input id="telfono" type="text" class="form-control form-material form-control-line"> </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Telefono de contacto</label>
-                                                    <div class="col-sm-12">
-                                                        <input name="telefono" type="text" placeholder="Sin +54, ejemplo 3813540261"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
-                                                    </div>
-                                                </div>
+                        </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Dirección</label>
-                                                    <div class="col-sm-12">
-                                                        <input name="direccion" type="text"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
-                                                    </div>
-                                                </div>
+                        <div class="row p-3">
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Email</label>
-                                                    <div class="col-sm-12">
-                                                        <input name="email" type="email"
-                                                                class="form-control form-control" aria-label="Amount"
-                                                                >
-                                                    </div>
-                                                </div>
+                            <div class="form-group col-8">
+                                <label>Dirección completa</label>
+                                <input id="direccion" type="text" class="form-control form-material form-control-line"> </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Score</label>
-                                                    <div class="col-sm-12">
-                                                        <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            
-                                                                <span class="input-group-text">Puntos</span>
+                            <div class="form-group col-4">
+                                <label>Empresa</label>
+                                <select id="empresa" class="form-control form-control-line">
+                                    {% for i in empresas %}
+                                    <option {% if data.empresa == i%} selected {% endif %}>{{i.nombre}}</option>
+                                    {% endfor %}
 
-                                                                </div>
-                                                                <input name="score" required type="number" 
-                                                                        class="form-control form-control" aria-label="Amount">
-
-
-                                                            </div>
-
-                                                            
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-sm-12">Empresa</label>
-                                                    <div class="col-sm-12">
-                                                        <select name="empresa" class="form-control form-control-line">
-                                                            {% for i in empresas %}
-                                                            <option {% if data.empresa == i%} selected {% endif %}>{{i.nombre}}</option>
-                                                            {% endfor %}
-                
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="row d-flex justify-content-center mt-4">
-                                                <div class="col-lg-6 text-center">
-
-                                                    <button type="submit" class="btn btn-primary">Cargar cliente</button>
-
-                                                </div>
-                                            </div>
-
-                                    </form>
-
-                                </div>
+                                </select>
                             </div>
+    
+
+                        </div>
+
+                        <div class="row p-3">
+
+                            <div class="form-group col-6">
+                                <label>Nombre de usuario</label>
+                                <input id="username" type="text" class="form-control form-material form-control-line" placeholder="El usuario se podra logear con estos datos"> </div>
+
+                            <div class="form-group col-6">
+                                <label>Password</label>
+                                <input id="password" type="text" class="form-control form-material form-control-line" placeholder="El usuario se podra logear con estos datos"> </div>
+
                         </div>
                     </div>
                 </div>
@@ -152,5 +96,25 @@
     </div>
 </div>
 
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
+
+<a id="add" href="#" onclick="service_crear_cliente()"
+    data-toggle="tooltip" data-placement="left" title="Agregar un nuevo cliente"
+    class="btn btn-success btn-circle fa fa-cloud-upload"></a>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+</style>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_client.js' %}"></script>
 
 {% endblock %}
