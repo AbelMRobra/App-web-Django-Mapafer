@@ -56,7 +56,7 @@ function autocompletar_user(){
     var username = document.getElementById("username")
     username.value = `${nombre}${apellido}`
     var password = document.getElementById("password")
-    password.value = `${String(nomcuilbre).replace("-", "")}`
+    password.value = `${String(cuil).replace("-", "")}`
     
 
 }
