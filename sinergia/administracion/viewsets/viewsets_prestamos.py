@@ -57,7 +57,6 @@ class PrestamosViewset(viewsets.ModelViewSet):
 
             if request.data['primera_cuota'] != "":
                 primera_cuota = str(request.data['primera_cuota'])
-                print(primera_cuota)
                 response["simulacion"] = simular_cuotas_prestamo(regimen, cantidad_cuotas, primera_cuota)
 
             return Response(response, status=status.HTTP_200_OK)
