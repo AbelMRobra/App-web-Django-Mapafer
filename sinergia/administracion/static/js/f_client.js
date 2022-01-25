@@ -46,3 +46,17 @@ function validar_respuesta_creacion(response, status){
  
     }
 }
+
+function autocompletar_user(){
+
+    var nombre = document.getElementById("nombre").value
+    var apellido = document.getElementById("apellido").value
+    var cuil = document.getElementById("cuil").value
+
+    var username = document.getElementById("username")
+    username.value = `${nombre}${apellido}`
+    var password = document.getElementById("password")
+    password.value = `${String(nomcuilbre).replace("-", "")}`
+    
+
+}
