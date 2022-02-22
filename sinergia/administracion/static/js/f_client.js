@@ -19,6 +19,7 @@ async function service_borrar_cliente(id) {
 async function service_crear_cliente() {
     const url = `${document.getElementById("host").value}api/api_clientes/`;
     sweet_alert("Procesando ..", "warning");
+    console.log("Prueba");
     var respuesta = await fetch(url ,{
         method: "POST",
         headers: {
