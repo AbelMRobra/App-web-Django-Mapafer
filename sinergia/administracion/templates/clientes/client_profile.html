@@ -63,7 +63,7 @@
                                 <li class="bg-proyecto-color">
                                     <div class="justify-content-between w-100">
                                         <div class="d-flex text-left align-items-center">
-                                            <i class="fa fa-university {% if d.3 >= 100 %} text-success {% else %} text-info {% endif %} mr-2 mb-3"></i><span ><span class="font-bold w-100">{{ d.3 }}Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</span>  <span class="text-muted font-bold">Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></span>
+                                            <i class="fa fa-university {% if d.3 >= 100 %} text-success {% else %} text-info {% endif %} mr-2 mb-3"></i><span ><span class="font-bold w-100">{{ d.3|floatformat:2}} Prestamo de ${{d.0.monto|floatformat:2|intcomma}}</span>  <span class="text-muted font-bold">Otorgado el: {{d.0.fecha|date:"d/m/Y"}}</span></span>
                                             
                                         </div>
                
