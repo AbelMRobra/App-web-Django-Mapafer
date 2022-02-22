@@ -94,6 +94,8 @@ class Clientes(models.Model):
     empleador = models.CharField(max_length=400, verbose_name="Empleador", blank=True, null=True)
     contacto = models.CharField(max_length=400, verbose_name="Contacto", blank=True, null=True)
     direccion = models.CharField(max_length=400, verbose_name="Dirección", blank=True, null=True)
+    localidad = models.CharField(max_length=400, verbose_name="Localidad", blank=True, null=True)
+    provincia = models.CharField(max_length=400, verbose_name="Provincia", blank=True, null=True)
     cuil = models.CharField(max_length=200, verbose_name="CUIL", blank=True, null=True, unique=True)
     telefono = models.CharField(max_length=200, verbose_name="Telefono", blank=True, null=True)
     email = models.CharField(max_length=200, verbose_name="Email", blank=True, null=True)

@@ -37,6 +37,8 @@ async function service_crear_cliente() {
             'empresa' : document.getElementById("empresa").value,
             'username' : document.getElementById("username").value,
             'password' : document.getElementById("password").value,
+            'localidad' : document.getElementById("localidad").value,
+            'provincia' : document.getElementById("provincia").value
         })
 
     });
