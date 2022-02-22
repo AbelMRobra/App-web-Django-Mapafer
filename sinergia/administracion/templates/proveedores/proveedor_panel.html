@@ -31,7 +31,8 @@
 
                             <thead>
       
-                                    <th>Empresa</th>
+                                    <th class='notexport'>Empresa</th>
+                                    <th style="display: none;">Empresa</th>
                                     <th style="text-align: center;">Prestamos</th>
                                     <th>Monto prestado</th>
                                     <th>Pagado</th>
@@ -60,6 +61,7 @@
                                                     class="fa fa-angle-right mr-2"></i>Borrar</a>
                                         </div>
                                     </div><a href="{% url 'Pago proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
+                                    <td style="text-align: center;">{{i.0.fantasia}}</td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     <td>${{i.2|floatformat:2|intcomma}}</td>
                                     <td>${{i.3|floatformat:2|intcomma}}</td>
@@ -153,6 +155,9 @@ class="btn btn-primary btn-circle fa fa-plus"></a>
                 extend: 'excelHtml5',
                 title: 'Proveeedores',
                 className: "btn btn-primary",
+                exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
 
                 init: function(api, node, config) {
                     $(node).removeClass('dt-button buttons-excel buttons-html5')
