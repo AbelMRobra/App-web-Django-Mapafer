@@ -61,7 +61,7 @@
                                         
                                         <a href="{% url 'Perfil del cliente' i.id %}">{{i.nombre}}, {{i.apellido}}</a></td>
                                     <td style="display: none;">{{i.nombre}}, {{i.apellido}}</td>
-                                    <td {% if i.score < 300 %} class = "text-danger" {% endif %}>{{i.score}}</td>
+                                    <td {% if i.score < 600 %} class = "text-danger" {% endif %}>{{i.score}}</td>
                                     <td> {{i.estado_cliente}} </td>
                                     <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
                                     <td>{% if i.telefono %}{{i.telefono|floatformat:0}} {% else %}-{% endif %}</td>                            
