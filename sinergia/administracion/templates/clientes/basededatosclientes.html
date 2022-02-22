@@ -34,7 +34,8 @@
                         <table id="example" class="table" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Usuario</th>
+                                    <th class='notexport'>Usuario</th>
+                                    <th style="display: none;">Usuario</th>
                                     <th>Score</th>
                                     <th>Estado</th>
                                     <th>Email</th>
@@ -59,6 +60,7 @@
                                         </div>
                                         
                                         <a href="{% url 'Perfil del cliente' i.id %}">{{i.nombre}}, {{i.apellido}}</a></td>
+                                    <td style="display: none;">{{i.nombre}}, {{i.apellido}}</td>
                                     <td {% if i.score < 300 %} class = "text-danger" {% endif %}>{{i.score}}</td>
                                     <td> {{i.estado_cliente}} </td>
                                     <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
@@ -98,9 +100,9 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
-            "language": {
-                "search": "Buscar"
-            },
+                "language": {
+                    "search": "Buscar"
+                },
 
             "info": false,
             dom: 'Bfrtip',
@@ -109,6 +111,9 @@
                 extend: 'excelHtml5',
                 title: 'BBDD clientes',
                 className: "btn btn-primary",
+                exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
 
                 init: function(api, node, config) {
                     $(node).removeClass('dt-button buttons-excel buttons-html5')
