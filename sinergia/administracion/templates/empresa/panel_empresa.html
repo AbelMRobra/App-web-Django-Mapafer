@@ -61,6 +61,15 @@
             
                                         </div>
 
+                                        <p class="my-2">CUIT</p>
+                                        <div class="mb-3">
+                                            <input 
+                                            id = "empresa_agregar_cuit"
+                                            type="text"  
+                                            class="form-control form-control-line">
+            
+                                        </div>
+
                                         <div>
                                             <button 
                                             class="btn btn-primary" 
@@ -88,26 +97,42 @@
 
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Empresa</th>
+                                    <th>ID</th>
                                     <th>Rubro</th>
                                     <th>Contacto</th>
-                                    <th style="text-align: center;">Clientes</th>
+                                    <th style="text-align: center;">Cuit</th>
                                     <th style="text-align: center;">Cuotas a vencer</th>
-                                    <th style="max-width: 5px;"></th>
-
-
+    
                                 </tr>
                             </thead>
 
                             <tbody 
                             id = "tabla_body"
-                            style="font-size: 14px;">
+                            style="font-size: 14px; font-weight: 450;">
 
                                 {% for i in informacion %}
                                 <tr id="fila_{{i.0.id}}">
+                                    
+                                    <td>
+                                        <div class="btn-group ml-auto mr-3">
+                                            <a href="JavaScript:void(0)" class="icon-options-vertical link"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="{% url 'Perfil empresa' i.0.id %}"><i
+                                                    class="fa fa-angle-right mr-2"></i> Perfil</a>
+                                                <a class="dropdown-item" href="{% url 'Pagos por empresas' i.0.id %}"><i
+                                                    class="fa fa-angle-right mr-2"></i> Pagos</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Editar{{i.0.id}}"><i
+                                                    class="fa fa-angle-right mr-2"></i> Editar</a>
+
+                                                <a class="dropdown-item text-danger" href="#" onclick="service_borrar_empresa({{i.0.id}})">
+                                                    <i class="fa fa-angle-right mr-2"></i>Borrar</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <a href="{% url 'Perfil empresa' i.0.id %}">{{i.0.nombre|lower|capfirst}}</a></td>
                                     <td>{{i.0.id}}</td>
-                                    <td><a href="{% url 'Perfil empresa' i.0.id %}">{{i.0.nombre|lower|capfirst}}</a></td>
                                     <td>
                                         {% if i.0.rubro %}
                                         {{i.0.rubro|lower|capfirst}}
@@ -116,14 +141,7 @@
                                         {% endif %}
                                                        
                                     </td>
-                                    <td>
-
-                                        {% if i.0.contacto %}
-                                        {{i.0.contacto|lower|capfirst}}
-                                        {% else %}
-                                        Sin especificar
-                                        {% endif %}
-                                    </td>
+                                    <td>{{i.0.cuit}}</td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     {% if i.3 == 0 and i.2 == 0 %}
                                     <td 
@@ -132,75 +150,15 @@
                                     <td 
                                     style="text-align: center;"><a href="{% url 'Pagos por empresas' i.0.id %}">Se vence ${{i.3|floatformat:2|intcomma}} ({{i.2}} cuotas)</a></td>
                                     {% endif %}
-                                    <td>
-                                    <div class="btn-group ml-auto">
-                                        <a href="JavaScript:void(0)" class="icon-options-vertical link"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="{% url 'Perfil empresa' i.0.id %}"><i
-                                                class="fa fa-users mr-2"></i> Perfil</a>
-                                            <a class="dropdown-item" href="{% url 'Pagos por empresas' i.0.id %}"><i
-                                                class="fa fa-money mr-2"></i> Pagos</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Editar{{i.0.id}}"><i
-                                                class="fa fa-pencil mr-2"></i> Editar</a>
-                                        </div>
-                                    </div></td>
 
-                    <div class="modal fade" id="Editar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="Editar{{i.0.id}}"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header"
-                                style="background-color: #2a3e52;">
-                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos</h5>
-                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data">
 
-                                        {% csrf_token %}
-
-                                        <p class="my-2">Nombre</p>
-                                        <div class="mb-3">
-                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
-            
-                                        </div>
-
-                                        <p class="my-2">Rubro</p>
-                                        <div class="mb-3">
-                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
-            
-                                        </div>
-
-                                        <div>
-                                            <button class="btn btn-primary" type="submit" value="{{i.0.id}}" name="id"
-                                                style="margin-top: 10px;">Editar</button>
-
-                                        </div>
-                                        {{ form.as_p }}
-                                    </form>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-
-                                </tr>
-
-                                <div class="modal fade" id="ModalBorrar{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
+                                    <div class="modal fade" id="Editar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="Editar{{i.0.id}}"
                                         aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header"
-                                                    style="background-color: #2a3e52;">
-                                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
+                                                style="background-color: #2a3e52;">
+                                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos</h5>
                                                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -209,21 +167,24 @@
                                                     <form method="POST" enctype="multipart/form-data">
 
                                                         {% csrf_token %}
-                                                        <div style="text-align: left;">
-                                                            <h3>Advertencia</h3>
 
-                                                            <h6>Esta acción no se puede deshacer, toda la información asociada al cliente sera eliminada. Recomendamos analizar esta acción</h6>
-
-                        
-
-                                                            <div>
-                                                                <button class="btn btn-danger" type="submit" name="borrar" value="{{i.id}}"
-                                                                    style="margin-top: 10px;">Continuar</button>
-
-                                                            </div>
+                                                        <p class="my-2">Nombre</p>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
+                            
                                                         </div>
 
-                                                        
+                                                        <p class="my-2">Rubro</p>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
+                            
+                                                        </div>
+
+                                                        <div>
+                                                            <button class="btn btn-primary" type="submit" value="{{i.0.id}}" name="id"
+                                                                style="margin-top: 10px;">Editar</button>
+
+                                                        </div>
                                                         {{ form.as_p }}
                                                     </form>
 
@@ -235,7 +196,11 @@
                                             </div>
                                         </div>
 
-                                    </div>
+                                        </div>
+
+                                </tr>
+
+
                                 {% endfor %}
                             </tbody>
 
@@ -309,11 +274,27 @@ function sweet_alert(mensaje, estado) {
 //
 
 // Script para crear una empresa
+async function service_borrar_empresa(id) {
+
+    const url = `{% host %}api/api_empresa/${id}/`;
+    sweet_alert("Procesando ..", "warning");
+    var respuesta = await fetch(url ,{
+        method: "DELETE",
+        headers: {
+            'X-CSRFToken' : "{{ csrf_token }}",
+            'Content-Type': 'application/json',
+        },
+    });
+
+    var status = await respuesta.status
+    return validar_delete(status, id);
+}
+
 
 async function crear_empresa() {
 
     const url = `{% host %}api/api_empresa/`;
-
+    sweet_alert("Procesando ..", "warning");
     var respuesta = await fetch(url ,{
         method: "POST",
         headers: {
@@ -323,6 +304,7 @@ async function crear_empresa() {
 
     body: JSON.stringify({
         'nombre' : document.getElementById("empresa_agregar").value,
+        'cuit' : document.getElementById("empresa_agregar_cuit").value,
 
 
     })
@@ -331,6 +313,18 @@ async function crear_empresa() {
     var response = await respuesta.json();
     var status = await respuesta.status
     return validar_creacion(response, status);
+}
+
+function validar_delete(status, id) {
+
+    if (status >= 200 && status <300){
+        sweet_alert("Listo!", "success");
+        var fila = document.getElementById(`fila_${id}`)
+        fila.remove()
+
+    } else {
+        sweet_alert("No permitido", "error")
+    }
 }
 
 function validar_creacion(response, status) {
@@ -342,7 +336,7 @@ function validar_creacion(response, status) {
 
 
     } else {
-        sweet_alert("No permitido", "warning")
+        sweet_alert("No permitido", "error")
     }
 }
 
@@ -356,21 +350,23 @@ function modificar_template_create(response) {
 
     var fila = document.getElementById(`fila_${response.id}`);
     
-    var celda_id = document.createElement('td');
-    celda_id.innerHTML = `${response.id}`;
-    fila.appendChild(celda_id);
+    
     
     var celda_nombre = document.createElement('td');
     celda_nombre.innerHTML = `${response.nombre}`;
     fila.appendChild(celda_nombre);
 
+    var celda_id = document.createElement('td');
+    celda_id.innerHTML = `${response.id}`;
+    fila.appendChild(celda_id);
+
     var celda_rubro = document.createElement('td');
     celda_rubro.innerHTML = 'Sin especificar';
     fila.appendChild(celda_rubro);
 
-    var celda_contacto = document.createElement('td');
-    celda_contacto.innerHTML = 'Sin especificar';
-    fila.appendChild(celda_contacto);
+    var celda_cuit = document.createElement('td');
+    celda_cuit.innerHTML = 'Sin especificar';
+    fila.appendChild(celda_cuit);
 
     var celda_cliente = document.createElement('td');
     celda_cliente.innerHTML = 0;

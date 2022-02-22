@@ -105,7 +105,17 @@
                     </div>
                 </div>
 
-                <hr>
+                <div class="card col-12">
+                    <div class="card-body">
+                        <h4 class="card-title font-bold"></span> Datos de la empresa</h4>
+        
+                        <address id = "datos_2">{{proveedor.direccion}} {{proveedor.ciudad}}, {{proveedor.provincia}} 
+                            <br/>
+                            <abbr title="Phone">Tel: </abbr> {{proveedor.telefono}} / <abbr title="Phone">Ciut: </abbr> {{proveedor.cuit}}  
+                        </address>
+        
+                    </div>
+                </div>
 
                 <div class="col-12 col-lg-6 mt-2" >
                     
@@ -126,7 +136,7 @@
  
                              {% for i in pagos %}
                              <tr>
-                                 <td><div class="btn-group ml-auto mr-2">
+                                 <td class="text-primary"><div class="btn-group ml-auto mr-2">
                                      <a href="JavaScript:void(0)" class="icon-options-vertical link"
                                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                      <div class="dropdown-menu dropdown-menu-right">
@@ -304,9 +314,9 @@
     data-toggle="tooltip" data-placement="left" title="Agregar un nuevo pago"
      class="fa fa-plus"></i></a>
 
-    <a id="add2" href="{% url 'Panel proveedor' %}"
+    <!-- <a id="add2" href="{% url 'Panel proveedor' %}"
     data-toggle="tooltip" data-placement="left" title="Volver al panel" 
-    class="btn btn-primary btn-circle fa fa-arrow-left"></a>
+    class="btn btn-primary btn-circle fa fa-arrow-left"></a> -->
 
 
     <style>
@@ -324,18 +334,13 @@
             }
         }
     
-        #add {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
+        #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
         }
-    
-        #add2{
-            position: fixed;
-            bottom: 40px;
-            right: 20px;
-            z-index: 10;
-        }
+
     
     
         .scrollbox {

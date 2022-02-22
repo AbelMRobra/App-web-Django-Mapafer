@@ -28,10 +28,13 @@ class EmpresaViewset(viewsets.ModelViewSet):
             empresa.rubro = request.data["rubro"]
             empresa.direccion = request.data["direccion"]
             empresa.telefono = request.data["telefono"]
+            empresa.cuit = request.data["cuit"]
+            empresa.ciudad = request.data["ciudad"]
+            empresa.provincia = request.data["provincia"]
             empresa.save()
 
             response = {"mensaje": f"Empresa editada!",
-            "rubro": empresa.rubro, "direccion": empresa.direccion, "telefono": empresa.telefono}
+            "rubro": empresa.rubro, "direccion": empresa.direccion, "telefono": empresa.telefono, "cuit": empresa.cuit, "ciudad": empresa.ciudad, "provincia": empresa.provincia}
             return Response(response, status=status.HTTP_202_ACCEPTED)
 
         except:

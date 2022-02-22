@@ -1,7 +1,7 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
-
+{% load apptags_extras %}
 {% block content %}
 
 <div class="row page-titles">
@@ -26,103 +26,74 @@
                     <h4 class="card-title"><span class="lstick m-r-20"></span><b>Agregar proveedor</b></h4>
                     <h6 class="card-subtitle">Complete el formulario</h6>
 
+                    <div class="justify-content-center text-left" style="font-weight: 450;">
+                        <div class="row p-3">
 
-                    <div class="row d-flex justify-content-center">
-                        <div class="col col-md-12 col-lg-6">
-                            <div class="row">
-                                <div class="col bg-light border rounded p-4 ">
+                            <div class="form-group col-4">
+                                <label>Razón social</label>
+                                <input id="razon_social" type="text" class="form-control form-material form-control-line"> </div>
 
-                                    <form method="POST">
+                            <div class="form-group col-4">
+                                <label>Nombre comercial</label>
+                                <input id="fantasia" type="text" class="form-control form-material form-control-line"> </div>
 
-                                        {% csrf_token %}
+                            <div class="form-group col-4">
+                                <label>CUIT</label>
+                                <input id="cuit" type="text" class="form-control form-material form-control-line"> </div>
 
-                                        <div class="campoctacte">
-
-                                            <div class="campo">
-
-                                                <div>
-                                                    <label>Razón social</label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="razon_social" required type="text"
-                                                                placeholder="Ejemplo: Azlepi S.R.L"
-                                                                class="form-control form-control" aria-label="Amount">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label>Nombre de fantasia</label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="fantasia" required type="text"
-                                                                placeholder="Link Inversiones"
-                                                                class="form-control form-control" aria-label="Amount">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row d-flex justify-content-center mt-4">
-                                                <div class="col-lg-6 text-center">
-
-                                                    <button type="submit" class="btn btn-primary">Agregar</button>
-
-                                                </div>
-                                            </div>
-
-                                    </form>
-
-                                </div>
-                            </div>
                         </div>
+
+                        <div class="row p-3">
+
+                            <div class="form-group col-4">
+                                <label>Dirección</label>
+                                <input id="direccion" type="text" class="form-control form-material form-control-line"> </div>
+
+                            <div class="form-group col-4">
+                                <label>Ciudad</label>
+                                <input id="ciudad" type="text" class="form-control form-material form-control-line"> </div>
+
+                            <div class="form-group col-4">
+                                <label>Provincia</label>
+                                <input id="provincia" type="text" class="form-control form-material form-control-line"> </div>
+
+                        </div>
+
+                        <div class="row p-3">
+
+                            <div class="form-group col-4">
+                                <label>Numero de contacto</label>
+                                <input id="telefono" type="text" class="form-control form-material form-control-line"> </div>  
+
+                        </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{% if mensaje %}
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
+
+<a id="add" href="#" onclick="service_crear_proveedor()"
+    data-toggle="tooltip" data-placement="left" title="Agregar nuevo proveedor"
+    class="btn btn-success btn-circle fa fa-cloud-upload"></a>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+</style>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    })
-
-    Toast.fire({
-        {% if mensaje.0 == 1 %}
-    icon: 'success',
-        {% elif mensaje.0 == 0 %}
-    icon: 'warning',
-        {% endif %}
-    title: '{{mensaje.1}}'
-    })
-
-</script>
-{% endif %}
-
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_proveedores.js' %}"></script>
 
 {% endblock %}

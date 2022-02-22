@@ -18,94 +18,46 @@
 
 </div>
 
+    <div class="row col-12">
+
+        <div class="card col-12">
+            <div class="card-body">
+                <h4 class="card-title font-bold"></span><a 
+                    href="#" data-toggle="modal" data-target="#Editar_datos"
+                    class="fa size-1 fa-pencil mr-2"></a> Datos de la empresa</h4>
+
+                <p id="datos_1">Rubro: {% if empresa.rubro %}{{empresa.rubro}}{% else %}Sin especificar{% endif %} / Cuit: {{empresa.cuit}}</p>
+                <address id = "datos_2">{% if empresa.direccion %}{{empresa.direccion}}{% else %}Sin especificar{% endif %} / {{empresa.ciudad}}, {{empresa.provincia}}
+                    <br/>
+                    <abbr title="Phone">Tel: </abbr> {% if empresa.telefono %}{{empresa.telefono}}{% else %}Sin especificar{% endif %} 
+                </address>
+
+            </div>
+        </div>
+
+    </div>
+
     <div class="row">
 
-        <div class="col-6 col-lg-4">
+        <div class="col-4 col-lg-4">
             
-            <div class="modal fade" id="Editar_datos" tabindex="-1" role="dialog" aria-labelledby="Editar_datos"
-                        aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header"
-                        style="background-color: #2a3e52;">
-                            <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos</h5>
-                            <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="modificar_datos">
-
-                                <p class="my-2">Rubro de la empresa</p>
-                                <div class="mb-3">
-                                    <input type="text"  id="empresa_rubro" value="{% if empresa.rubro %}{{empresa.rubro}}{% endif %}" class="form-control form-control-line">
-
-                                </div>
-
-                                <p class="my-2">Dirección</p>
-                                <div class="mb-3">
-                                    <input type="text"  id="empresa_direccion" value="{% if empresa.direccion %}{{empresa.direccion}}{% endif %}" class="form-control form-control-line">
-
-                                </div>
-
-                                <p class="my-2">Telefono</p>
-                                <div class="mb-3">
-                                    <input type="text" id="empresa_telefono" value="{% if empresa.telefono %}{{empresa.telefono}}{% endif %}" class="form-control form-control-line">
-
-                                </div>
-
-                                <div>
-                                    <button onclick="editar_datos()" class="btn btn-primary" style="margin-top: 10px;">Editar</button>
-
-                                </div>
- 
-                            </form>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                        </div>
-                    </div>
-                </div>
-
-                </div>
-
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title font-bold"></span><a 
-                        href="#" data-toggle="modal" data-target="#Editar_datos"
-                        class="fa size-1 fa-pencil"></a> Datos de la empresa</h4>
+                    <h4 class="card-title font-bold"></span>Contactos de la empresa</h4>
+                    <ul id="lista_contacto" class="feeds scrollbox" style="font-size: 12px; height: 600px; max-height: 600px;">
 
-                    <p>Rubro</p>
-                    <p><b id="template_rubro" style="font-weight: 450;">{% if empresa.rubro %}{{empresa.rubro}}{% else %}Sin especificar{% endif %}</b></p>
+                        {% for contacto in contactos_empresa %}
+                        <div class="row" id="contacto_{{contacto.id}}">
 
-                    <p>Dirección</p>
-                    <p><b id="template_direccion" style="font-weight: 450;">{% if empresa.direccion %}{{empresa.direccion}}{% else %}Sin especificar{% endif %}</b></p>
-
-                    <p>Telefono</p>
-                    <p><b id="template_telefono" style="font-weight: 450;">{% if empresa.telefono %}{{empresa.telefono}}{% else %}Sin especificar{% endif %}</b></p>
-
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title font-bold"></span>Usuarios activos</h4>
-                    <ul class="feeds scrollbox" style="font-size: 12px; height: 310px; max-height: 310px;">
-
-                        {% for cliente in clientes %}
-
-                        <li class="bg-proyecto-color">
-                            <div class="justify-content-between align-items-center w-100">
-                                <div class="d-flex text-left">
-                                    <img src="{% if cliente.imagen %}{{cliente.imagen.url}}{% else %}{% static 'img/userlog2.png' %}{% endif %}" width="25px" height="25px"
-                                        alt="user" class="mr-2"><span class="font-bold">{{cliente.apellido}}, {{cliente.nombre}}</span>
-                                </div>
-                                <div><span class="text-muted font-bold" id="{{actividad.id}}"></span</div>
+                            <div class="col-12">
+                                <h3 class="box-title m-b-0">{{contacto.contacto}}</h3> <small>{{contacto.cargo}}</small>
+                                <address>
+                                    {{contacto.email}}
+                                    <br/>
+                                    <abbr title="Phone">Tel:</abbr> {{contacto.numero}} <i class="fa fa-trash-o ml-2 box" onclick="borrar_contacto({{contacto.id}})"></i>
+                                </address>
                             </div>
-                        </li>
-
+                        </div>
                         {% endfor %}
 
                     </ul>
@@ -113,12 +65,12 @@
             </div>
         </div>
 
-        <div class="col-6 col-lg-8">
+        <div class="col-8 col-lg-8">
 
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title font-bold"></span>Historial de pagos</h4>
-                    <ul class="feeds scrollbox" style="font-size: 12px; height: 650px; max-height: 650px;">
+                    <ul class="feeds scrollbox" style="font-size: 12px; height: 600px; max-height: 600px;">
 
                         {% for pago in pagos %}
 
@@ -175,25 +127,6 @@
 
                                 <br>
 
-                                <ol id="lista_contacto" class="list-group list-group-numbered">
-                                    {% for contacto in contactos_empresa %}
-
-                                    <li 
-                                    id = "contacto_{{contacto.id}}"
-                                    class="list-group-item d-flex justify-content-between align-items-start">
-                                      <div class="ms-2 me-auto">
-                                        <div class="fw-bold">{{contacto.contacto}}</div>
-                                        <small><b>{{contacto.cargo}}</b> - <b>email: </b> {{contacto.email}} / <b>tel: </b>{{contacto.numero}}</small> 
-                                      </div>
-                                      <span class="badge bg-danger rounded-pill"
-                                      onclick="borrar_contacto({{contacto.id}})"><i 
-                                        data-toggle="tooltip" data-placement="left" title="Borrar contacto"
-                                        class="fa fa-trash-o"></i> </span>
-                                    </li>
-                                    
-                                    {% endfor %}
- 
-                                  </ol>
  
                             </form>
 
@@ -211,6 +144,73 @@
         <i data-toggle="tooltip" data-placement="left" title="Lista de contactos"
         class="fa fa-users"></i>
     </a>
+
+    <div class="modal fade" id="Editar_datos" tabindex="-1" role="dialog" aria-labelledby="Editar_datos"
+    aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+    <div class="modal-header"
+    style="background-color: #2a3e52;">
+        <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar datos</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form id="modificar_datos">
+
+            <p class="my-2">Rubro de la empresa</p>
+            <div class="mb-3">
+                <input type="text"  id="empresa_rubro" value="{% if empresa.rubro %}{{empresa.rubro}}{% endif %}" class="form-control form-control-line">
+
+            </div>
+
+            <p class="my-2">Dirección</p>
+            <div class="mb-3">
+                <input type="text"  id="empresa_direccion" value="{% if empresa.direccion %}{{empresa.direccion}}{% endif %}" class="form-control form-control-line">
+
+            </div>
+
+            <p class="my-2">Telefono</p>
+            <div class="mb-3">
+                <input type="text" id="empresa_telefono" value="{% if empresa.telefono %}{{empresa.telefono}}{% endif %}" class="form-control form-control-line">
+
+            </div>
+
+            <p class="my-2">CUIT</p>
+            <div class="mb-3">
+                <input type="text" id="empresa_cuit" value="{% if empresa.cuit %}{{empresa.cuit}}{% endif %}" class="form-control form-control-line">
+
+            </div>
+
+            <p class="my-2">Ciudad</p>
+            <div class="mb-3">
+                <input type="text" id="empresa_ciudad" value="{% if empresa.ciudad %}{{empresa.ciudad}}{% endif %}" class="form-control form-control-line">
+
+            </div>
+
+            <p class="my-2">Provincia</p>
+            <div class="mb-3">
+                <input type="text" id="empresa_provincia" value="{% if empresa.provincia %}{{empresa.provincia}}{% endif %}" class="form-control form-control-line">
+
+            </div>
+
+            <div>
+                <button onclick="editar_datos()" class="btn btn-primary" style="margin-top: 10px;">Editar</button>
+
+            </div>
+
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+    </div>
+</div>
+</div>
+
+</div>
 
     <style>
         @keyframes example {
@@ -364,6 +364,9 @@ async function editar_datos() {
         'rubro' : document.getElementById("empresa_rubro").value,
         'direccion' : document.getElementById("empresa_direccion").value,
         'telefono' : document.getElementById("empresa_telefono").value,
+        'cuit' : document.getElementById("empresa_cuit").value,
+        'ciudad' : document.getElementById("empresa_ciudad").value,
+        'provincia' : document.getElementById("empresa_provincia").value,
 
 
     })
@@ -389,16 +392,13 @@ function validar_edicion(response, status) {
 
 function modificar_template_edicion(response) {
 
+    var datos_1 = document.getElementById('datos_1');
+    datos_1.innerHTML = `Rubro: ${response.rubro} / Cuit: ${response.cuit}`
 
-    var p_rubro = document.getElementById('template_rubro');
-    p_rubro.innerHTML = `${response.rubro}`
-
-    var p_direccion = document.getElementById('template_direccion');
-    p_direccion.innerHTML = `${response.direccion}`
-
-    var p_telefono = document.getElementById('template_telefono');
-    p_telefono.innerHTML = `${response.telefono}`
-
+    var datos_2 = document.getElementById('datos_2');
+    datos_2.innerHTML = `${response.direccion} / ${response.ciudad}, ${response.provincia}
+                    <br/>
+                    <abbr title="Phone">Tel: </abbr> ${response.telefono}`
 
 }
 
@@ -450,26 +450,23 @@ function validar_contacto_creacion(response, status) {
 
 function modificar_template_contacto(response) {
 
-
     var contactos = document.getElementById('lista_contacto');
-    var nuevo_contacto = document.createElement('li')
-    nuevo_contacto.className = "list-group-item d-flex justify-content-between align-items-start"
+    var nuevo_contacto = document.createElement('div')
+    nuevo_contacto.className = "row"
     nuevo_contacto.id = `contacto_${response.id}`
     nuevo_contacto.innerHTML = `
-        <div class="ms-2 me-auto">
-            <div class="fw-bold">${response.contacto}</div>
-            <small><b>${response.cargo}</b> - <b>email: </b> ${response.email} / <b>tel: </b>${response.numero}</small> 
-        </div>
-        <span class="badge bg-danger rounded-pill"
-        onclick="borrar_contacto(${response.id})"><i 
-            data-toggle="tooltip" data-placement="left" title="Borrar contacto"
-            class="fa fa-trash-o"></i> </span>
-    
-    
+
+    <div class="col-12">
+        <h3 class="box-title m-b-0">${response.contacto}</h3> <small>${response.cargo}</small>
+        <address>
+            ${response.email}
+            <br/>
+            <br/>
+            <abbr title="Phone">P:</abbr> ${response.numero} <i class="fa fa-trash-o ml-2 box" onclick="borrar_contacto(${response.id})"></i>
+        </address>
+    </div>
     `
     contactos.appendChild(nuevo_contacto);
-
-
 
 }
 

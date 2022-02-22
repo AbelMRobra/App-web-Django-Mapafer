@@ -1,13 +1,13 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
-
+{% load apptags_extras %}
 {% block content %}
 
 
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">{{proveedor.fantasia}}</h3>
+        <h3 class="text-themecolor">Proveedores {{proveedor.fantasia}}</h3>
     </div>
 
     <div class="col-md-7 align-self-center">
@@ -24,73 +24,51 @@
         <div class="card">
             <div class="card-body row">
                 <div class="col-12 justify-content-center">
-                    <h4 class="card-title"><span class="lstick m-r-20"></span>Editar proveedor</h4>
+                    <h4 class="card-title"><span class="lstick m-r-20"></span><b>Editar proveedor</b></h4>
                     <h6 class="card-subtitle">Modifique los datos del registro</h6>
 
-                    <div class="row d-flex justify-content-center">
-                        <div class="col col-md-12 col-lg-6">
-                            <div class="row">
-                                <div class="col bg-light border rounded p-4 ">
 
-                                    <form method="POST">
+                    <div class="justify-content-center text-left" style="font-weight: 450;">
+                        <div class="row p-3">
 
-                                        {% csrf_token %}
+                            <div class="form-group col-4">
+                                <label>Razón social</label>
+                                <input id="razon_social" value="{{proveedor.razon_social}}" type="text" class="form-control form-material form-control-line"> </div>
 
-                                        <div class="campoctacte">
+                            <div class="form-group col-4">
+                                <label>Nombre comercial</label>
+                                <input id="fantasia" value="{{proveedor.fantasia}}" type="text" class="form-control form-material form-control-line"> </div>
 
-                                            <div class="campo">
+                            <div class="form-group col-4">
+                                <label>CUIT</label>
+                                <input id="cuit" value="{{proveedor.cuit}}" type="text" class="form-control form-material form-control-line"> </div>
 
-                                                <div>
-                                                    <label for="nombre">
-                                                        <h6>Razón social</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="razon_social"
-                                                                value="{{proveedor.razon_social}}" required type="text"
-                                                                class="form-control form-control" aria-label="Amount">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label for="apellido">
-                                                        <h6>Nombre fantasia</h6>
-                                                    </label>
-                                                </div>
-
-                                                <div class="row d-flex justify-content-center my-3">
-                                                    <div class="col col-md-8 col-lg-8">
-                                                        <div>
-
-                                                            <input name="fantasia" value="{{proveedor.fantasia}}"
-                                                                required type="text" class="form-control form-control"
-                                                                aria-label="Amount">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row d-flex justify-content-center mt-4">
-                                                <div class="col-lg-6 text-center">
-
-                                                    <button type="submit" class="btn btn-primary">Editar</button>
-
-                                                </div>
-                                            </div>
-
-                                    </form>
-
-                                </div>
-                            </div>
                         </div>
+
+                        <div class="row p-3">
+
+                            <div class="form-group col-4">
+                                <label>Dirección</label>
+                                <input id="direccion" value="{{proveedor.direccion}}" type="text" class="form-control form-material form-control-line"> </div>
+
+                            <div class="form-group col-4">
+                                <label>Ciudad</label>
+                                <input id="ciudad" value="{{proveedor.ciudad}}" type="text" class="form-control form-material form-control-line"> </div>
+
+                            <div class="form-group col-4">
+                                <label>Provincia</label>
+                                <input id="provincia" value="{{proveedor.provincia}}"  type="text" class="form-control form-material form-control-line"> </div>
+
+                        </div>
+
+                        <div class="row p-3">
+
+                            <div class="form-group col-4">
+                                <label>Numero de contacto</label>
+                                <input id="telefono" value="{{proveedor.telefono}}" type="text" class="form-control form-material form-control-line"> </div>  
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -98,34 +76,25 @@
     </div>
 </div>
 
-{% if mensaje %}
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
+
+<a id="add" href="#" onclick="service_editar_proveedor({{proveedor.id}})"
+    data-toggle="tooltip" data-placement="left" title="Editar datos"
+    class="btn btn-success btn-circle fa fa-cloud-upload"></a>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+</style>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    })
-
-    Toast.fire({
-        {% if mensaje.0 == 1 %}
-        icon: 'success',
-        {% elif mensaje.0 == 0 %}
-        icon: 'warning',
-        {% endif %}
-        title: '{{mensaje.1}}'
-    })
-
-</script>
-{% endif %}
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_proveedores.js' %}"></script>
 
 {% endblock %}

@@ -44,7 +44,7 @@
                             </thead>
                             <tbody style="font-size: 14px; font-weight: 450;">
                                 {% for i in data %}
-                                <tr>
+                                <tr id="{{i.id}}">
                                     <td>
                                         <div class="btn-group ml-auto mr-3">
                                             <a href="JavaScript:void(0)" class="icon-options-vertical link"
@@ -52,7 +52,7 @@
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item" href="{% url 'Perfil del cliente' i.id %}"><i
                                                         class="fa fa-angle-right mr-2"></i>Perfil</a>
-                                                <a class="dropdown-item text-danger" href="#" data-toggle="modal"
+                                                <a class="dropdown-item text-danger" href="#" data-toggle="modal" onclick="service_borrar_cliente({{i.id}})"
                                                     data-target="#ModalBorrar{{i.id}}"><i
                                                         class="fa fa-angle-right mr-2"></i>Borrar</a>
                                             </div>
@@ -92,7 +92,9 @@
 
 </style>
 
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_client.js' %}"></script>
 <script>
     $(document).ready(function () {
         $('#example').DataTable({

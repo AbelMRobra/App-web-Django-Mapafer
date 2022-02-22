@@ -1,9 +1,24 @@
 
 
-async function service_crear_cliente() {
+async function service_borrar_cliente(id) {
+    const url = `${document.getElementById("host").value}api/api_clientes/${id}/`;
+    sweet_alert("Procesando ..", "warning");
+    var respuesta = await fetch(url ,{
+        method: "DELETE",
+        headers: {
+            'X-CSRFToken' : `${document.getElementById("token").value}`,
+            'Content-Type': 'application/json',
+        },
 
+    });
+
+    var status = await respuesta.status;
+    return validar_respuesta_borrado(status, id)
+}
+
+async function service_crear_cliente() {
     const url = `${document.getElementById("host").value}api/api_clientes/`;
-    
+    sweet_alert("Procesando ..", "warning");
     var respuesta = await fetch(url ,{
         method: "POST",
         headers: {
@@ -17,7 +32,7 @@ async function service_crear_cliente() {
             'score' : document.getElementById("score").value,
             'email' : document.getElementById("email").value,
             'cuil' : document.getElementById("cuil").value,
-            'telfono' : document.getElementById("telfono").value,
+            'telefono' : document.getElementById("telefono").value,
             'direccion' : document.getElementById("direccion").value,
             'empresa' : document.getElementById("empresa").value,
             'username' : document.getElementById("username").value,
@@ -36,14 +51,18 @@ function validar_respuesta_creacion(response, status){
     if (status >= 200 && status <300){
         sweet_alert("Cliente creado", "success")
     } else {
-        console.log(Object.keys(response))
-        let errors = Object.keys(response)
-        for (let i=0; i <= errors.length -1; i++){
-            console.log(response[errors[i]])
-        }
+        sweet_alert(response.message, "error")
+    }
+}
 
-        sweet_alert("No aceptado", "warning")
- 
+function validar_respuesta_borrado(status, id){
+    
+    if (status >= 200 && status <300){
+        sweet_alert("Perfecto", "success");
+        var row = document.getElementById(`${id}`)
+        row.remove()
+    } else {
+        sweet_alert("Problema de servidor", "error")
     }
 }
 
@@ -54,7 +73,7 @@ function autocompletar_user(){
     var cuil = document.getElementById("cuil").value
 
     var username = document.getElementById("username")
-    username.value = `${nombre}${apellido}`
+    username.value = `${String(cuil).replace("-", "")}`
     var password = document.getElementById("password")
     password.value = `${String(cuil).replace("-", "")}`
     

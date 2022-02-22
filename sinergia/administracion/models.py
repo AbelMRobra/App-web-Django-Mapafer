@@ -16,9 +16,15 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Proveedor(models.Model):
     razon_social = models.CharField(max_length=200, verbose_name="Razón social")
     fantasia = models.CharField(max_length=200, verbose_name="Nombre de fantasia")
+    cuit = models.CharField(max_length=200, verbose_name="CUIT", blank=True, null=True, unique=True)
+    telefono = models.CharField(max_length=200, verbose_name="Telefono", blank=True, null=True)
+    direccion = models.CharField(max_length=200, verbose_name="Direccion", blank=True, null=True)
+    ciudad = models.CharField(max_length=200, verbose_name="Ciudad", blank=True, null=True)
+    provincia = models.CharField(max_length=200, verbose_name="Provincia", blank=True, null=True)
 
     class Meta:
         verbose_name="Proveedor"
@@ -40,17 +46,20 @@ class TasaParaCreditos(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class Empresa(models.Model):
 
     nombre = models.CharField(max_length=200, verbose_name="Nombre", unique=True)
     password = models.CharField(max_length=200, verbose_name="password", blank=True, null=True)
     code_key = models.IntegerField(verbose_name="Code key", blank=True, null=True)
-
+    cuit = models.CharField(max_length=200, verbose_name="CUIL", blank=True, null=True, unique=True)
     telefono = models.CharField(max_length=200, verbose_name="Telefono", blank=True, null=True)
     contacto = models.CharField(max_length=200, verbose_name="Contacto", blank=True, null=True)
     rubro = models.CharField(max_length=200, verbose_name="Rubro", blank=True, null=True)
     direccion = models.CharField(max_length=200, verbose_name="Direccion", blank=True, null=True)
     email = models.CharField(max_length=200, verbose_name="Email", blank=True, null=True)
+    ciudad = models.CharField(max_length=200, verbose_name="Ciudad", blank=True, null=True)
+    provincia = models.CharField(max_length=200, verbose_name="Provincia", blank=True, null=True)
 
     class Meta:
         verbose_name="Empresa"
@@ -75,6 +84,7 @@ class ContactosEmpresa(models.Model):
     def __str__(self):
         return self.contacto
 
+
 class Clientes(models.Model):
 
     usuario = models.ForeignKey(UserProfile, on_delete=models.PROTECT, verbose_name="Usuario del sistema", blank=True, null=True)
@@ -93,7 +103,7 @@ class Clientes(models.Model):
     servicio = models.FileField(verbose_name="Servicio", blank=True, null=True)
     informe_crediticio = models.FileField(verbose_name="Informe crediticio", blank=True, null=True)
     imagen = models.ImageField(verbose_name="Imagen", blank=True, null=True)
-
+    
     def estado_cliente(self):
         
         prestamos = Prestamos.objects.filter(cliente = self)
@@ -102,13 +112,10 @@ class Clientes(models.Model):
         estados = []
         
         if len(prestamos) > 0:
-            
             for prestamo in prestamos:
-
                 cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).order_by("fecha").exclude(estado = "SI")
                 
                 if len(cuotas) == 0:
-                    
                     estados.append(0)
                 
                 else:
@@ -126,7 +133,6 @@ class Clientes(models.Model):
                         estados.append(5)
             
             estados.sort(reverse=True)
-            
             estado_cliente = estados[0]
             
             if estado_cliente == 0:
@@ -147,7 +153,6 @@ class Clientes(models.Model):
             if estado_cliente == 5:
                 estado_cliente = "Situación 5"
 
-            
         else:
             estado_cliente = "Potencial"
 
@@ -174,6 +179,7 @@ class Citas(models.Model):
 
     def __str__(self):
         return self.asunto
+
 
 class Prestamos(models.Model):
 
@@ -220,6 +226,7 @@ class Prestamos(models.Model):
     def __str__(self):
         return self.cliente.nombre
 
+
 class CuotasPrestamo(models.Model):
 
     class Pagado(models.TextChoices):
@@ -243,6 +250,7 @@ class CuotasPrestamo(models.Model):
     def __str__(self):
         return self.estado
 
+
 class Pagos(models.Model):
 
     comentarios = models.CharField(max_length=100, blank=True, null=True, verbose_name="Comentarios")
@@ -253,6 +261,7 @@ class Pagos(models.Model):
     class Meta:
         verbose_name="Pago"
         verbose_name_plural="Pagos"
+
 
 class DeudaProveedor(models.Model):
     
@@ -266,6 +275,7 @@ class DeudaProveedor(models.Model):
 
     def __str__(self):
         return f'{self.prestamo.proveedor.razon_social}, {self.prestamo.valor_original}'
+
 
 class PagosProveedores(models.Model):
 
