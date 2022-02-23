@@ -12,8 +12,9 @@ async function service_crear_proveedor() {
             'razon_social' : document.getElementById("razon_social").value,
             'fantasia' : document.getElementById("fantasia").value,
             'cuit' : document.getElementById("cuit").value,
-            'telefono' : document.getElementById("telefono").value,
-            'cuit' : document.getElementById("cuit").value,
+            'banco' : document.getElementById("banco").value,
+            'n_cuenta' : document.getElementById("n_cuenta").value,
+            'cbu' : document.getElementById("cbu").value,
             'direccion' : document.getElementById("direccion").value,
             'ciudad' : document.getElementById("ciudad").value,
             'provincia' : document.getElementById("provincia").value,
@@ -41,8 +42,9 @@ async function service_editar_proveedor(id) {
             'razon_social' : document.getElementById("razon_social").value,
             'fantasia' : document.getElementById("fantasia").value,
             'cuit' : document.getElementById("cuit").value,
-            'telefono' : document.getElementById("telefono").value,
-            'cuit' : document.getElementById("cuit").value,
+            'banco' : document.getElementById("banco").value,
+            'n_cuenta' : document.getElementById("n_cuenta").value,
+            'cbu' : document.getElementById("cbu").value,
             'direccion' : document.getElementById("direccion").value,
             'ciudad' : document.getElementById("ciudad").value,
             'provincia' : document.getElementById("provincia").value,
@@ -64,4 +66,18 @@ function validar_respuesta_creacion(response, status){
         console.log(response)
         sweet_alert(response.message, "error")
     }
+}
+
+function change_monto_pago(saldo){
+
+    var select = document.getElementById('select')
+    var id_deuda = select.value
+
+    var input_id = document.getElementById(id_deuda)
+    var valor = input_id.value
+
+    console.log(valor)
+
+    var monto = document.getElementById('monto')
+    monto.value = valor
 }

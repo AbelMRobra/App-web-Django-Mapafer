@@ -1,6 +1,7 @@
 {% extends "home.html" %}
 {% load static %}
 {% load humanize %}
+{% load apptags_extras %}
 {% block content %}
 
 <div class="row page-titles">
@@ -66,7 +67,7 @@
                                                     <div class="col-6">
                                                         <span>Monto</span>
                                                         <div class="mb-3">
-                                                            <input name="monto" type="number" step="any" class="form-control form-control">
+                                                            <input id="monto" name="monto" type="number" step="any" class="form-control form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -75,9 +76,9 @@
                                                     <div class="col-12">
                                                         <span>Numero de la deuda</span>
                                                         <div class="mb-3">
-                                                            <select name="id_deuda" class="form-control form-control">
+                                                            <select id="select" name="id_deuda" class="form-control form-control" onchange="change_monto_pago()">
                                                                 {% for detalle in deudas %}
-                                                                <option value="{{detalle.0.id}}">ID: {{detalle.0.id}} - {{detalle.0.prestamo.cliente.apellido}}: {{detalle.0.prestamo.cliente.cuil}} </option>
+                                                                <option value="{{detalle.0.id}}" >ID: {{detalle.0.id}} - {{detalle.0.prestamo.cliente.apellido}}: {{detalle.0.prestamo.cliente.cuil}} </option>
                                                                 {% endfor %}
                                                             </select>
                                 
@@ -149,7 +150,7 @@
                                              data-target="#ModalBorrar{{i.id}}"><i
                                                  class="fa fa-angle-right mr-2"></i> Borrar</a>
                                      </div>
-                                 </div> Pago realizado el: {{i.fecha|date:"d-m-Y"}} {% if i.deuda %} al prestamo codeID {{i.deuda.id}} {% else %} sin asignar {% endif %}</td>
+                                 </div> Pagodo el: {{i.fecha|date:"d-m-Y"}} {% if i.deuda %}. CodeID {{i.deuda.id}} {% else %} sin asignar {% endif %}</td>
                                  <td>${{i.monto|floatformat:2|intcomma}}</td>
  
                              </tr>
@@ -285,10 +286,12 @@
                             <tbody style="font-size: 14px; font-weight: 450;">
                                 {% for detalle in deudas %}
                                 <tr>
-                                    <td><i class="mr-3 {% if detalle.0.estado_pagado %}fa fa-check-circle text-success{% else %}fa fa-exclamation-circle text-warning{% endif %}"></i>CodeID {{detalle.0.id}} a {{detalle.0.prestamo.cliente.apellido}}, {{detalle.0.prestamo.cliente.nombre}} monto de ${{detalle.0.prestamo.valor_original|floatformat:2|intcomma}} vence: <b>{{detalle.0.fecha|date:"d/m/Y"}}</b>
+                                    <td><i class="mr-3 {% if detalle.0.estado_pagado %}fa fa-check-circle text-success{% else %}fa fa-exclamation-circle text-warning{% endif %}"></i>CodeID {{detalle.0.id}}. {{detalle.0.prestamo.cliente.apellido}}: {{detalle.0.prestamo.cliente.cuil}} (${{detalle.0.prestamo.valor_original|floatformat:2|intcomma}}) vence: <b>{{detalle.0.fecha|date:"d/m/Y"}}</b>
                                         <div class="mt-1 progress" style="height: 6px;">
                                             <div class="progress-bar bg-primary " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{detalle.1|floatformat:0}}%; height:6px;"> <span class="sr-only">{{detalle.1|floatformat:0}}% Complete</span></div>
                                             </div></td>
+
+                                    <input id="{{detalle.0.id}}" value="{{detalle.2}}" type="number" step="any" style="display: none;">
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -317,99 +320,102 @@
     <!-- <a id="add2" href="{% url 'Panel proveedor' %}"
     data-toggle="tooltip" data-placement="left" title="Volver al panel" 
     class="btn btn-primary btn-circle fa fa-arrow-left"></a> -->
+    <input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+    <input id="host" type="text" value="{% host %}" style="display: none;"></input>
 
-
-    <style>
-        @keyframes example {
-            0% {
-                transform: scale(0.9);
-            }
-    
-            50% {
-                transform: scale(1);
-            }
-    
-            100% {
-                transform: scale(0.9);
-            }
-        }
-    
-        #add{
-        position: fixed;
-        bottom: 40px;
-        right: 20px;
-        z-index: 10;
+<style>
+    @keyframes example {
+        0% {
+            transform: scale(0.9);
         }
 
-    
-    
-        .scrollbox {
-    
-            overflow: hidden;
+        50% {
+            transform: scale(1);
         }
-    
-        .scrollbox:hover {
-            overflow: auto;
-        }
-    
-        .scrollbox::-webkit-scrollbar {
-            width: 6px;
-        }
-    
-        .scrollbox::-webkit-scrollbar-thumb {
-            background-color: rgb(201, 201, 201);
-            border-radius: 100px;
-        }
-    
-    
-        .arrow_box:hover {
-            transform: scaleX(1.07);
-    
-        }
-    
-        .arrow_box {
-            position: absolute;
-            transform: scaleX(1);
-            transform-origin: left center;
-            transition: transform 0.7s;
-    
-            background: rgba({{proyecto.color}}, 0.5);
-            width: 130px;
-            height: 30px;
-            margin-top:-5px;
-        }
-    
-        .arrow_box:after {
-            left: 100%;
-            top: 50%;
-            border: solid transparent;
-            content: "";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-            border-color: rgba(136, 183, 213, 0);
-    
-            border-left-color: rgba({{proyecto.color}}, 0.5);
-            border-width: 14px;
-            margin-top: -14px;
-        }
-    
-        .bg-proyecto-color:nth-child(odd) {
-            border-bottom: white solid 2px;
-            background-color: rgba(160, 160, 160, 0.25);
-        }
-    
-        .bg-proyecto-color:nth-child(even) {
-            border-bottom: white solid 2px;
-            background-color: rgba(160, 160, 160, 0.1);
-        }
-    </style>
 
-{% if mensaje %}
+        100% {
+            transform: scale(0.9);
+        }
+    }
+
+    #add{
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    z-index: 10;
+    }
+
+
+
+    .scrollbox {
+
+        overflow: hidden;
+    }
+
+    .scrollbox:hover {
+        overflow: auto;
+    }
+
+    .scrollbox::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scrollbox::-webkit-scrollbar-thumb {
+        background-color: rgb(201, 201, 201);
+        border-radius: 100px;
+    }
+
+
+    .arrow_box:hover {
+        transform: scaleX(1.07);
+
+    }
+
+    .arrow_box {
+        position: absolute;
+        transform: scaleX(1);
+        transform-origin: left center;
+        transition: transform 0.7s;
+
+        background: rgba({{proyecto.color}}, 0.5);
+        width: 130px;
+        height: 30px;
+        margin-top:-5px;
+    }
+
+    .arrow_box:after {
+        left: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(136, 183, 213, 0);
+
+        border-left-color: rgba({{proyecto.color}}, 0.5);
+        border-width: 14px;
+        margin-top: -14px;
+    }
+
+    .bg-proyecto-color:nth-child(odd) {
+        border-bottom: white solid 2px;
+        background-color: rgba(160, 160, 160, 0.25);
+    }
+
+    .bg-proyecto-color:nth-child(even) {
+        border-bottom: white solid 2px;
+        background-color: rgba(160, 160, 160, 0.1);
+    }
+</style>
 
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_proveedores.js' %}"></script>
+
+{% if mensaje %}
 
 <script>
 

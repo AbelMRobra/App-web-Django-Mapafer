@@ -8,11 +8,8 @@ from ..funciones.f_prestamos import *
 def prestamos_panel(request):
 
     context = {}
-
     prestamos_validacion_cuotas()
-
     if request.method == 'POST':
-
         datos_post = request.POST.dict()
 
         if 'entregado_si' in datos_post:
@@ -26,15 +23,12 @@ def prestamos_panel(request):
             prestamo.save()
 
         if 'borrar' in datos_post:
-
             context["mensaje"] = prestamos_borrar_prestamo(int(request.POST['borrar']))
 
     data = []
-
     data_aux = Prestamos.objects.all()
 
     for d in data_aux:
-
         today = datetime.date.today()
         pagos_list = Pagos.objects.filter(prestamo = d).values_list("monto", flat = True)
 

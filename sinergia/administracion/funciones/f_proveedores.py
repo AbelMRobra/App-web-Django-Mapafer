@@ -41,13 +41,10 @@ def proveedores_calculo_deuda():
     return proveedor_datos
 
 def proveedores_deuda_info(proveedor):
-
     deudas = DeudaProveedor.objects.filter(prestamo__proveedor = proveedor).order_by("fecha")
-
     info_deudas = []
 
     for deuda in deudas:
-        
         pagos = sum(np.array(PagosProveedores.objects.filter(deuda = deuda).values_list("monto", flat=True)))
         
         if deuda.prestamo.valor_original != 0:
@@ -55,7 +52,9 @@ def proveedores_deuda_info(proveedor):
         else:
             avance = 100
 
-        info_deudas.append((deuda, avance))
+        saldo = round((1 - avance)*deuda.prestamo.valor_original, 2)
+
+        info_deudas.append((deuda, avance, saldo))
 
     return info_deudas
 
