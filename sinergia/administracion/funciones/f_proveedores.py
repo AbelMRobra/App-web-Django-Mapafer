@@ -52,7 +52,7 @@ def proveedores_deuda_info(proveedor):
         else:
             avance = 100
 
-        saldo = round((1 - avance)*deuda.prestamo.valor_original, 2)
+        saldo = round((1 - avance/100)*deuda.prestamo.valor_original, 2)
 
         info_deudas.append((deuda, avance, saldo))
 
