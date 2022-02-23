@@ -24,6 +24,7 @@ class ClientViewset(viewsets.ModelViewSet):
         try:
 
             # Creamos primero el cliente
+            print(request.data)
             request.data['empresa'] = Empresa.objects.get(nombre = request.data['empresa']).id
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)

@@ -25,6 +25,10 @@ async function service_datos_prestamo(){
     return validar_respuesta_consulta_datos(response, status)
 }
 async function service_crear_prestamo(){
+
+    sweet_alert("Procesando ..", "warning")
+
+
     const url = `${document.getElementById("host").value}api/api_prestamos/crear_prestamo/`;
     var respuesta = await fetch(url ,{
         method: "POST",

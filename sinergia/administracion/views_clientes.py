@@ -1,7 +1,7 @@
 import datetime
 import numpy as np
-from genericpath import exists
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
 from .google_calendar import crear_evento
 from .google_sheet import programa_social
@@ -85,6 +85,17 @@ def profileclient(request, id_cliente):
             pass
 
         try:
+
+            try:
+                cuil = context['data'].cuil
+                usuario = User.objects.get(username = cuil)
+                usuario.username = request.POST['cuil']
+                usuario.password = request.POST['cuil']
+                usuario.save()
+
+            except:
+                pass
+
             context['data'].nombre = request.POST['nombre']
             context['data'].apellido = request.POST['apellido']
             context['data'].direccion = request.POST['direccion']
@@ -95,6 +106,8 @@ def profileclient(request, id_cliente):
             context['data'].empleador = request.POST['empleador']
             context['data'].empresa = Empresa.objects.get(nombre = request.POST['empresa'])
             context['data'].save()
+
+            
         except:
             pass 
 

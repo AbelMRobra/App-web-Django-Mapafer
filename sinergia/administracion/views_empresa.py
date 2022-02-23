@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa
+from .models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa, Prestamos
 import datetime
 from datetime import timedelta
 from .google_sheet import programa_social_empresa
@@ -72,20 +72,11 @@ def panelempresas(request):
     return render(request, "empresa/panel_empresa.html", context)
 
 def panel_pagos(request, id_empresa):
-
     empresa = Empresa.objects.get(id = id_empresa)
-
     hoy = datetime.date.today()
-
-    if hoy.day < 13:
-        dia_auxiliar_1 = datetime.date(hoy.year, hoy.month, 1)
-        dia_auxiliar_2 = dia_auxiliar_1 - timedelta(days = 5)
-        dia_auxiliar_3 = dia_auxiliar_1 + timedelta(days = 5)
-
-    else:
-        dia_auxiliar_1 = datetime.date(hoy.year, hoy.month, 15)
-        dia_auxiliar_2 = dia_auxiliar_1 - timedelta(days = 5)
-        dia_auxiliar_3 = dia_auxiliar_1 + timedelta(days = 5)
+    dia_auxiliar_1 = datetime.date.today()
+    dia_auxiliar_2 = dia_auxiliar_1 
+    dia_auxiliar_3 = dia_auxiliar_1 + timedelta(days = 15)
 
     if request.method == 'POST':
 
@@ -112,11 +103,19 @@ def panel_pagos(request, id_empresa):
                     cuota.estado = "SI"
                     cuota.save()
     
+    total_periodo = 0
+    data_cuotas = []
+    prestamos = Prestamos.objects.all()
+    cuotas = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by("prestamo__cliente__apellido").exclude(estado = "SI")
     
-    data_filtrada = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by("prestamo__cliente__apellido").exclude(estado = "SI")
-    
+    for cuota in cuotas:
+        total_periodo += cuota.monto
+        total_cuotas = prestamos.filter(id = cuota.prestamo.id).first().cuotas
+        data_cuotas.append((cuota, total_cuotas))
+
     context = {}
-    context["data"] = data_filtrada
+    context["cuotas"] = data_cuotas
+    context['total'] = total_periodo
     context["empresa"] = empresa
     context["fecha_1"] = dia_auxiliar_2
     context["fecha_2"] = dia_auxiliar_3

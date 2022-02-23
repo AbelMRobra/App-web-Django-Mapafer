@@ -98,115 +98,39 @@
                                     <th>Prestamo</th>
                                     <th>Fecha</th>
                                     <th>Cuota</th>
+                                    <th>Monto</th>
                                     <th style="max-width: 5px;"></th>
 
 
                                 </tr>
                             </thead>
 
-                            
-
                             <tbody style="font-size: 14px;">
 
-                                {% for i in data %}
+                                {% for cuota in cuotas %}
                                 <tr>
-                                    <td>{{i.id}}</td>
-                                    <td><a href="{% url 'Administrar credito' i.prestamo.id %}">{{i.prestamo.cliente.apellido}}, {{i.prestamo.cliente.nombre}} - CUIL:{{i.prestamo.cliente.cuil}}</a></td>
-                                    <td>{{i.fecha|date:"d/m/Y"}}</td>
-                                    <td>${{i.monto|floatformat:2|intcomma}}</td>
-                                    
+                                    <td>{{cuota.0.id}}</td>
+                                    <td><a href="{% url 'Administrar credito' cuota.0.prestamo.id %}">{{cuota.0.prestamo.cliente.apellido}}, {{cuota.0.prestamo.cliente.nombre}} - CUIL:{{cuota.0.prestamo.cliente.cuil}}</a></td>
+                                    <td>{{cuota.0.fecha|date:"d/m/Y"}}</td>
+                                    <td>{{cuota.0.numero}}/{{cuota.1}}</td>
+                                    <td>${{cuota.0.monto|floatformat:2|intcomma}}</td>
                                     <td>
 
-                                        <input type="checkbox" name="cuota{{i.id}}" value="{{i.id}}" id="cuota{{i.id}}" class="filled-in chk-col-blue" checked />
-                                        <label for="cuota{{i.id}}"></label>
+                                        <input type="checkbox" name="cuota{{cuota.0.id}}" value="{{cuota.0.id}}" id="cuota{{cuota.0.id}}" class="filled-in chk-col-blue" checked />
+                                        <label for="cuota{{cuota.0.id}}"></label>
                                     </td>
-
-                                    <div class="modal fade" id="Editar{{i.0.id}}" tabindex="-1" role="dialog" aria-labelledby="Editar{{i.0.id}}"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header"
-                                                style="background-color: #2a3e52;">
-                                                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar nombre</h5>
-                                                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form method="POST" enctype="multipart/form-data">
-
-                                                        {% csrf_token %}
-
-                                                        <p class="my-2">Nombre</p>
-                                                        <div class="mb-3">
-                                                            <input type="text" name="nombre" value="{{i.0.nombre}}" class="form-control form-control-line">
-                            
-                                                        </div>
-
-                                                        <div>
-                                                            <button class="btn btn-primary" type="submit" value="{{i.0.id}}" name="id"
-                                                                style="margin-top: 10px;">Editar</button>
-
-                                                        </div>
-                                                        {{ form.as_p }}
-                                                    </form>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        </div>
-
                                 </tr>
 
-                                        <div class="modal fade" id="ModalBorrar{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalBorrar{{i.id}}"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header"
-                                                            style="background: rgb(195, 39, 181);
-                                                        background: linear-gradient(315deg, rgba(195, 39, 181,1) 0%, rgba(56,56,130,1) 22%, rgba(195, 39, 181,1) 100%);">
-                                                            <h5 class="modal-title text-light" id="exampleModalLongTitle">Borrar el perfil</h5>
-                                                            <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form method="POST" enctype="multipart/form-data">
-
-                                                                {% csrf_token %}
-                                                                <div style="text-align: left;">
-                                                                    <h3>Advertencia</h3>
-
-                                                                    <h6>Esta acción no se puede deshacer, toda la información asociada al cliente sera eliminada. Recomendamos analizar esta acción</h6>
-
-                                
-
-                                                                    <div>
-                                                                        <button class="btn btn-danger" type="submit" name="borrar" value="{{i.id}}"
-                                                                            style="margin-top: 10px;">Continuar</button>
-
-                                                                    </div>
-                                                                </div>
-
-                                                                
-                                                                {{ form.as_p }}
-                                                            </form>
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
                                 {% endfor %}
+
+                                <tr>
+                                    <td></td>
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>${{total|floatformat:2|intcomma}}</td>
+                                    <td></td>
+                                </tr>
                             </tbody>
 
                         </table>
