@@ -18,9 +18,13 @@ class UserProfile(models.Model):
 
 
 class Proveedor(models.Model):
+
     razon_social = models.CharField(max_length=200, verbose_name="Razón social")
     fantasia = models.CharField(max_length=200, verbose_name="Nombre de fantasia")
     cuit = models.CharField(max_length=200, verbose_name="CUIT", blank=True, null=True, unique=True)
+    n_cuenta = models.CharField(max_length=200, verbose_name="Nº cuenta", blank=True, null=True)
+    cbu = models.CharField(max_length=200, verbose_name="CBU", blank=True, null=True)
+    banco = models.CharField(max_length=200, verbose_name="Banco", blank=True, null=True)
     telefono = models.CharField(max_length=200, verbose_name="Telefono", blank=True, null=True)
     direccion = models.CharField(max_length=200, verbose_name="Direccion", blank=True, null=True)
     ciudad = models.CharField(max_length=200, verbose_name="Ciudad", blank=True, null=True)
@@ -203,22 +207,15 @@ class Prestamos(models.Model):
 
 
     def pagado_credito(self):
-
         pagado = sum(Pagos.objects.filter(prestamo = self).values_list("monto", flat=True))
-
         return pagado
 
 
     def saldo_credito(self):
-
         interes = sum(CuotasPrestamo.objects.filter(prestamo = self).values_list("monto_interes", flat=True))
-
         bonificacion = sum(CuotasPrestamo.objects.filter(prestamo = self).values_list("monto_bonificado", flat=True))
-
         pagos = sum(Pagos.objects.filter(prestamo = self).values_list("monto", flat=True))
-
         saldo = self.monto - pagos + interes + bonificacion
-
         return saldo
 
     class Meta:

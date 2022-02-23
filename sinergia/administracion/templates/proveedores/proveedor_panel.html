@@ -61,7 +61,7 @@
                                                     class="fa fa-angle-right mr-2"></i>Borrar</a>
                                         </div>
                                     </div><a href="{% url 'Pago proveedor' i.0.id %}">{{i.0.fantasia}}</a></td>
-                                    <td style="text-align: center;">{{i.0.fantasia}}</td>
+                                    <td style="text-align: center; display: none;">{{i.0.fantasia}}</td>
                                     <td style="text-align: center;">{{i.1}}</td>
                                     <td>${{i.2|floatformat:2|intcomma}}</td>
                                     <td>${{i.3|floatformat:2|intcomma}}</td>
