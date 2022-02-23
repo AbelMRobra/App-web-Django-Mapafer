@@ -77,7 +77,7 @@
                                                         <div class="mb-3">
                                                             <select name="id_deuda" class="form-control form-control">
                                                                 {% for detalle in deudas %}
-                                                                <option value="{{detalle.0.id}}">Deuda numero {{detalle.0.id}}</option>
+                                                                <option value="{{detalle.0.id}}">ID: {{detalle.0.id}} - {{detalle.0.prestamo.cliente.apellido}}: {{detalle.0.prestamo.cliente.cuil}} </option>
                                                                 {% endfor %}
                                                             </select>
                                 
@@ -109,6 +109,8 @@
                     <div class="card-body">
                         <h4 class="card-title font-bold"></span> Datos de la empresa</h4>
         
+                        <address id = "datos_2">{{proveedor.banco}} {{proveedor.n_cuenta}}, {{proveedor.cbu}}  
+                        </address>
                         <address id = "datos_2">{{proveedor.direccion}} {{proveedor.ciudad}}, {{proveedor.provincia}} 
                             <br/>
                             <abbr title="Phone">Tel: </abbr> {{proveedor.telefono}} / <abbr title="Phone">Ciut: </abbr> {{proveedor.cuit}}  
@@ -171,8 +173,6 @@
                                                          <h3>Advertencia</h3>
  
                                                          <h6>Esta acción no se puede deshacer, toda la información sera eliminada de la base de datos</h6>
- 
-                     
  
                                                          <div>
                                                              <button class="btn btn-danger" type="submit" name="id_pago_borrar" value="{{i.id}}"

@@ -42,25 +42,21 @@ def proveedor_editar(request, id_proveedor):
     return render(request, "proveedores/proveedores_editar.html", context)
 
 def proveedor_pagos(request, id_proveedor):
-
     proveedor = Proveedor.objects.get(id = id_proveedor)
     context = {}
 
     if request.method == 'POST':
 
         try:
-
             context['mensaje'] = proveedores_borrar_pagos(request.POST['id_pago_borrar'])
 
         except:
 
             try:
-
                 context['mensaje'] = proveedores_editar_pagos(request.POST['id_pago'], request.POST['id_deuda'], request.POST['fecha'], request.POST['monto'])
                 
 
             except:
-
                 context['mensaje'] = proveedores_agregar_pagos(proveedor,request.POST['id_deuda'], request.POST['fecha'], request.POST['monto'])
 
     # Información para render

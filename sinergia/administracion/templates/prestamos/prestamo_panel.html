@@ -34,7 +34,6 @@
                                 <tr>
 
                                     <th>Cliente</th>
-                                    <th>ID</th>
                                     <th>Fecha</th>
                                     <th>Monto</th>
                                     <th>N°c</th>
@@ -67,7 +66,6 @@
                                     </div> <a href="{% url 'Administrar credito' i.0.id %}"> {{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
                                         <h6 class="card-subtitle ml-4" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</h6>
                                     </td>
-                                    <td>{{i.0.id}}</td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>${{i.0.monto|floatformat:2|intcomma}}</td>
                                     <td>{{i.0.cuotas}} - {{i.0.regimen|lower|capfirst}}</td>
