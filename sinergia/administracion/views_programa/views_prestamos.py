@@ -75,7 +75,7 @@ def prestamos_panel(request):
 
             prox_vencimiento = fecha_aux 
         
-        data.append((d, pagos, saldo, prox_vencimiento, mora, avance, int(d.monto/d.cuota)))
+        data.append((d, pagos, saldo, prox_vencimiento, mora, avance, int(d.monto/d.cuotas)))
 
     context["data"] = data
     return render(request, "prestamos/prestamo_panel.html", context)
