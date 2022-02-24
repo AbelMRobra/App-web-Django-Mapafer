@@ -22,9 +22,7 @@ class ClientViewset(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
 
         try:
-
             # Creamos primero el cliente
-            print(request.data)
             request.data['empresa'] = Empresa.objects.get(nombre = request.data['empresa']).id
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -32,7 +30,6 @@ class ClientViewset(viewsets.ModelViewSet):
             headers = self.get_success_headers(serializer.data)
         
         except:
-
             if len(Clientes.objects.filter(usuario__user__cuil = request.data['cuil'])) > 0:
                 response = {'message': 'El cuil se encuentra en uso'}
             else:
