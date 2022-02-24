@@ -13,7 +13,7 @@ function traer_nombre () {
 
 async function modificar_tasa() {
 
-    const url = `${document.getElementById("host").value}api/api_tasas/${document.getElementById("campo_id_tasa").value}/`;
+    const url = `${document.getElementById("host").value}api/api_tasas/1/`;
 
     var nombre = traer_nombre();
 
@@ -25,7 +25,6 @@ async function modificar_tasa() {
         },
 
         body: JSON.stringify({
-            'nombre' : nombre,
             'valor_tasa' : document.getElementById("campo_valor_tasa").value,
 
         })
