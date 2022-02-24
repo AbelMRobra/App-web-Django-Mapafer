@@ -58,8 +58,7 @@ def prestamos_panel(request):
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
 
             prox_vencimiento = fecha_aux 
-            data.append((d, pagos, saldo, prox_vencimiento, mora, avance))
-        
+       
         if d.regimen == "MENSUAL":
             cuotas_pasadas = 0
             fecha_aux = fecha_primer_pago
@@ -75,7 +74,8 @@ def prestamos_panel(request):
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
 
             prox_vencimiento = fecha_aux 
-            data.append((d, pagos, saldo, prox_vencimiento, mora, avance))
+        
+        data.append((d, pagos, saldo, prox_vencimiento, mora, avance, int(d.monto/d.cuota)))
 
     context["data"] = data
     return render(request, "prestamos/prestamo_panel.html", context)

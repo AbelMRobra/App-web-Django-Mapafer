@@ -39,7 +39,7 @@
                                     <th>Score</th>
                                     <th>Estado</th>
                                     <th>Email</th>
-                                    <th>Cuit</th>
+                                    <th>Cuil</th>
                                     <th>Empresa</th>
                                 </tr>
                             </thead>
@@ -64,7 +64,7 @@
                                     <td {% if i.score < 600 %} class = "text-danger" {% endif %}>{{i.score}}</td>
                                     <td> {{i.estado_cliente}} </td>
                                     <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
-                                    <td>{{i.cuit}}</td>                            
+                                    <td>{{i.cuil}}</td>                            
                                     <td>{% if i.empresa %}{{i.empresa}} {% else %}-{% endif %}</td>
                                 </tr>
                                 {% endfor %}
