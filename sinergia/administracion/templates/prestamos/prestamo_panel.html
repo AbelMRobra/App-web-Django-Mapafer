@@ -39,7 +39,9 @@
                                     <th style="display: none;">Cuil</th>
                                     <th>Fecha</th>
                                     <th>Monto</th>
-                                    <th>N°c</th>
+                                    <th class='notexport'>N°c</th>
+                                    <th style="display: none;">Cantidad cuotas</th>
+                                    <th style="display: none;">Regimen</th>
                                     <th class='notexport'>Pagado</th>
                                     <th style="display: none;">Pagado</th>
                                     <th style="display: none;">Cuota</th>
@@ -77,6 +79,8 @@
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>${{i.0.monto|floatformat:0|intcomma}}</td>
                                     <td>{{i.0.cuotas}} - {{i.0.regimen|lower|capfirst}}</td>
+                                    <td style="display: none;">{{i.0.cuotas}}</td>
+                                    <td style="display: none;">{{i.0.regimen|lower|capfirst}}</td>
                                     <td>${{i.1|floatformat:0|intcomma}}
                                         <div class="progress" style="height: 6px;">
                                             <div class="progress-bar bg-primary " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{i.5}}%; height:6px;"> <span class="sr-only">50% Complete</span></div>
