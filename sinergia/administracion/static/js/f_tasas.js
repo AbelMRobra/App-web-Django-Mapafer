@@ -14,11 +14,8 @@ function traer_nombre () {
 async function modificar_tasa() {
 
     const url = `${document.getElementById("host").value}api/api_tasas/1/`;
-
-    var nombre = traer_nombre();
-
     var respuesta = await fetch(url ,{
-        method: "PUT",
+        method: "PATCH",
         headers: {
             'X-CSRFToken' : `${document.getElementById("token").value}`,
             'Content-Type': 'application/json',
@@ -38,7 +35,6 @@ async function modificar_tasa() {
 function validar_respuesta(response, status){
     
     if (status >= 200 && status <300){
-
         sweet_alert("Tasa editada", "success");
 
         // for (let i=0; i <= data_tasas.length -1; i++){
