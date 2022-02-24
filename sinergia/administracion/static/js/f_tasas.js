@@ -41,22 +41,18 @@ function validar_respuesta(response, status){
 
         sweet_alert("Tasa editada", "success");
 
+        // for (let i=0; i <= data_tasas.length -1; i++){
+        //     if (data_tasas[i].id == response.id) {
+        //         data_tasas[i].valor_tasa = response.valor_tasa; 
+        //     } 
 
-        for (let i=0; i <= data_tasas.length -1; i++){
+        // }
 
-            if (data_tasas[i].id == response.id) {
-                data_tasas[i].valor_tasa = response.valor_tasa;
+        // var option = document.getElementById(`option_formulario_${response.id}`);
+        // option.value = response.valor_tasa;
+        // option.text = `${response.nombre} (${response.valor_tasa}%)`;
 
-                
-            } 
-
-        }
-
-        var option = document.getElementById(`option_formulario_${response.id}`);
-        option.value = response.valor_tasa;
-        option.text = `${response.nombre} (${response.valor_tasa}%)`;
-
-        edicion_tasas_valor();
+        // edicion_tasas_valor();
     } else {
         sweet_alert("Hubo un problema!", "warning")
     }
@@ -64,7 +60,6 @@ function validar_respuesta(response, status){
 
 function edicion_tasas_valor() {
 
-    
     var campo_nombre_tasa = document.getElementById("campo_nombre_tasa");
     var campo_valor_tasa = document.getElementById("campo_valor_tasa");
     var campo_id_tasa = document.getElementById("campo_id_tasa");
