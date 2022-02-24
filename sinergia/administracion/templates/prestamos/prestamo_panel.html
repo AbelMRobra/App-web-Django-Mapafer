@@ -33,7 +33,10 @@
                             <thead class="font-bold" style="font-size: 14px;">
                                 <tr>
 
-                                    <th>Cliente</th>
+                                    <th class='notexport'>Cliente</th>
+                                    <th style="display: none;">Cliente</th>
+                                    <th style="display: none;">Empresa</th>
+                                    <th style="display: none;">Cuit</th>
                                     <th>Fecha</th>
                                     <th>Monto</th>
                                     <th>N°c</th>
@@ -66,6 +69,9 @@
                                     </div> <a href="{% url 'Administrar credito' i.0.id %}"> {{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</a> 
                                         <h6 class="card-subtitle ml-4" style="font-size: 12px; margin-top: 5px;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</h6>
                                     </td>
+                                    <td style="display: none;">{{i.0.cliente.apellido}}, {{i.0.cliente.nombre}}</td>
+                                    <td style="display: none;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</td>
+                                    <td style="display: none;">{{i.0.cliente.cuit}}</td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>${{i.0.monto|floatformat:2|intcomma}}</td>
                                     <td>{{i.0.cuotas}} - {{i.0.regimen|lower|capfirst}}</td>
@@ -251,6 +257,9 @@ data-toggle="tooltip" data-placement="left" title="Agregar un nuevo credito"
                 extend: 'excelHtml5',
                 title: 'Cartera activa',
                 className: "btn btn-primary",
+                exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
 
                 init: function(api, node, config) {
                     $(node).removeClass('dt-button buttons-excel buttons-html5')
