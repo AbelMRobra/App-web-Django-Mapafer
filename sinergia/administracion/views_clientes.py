@@ -26,8 +26,7 @@ def clientes(request):
         #         d.save()
 
     context = {}
-    context["data"] = Clientes.objects.all().order_by("nombre")
-
+    context["data"] = Clientes.objects.all().order_by("apellido")
     cons_prestamo = Prestamos.objects.all()
 
     for c in context["data"]:

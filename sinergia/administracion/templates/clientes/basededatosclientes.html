@@ -39,7 +39,7 @@
                                     <th>Score</th>
                                     <th>Estado</th>
                                     <th>Email</th>
-                                    <th>Telefono</th>
+                                    <th>Cuit</th>
                                     <th>Empresa</th>
                                 </tr>
                             </thead>
@@ -59,12 +59,12 @@
                                             </div>
                                         </div>
                                         
-                                        <a href="{% url 'Perfil del cliente' i.id %}">{{i.nombre}}, {{i.apellido}}</a></td>
-                                    <td style="display: none;">{{i.nombre}}, {{i.apellido}}</td>
+                                        <a href="{% url 'Perfil del cliente' i.id %}">{{i.apellido}}, {{i.nombre}}</a></td>
+                                    <td style="display: none;">{{i.apellido}}, {{i.nombre}}</td>
                                     <td {% if i.score < 600 %} class = "text-danger" {% endif %}>{{i.score}}</td>
                                     <td> {{i.estado_cliente}} </td>
                                     <td>{% if i.email %}{{i.email}}{% else %}Sin registrar{% endif %}</td>
-                                    <td>{% if i.telefono %}{{i.telefono|floatformat:0}} {% else %}-{% endif %}</td>                            
+                                    <td>{{i.cuit}}</td>                            
                                     <td>{% if i.empresa %}{{i.empresa}} {% else %}-{% endif %}</td>
                                 </tr>
                                 {% endfor %}
