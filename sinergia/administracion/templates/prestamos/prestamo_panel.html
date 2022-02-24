@@ -75,18 +75,18 @@
                                     <td style="display: none;">{% if i.0.cliente.empresa %}{{i.0.cliente.empresa}}{% endif %}</td>
                                     <td style="display: none;">{{i.0.cliente.cuil}}</td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
-                                    <td>${{i.0.monto|floatformat:2|intcomma}}</td>
+                                    <td>${{i.0.monto|floatformat:0|intcomma}}</td>
                                     <td>{{i.0.cuotas}} - {{i.0.regimen|lower|capfirst}}</td>
-                                    <td>${{i.1|floatformat:2|intcomma}}
+                                    <td>${{i.1|floatformat:0|intcomma}}
                                         <div class="progress" style="height: 6px;">
                                             <div class="progress-bar bg-primary " role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{i.5}}%; height:6px;"> <span class="sr-only">50% Complete</span></div>
                                             </div>
                                     </td>
-                                    <td style="display: none;">${{i.1|floatformat:2|intcomma}}</td>
-                                    <td style="display: none;">${{i.1|floatformat:2|intcomma}}</td>
+                                    <td style="display: none;">${{i.1|floatformat:0|intcomma}}</td>
+                                    <td style="display: none;">${{i.1|floatformat:0|intcomma}}</td>
 
                                     {% if i.4 > 0.01 %}
-                                    <td class="text-danger">$ {{i.4|floatformat:2|intcomma}}</td>
+                                    <td class="text-danger">$ {{i.4|floatformat:0|intcomma}}</td>
                                     {% else %}
                                     <td>$ 0.00 <i
                                         data-toggle="tooltip" data-placement="top" title="No presenta deuda"
@@ -95,7 +95,7 @@
 
                                     {% if i.2 > 0.01 %}
 
-                                    <td>${{i.2|floatformat:2|intcomma}}</td>
+                                    <td>${{i.2|floatformat:0|intcomma}}</td>
 
                                     {% else %}
                                     <td>$ 0.00 <i
