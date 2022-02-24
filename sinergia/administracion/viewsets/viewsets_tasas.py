@@ -22,19 +22,19 @@ class TasasViewset(viewsets.GenericViewSet, mixins.UpdateModelMixin):
         self.perform_update(serializer)
 
         tasa_1 = TasaParaCreditos.objects.get(id = 2)
-        tasa_1.valor_tasa = instance*1.2
+        tasa_1.valor_tasa = instance.valor_tasa*1.2
         tasa_1.save()
 
         tasa_2 = TasaParaCreditos.objects.get(id = 3)
-        tasa_2.valor_tasa = instance*1.1
+        tasa_2.valor_tasa = instance.valor_tasa*1.1
         tasa_2.save()
 
         tasa_3 = TasaParaCreditos.objects.get(id = 4)
-        tasa_3.valor_tasa = instance*0.9
+        tasa_3.valor_tasa = instance.valor_tasa*0.9
         tasa_3.save()
 
         tasa_4 = TasaParaCreditos.objects.get(id = 5)
-        tasa_4.valor_tasa = instance*0.8
+        tasa_4.valor_tasa = instance.valor_tasa*0.8
         tasa_4.save()
 
         if getattr(instance, '_prefetched_objects_cache', None):
