@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Clientes, Proveedor, Prestamos, Pagos, Empresa, CuotasPrestamo, Citas, DeudaProveedor, \
-    UserProfile
+    UserProfile, TasaParaCreditos
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -51,6 +51,12 @@ class PagosAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ('fecha', 'monto')
     resources_class = PagosResource
 
+
+class TasaParaCreditosAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('id', 'nombre', 'valor_tasa')
+
+
+admin.site.register(TasaParaCreditos, TasaParaCreditosAdmin)
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Clientes, ClientesAdmin)
 admin.site.register(Proveedor, ProveedorAdmin)

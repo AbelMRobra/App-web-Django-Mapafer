@@ -122,16 +122,7 @@
             <div class="modal-body">
    
                     <div style="text-align: left;">
-                        <h3>Ingese los valores</h3>
-
-                        <p class="my-2">Nombre</p>
-                        <div class="mb-3">
-                            <input id="campo_nombre_newtasa" 
-                            required type="text" name="nombre" 
-                            placeholder="Nombre de referencia" 
-                            class="form-control form-control-line">
-
-                        </div>
+                        <h3>Modifique el valor</h3>
 
                         <p class="my-2">Valor</p>
                         <div class="mb-3">
@@ -139,68 +130,19 @@
                             required type="number" step="any" n
                             ame="valor" placeholder="Valor porcentual" 
                             class="form-control form-control-line">
-
                         </div>
 
 
                         <div class="text-right">
-                            <button class="btn btn-success btn-circle fa fa-plus" 
-                            data-toggle="tooltip" data-placement="top" title="Agregar tasa"
-                            onclick="crear_tasa()"
+                            <button class="btn btn-success btn-circle fa fa-cloud-upload" 
+                            data-toggle="tooltip" data-placement="top" title="Modificar precio base"
+                            onclick="edicion_tasas_valor()"
                             style="margin-top: 10px;"></button>
 
                         </div>
                     </div>
 
-                    <div class="row d-flex" style="text-align: left;">
 
-                        <div class="col-12">
-                            <h3>Modificar una tasa</h3>
-                        </div>
-                        
-
-                        <div class="col-8">
-
-                            <p class="my-2">Tasa</p>
-                            <div class="mb-3">
-                                <select id="campo_nombre_tasa" onchange="edicion_tasas_valor()" class="form-control form-control">
-                                    {% for tasa in tasas %}
-                                    <option id = "modal_option_{{tasa.id}}" value="{{tasa.id}}">{{tasa.nombre}}</option>
-                                    {% endfor %}
-
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <div class="col-4">
-
-                            <p class="my-2">Valor</p>
-                            <div class="mb-3">
-                                <input id="campo_valor_tasa" required type="number" step="any" placeholder="Valor porcentual" class="form-control form-control-line">
-                                <input id="campo_id_tasa" type="number" style="display: none;">
-                            </div>
-
-                        </div>
-
-                        <div class="text-center col-12">
-                            <button 
-                            class="btn btn-success btn-circle fa fa-pencil-square-o" 
-                            data-toggle="tooltip" data-placement="top" title="Editar el valor de la tasa seleccionada"
-                            onclick="modificar_tasa()" 
-                            style="margin-top: 10px;"></button>
-
-                            <button 
-                            data-toggle="tooltip" data-placement="top" title="Eliminar tasa seleccionada"
-                            class="btn btn-danger btn-circle fa fa-trash-o" 
-                            onclick="eliminar_tasa()" 
-
-                            style="margin-top: 10px;"></button>
-
-                        </div>
-
-
-                    </div>
             </div>
 
         </div>
