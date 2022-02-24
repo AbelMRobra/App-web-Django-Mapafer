@@ -5,11 +5,9 @@ from ..funciones.f_estado_cliente import *
 from django.db.models import Q
 
 def prestamos_validacion_cuotas():
-
     cuotas_validar = CuotasPrestamo.objects.filter(Q(monto_interes = None)|Q(monto_bonificado = None))
 
     for cuota in cuotas_validar:
-
         if cuota.monto_interes == None:
             cuota.monto_interes = 0
             cuota.save()
@@ -19,11 +17,9 @@ def prestamos_validacion_cuotas():
             cuota.save()
 
 def prestamos_cuotas_pagos(id_prestamo):
-
     prestamo = Prestamos.objects.get(id = id_prestamo)
     cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo)
     pagos = sum(np.array(Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat=True)))
-    print(pagos)
 
     for cuota in cuotas:
         monto_cuota = cuota.monto + cuota.monto_interes - cuota.monto_bonificado

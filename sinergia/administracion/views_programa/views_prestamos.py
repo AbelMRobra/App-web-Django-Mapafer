@@ -89,13 +89,10 @@ def prestamos_credito_cargado(request, id_credito_nuevo, id_credito_anterior):
     return render(request, "prestamos/prestamo_credito_cargado.html", context)
 
 def prestamos_agregar(request):
-
     estado_del_calculo = 0
-    
     context = {}
 
     if request.method == 'POST':
-
         datos_post = request.POST.dict()
 
         if 'carga_tasa' in datos_post:
@@ -284,23 +281,18 @@ def prestamos_refinanciar(request):
 
 def prestamos_detalle_completo(request, id_credito):
 
+    prestamos_cuotas_pagos(id_credito)
     context = {}
-
     credito = Prestamos.objects.get(id = id_credito)
-
     context['credito'] = credito
 
     if request.method == 'POST':
-        
         id_proveedor = request.POST['proveedor'].split("-")[0]
         proveedor = Proveedor.objects.get(id = int(id_proveedor))
-
         context["mensaje"] = prestamos_editar_credito(id_credito, proveedor, request.POST['fecha'], 
         request.POST['primera_cuota'], request.POST['valor_original'], request.POST['presupuesto_cliente'], 
         request.POST['monto'], request.POST['cuotas'])
-
         context['credito'] = Prestamos.objects.get(id = id_credito)
-
 
     cuotas = CuotasPrestamo.objects.filter(prestamo = credito)
     pagos = Pagos.objects.filter(prestamo = credito)
