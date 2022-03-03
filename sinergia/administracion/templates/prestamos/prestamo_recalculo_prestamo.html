@@ -39,7 +39,9 @@
                             <select id="credito" class="form-control form-control" onchange="service_datos_refinanciar()">
                                 <option value="0" style="display: none;">Elija un credito</option>
                                 {% for credito in creditos %}
+                                {% if credito.saldo_credito > 0 %}
                                 <option value="{{credito.id}}">{{credito.cliente.apellido}}, {{credito.cliente.nombre}}: Monto: ${{credito.monto|floatformat:2|intcomma}} / Pagado: ${{credito.pagado_credito|floatformat:2|intcomma}} / Saldo:  ${{credito.saldo_credito|floatformat:2|intcomma}}  </option>
+                                {% endif %}
                                 {% endfor %}
                             </select>
 
@@ -59,7 +61,7 @@
                             <label class="mt-2"  for="">Tasa de interes anual (%)</label>
                             <select id="tasa" class="form-control form-control" onchange="service_datos_refinanciar()">
                                 {% for tasa in tasas %}
-                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
+                                <option value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
                                 {% endfor %}
                             </select>
                             <label class="mt-2" for="">Monto inicial</label>

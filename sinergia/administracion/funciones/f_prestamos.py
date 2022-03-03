@@ -24,10 +24,10 @@ def prestamos_cuotas_pagos(id_prestamo):
     for cuota in cuotas:
         monto_cuota = cuota.monto + cuota.monto_interes - cuota.monto_bonificado
 
-        if pagos > monto_cuota:
+        if pagos > int(monto_cuota):
             cuota.estado = "SI"
             pagos -= monto_cuota
-        elif pagos > 0:
+        elif pagos > 0 and pagos > 1:
             cuota.estado = "PARCIAL"
             pagos = 0
         else:
@@ -35,7 +35,6 @@ def prestamos_cuotas_pagos(id_prestamo):
         
         cuota.save()
 
-    
 def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, valor_original, presupuesto_cliente, monto, cuotas, regimen):
 
     try:
@@ -143,9 +142,7 @@ def prestamos_calculadora(tasa, monto_inicial, periodo_gracia, regimen, cantidad
     return [round(monto_prestamo, 2), round(importe_cuota, 2), int(cantidad_cuotas)]
 
 def prestamos_refinanciaminto_calculo(id_prestamo, tasa_deuda, tasa_saldo):
-
     prestamo = Prestamos.objects.get(id = id_prestamo)
-
     cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo).exclude(estado = "SI")
 
     monto_deuda_actual = 0
@@ -160,17 +157,14 @@ def prestamos_refinanciaminto_calculo(id_prestamo, tasa_deuda, tasa_saldo):
     for cuota in cuotas:
 
         if cuota.fecha < hoy:
-
             tasa = tasa_deuda/100
             tasa_ajustada = (1 + tasa)**(1/365) - 1
             dias = (hoy - cuota.fecha).days
         
         else:
-
             tasa = tasa_saldo/100
             tasa_ajustada = (1 + tasa)**(1/365) - 1
             dias = (hoy - cuota.fecha).days
-
 
         monto = cuota.monto 
         monto_ajustado = npf.fv(tasa_ajustada, dias, 0, -monto)
@@ -185,7 +179,7 @@ def prestamos_refinanciaminto_calculo(id_prestamo, tasa_deuda, tasa_saldo):
             monto_saldo_actual += monto_ajustado
             cuotas_saldo += 1
 
-    return {"DeudaHistorica": monto_deuda_historica, "SaldoHistorica":monto_saldo_historica, "DeudaActual": monto_deuda_actual, "SaldoActual":monto_saldo_actual, "CantidadDeuda": cuotas_deuda, "CantidadSaldo": cuotas_saldo}
+    return {"DeudaHistorica": round(monto_deuda_historica, 2), "SaldoHistorica": round(monto_saldo_historica, 2), "DeudaActual": round(monto_deuda_actual, 2), "SaldoActual": round(monto_saldo_actual, 2), "CantidadDeuda": cuotas_deuda, "CantidadSaldo": cuotas_saldo}
 
 def prestamos_cancelar_refinanciamiento(id_prestamo, tasa_deuda, tasa_saldo):
 

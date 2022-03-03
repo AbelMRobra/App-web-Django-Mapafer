@@ -37,6 +37,7 @@ class Proveedor(models.Model):
     def __str__(self):
         return self.razon_social
 
+
 class TasaParaCreditos(models.Model):
 
     nombre = models.CharField(max_length=200, verbose_name="Nombre tasa")

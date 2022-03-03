@@ -5,8 +5,6 @@ from rest_framework.decorators import action, permission_classes
 
 from administracion.models import Prestamos, Proveedor, Clientes, TasaParaCreditos
 from administracion.serializers import serializers_prestamos
-
-
 from ..funciones.f_prestamos import *
 
 class PrestamosViewset(viewsets.ModelViewSet):
@@ -21,8 +19,6 @@ class PrestamosViewset(viewsets.ModelViewSet):
         try:
             prestamo = Prestamos.objects.get(id = pk)
             valor_cuota = prestamo.monto/prestamo.cuotas
-  
-
             response = {"mensaje": "Success",
             "cliente": f"{prestamo.cliente.nombre}, {prestamo.cliente.apellido}",
             "cuota": round(valor_cuota, 2),
@@ -50,7 +46,7 @@ class PrestamosViewset(viewsets.ModelViewSet):
             datos_calculadora = prestamos_calculadora(tasa, monto_inicial, periodo_gracia, regimen, cantidad_cuotas)
 
             response = {}
-            response["monto"] = datos_calculadora[0]
+            response["monto"] = round(datos_calculadora[0], 2)
             response["monto_cuota"] = datos_calculadora[1]
             response["cuota"] = datos_calculadora[2]
             response["simulacion"] = []
@@ -93,19 +89,17 @@ class PrestamosViewset(viewsets.ModelViewSet):
                 datos_calculadora = ["", "", ""]
 
             response = {}
-            response["monto"] = datos_calculadora[0]
+            response["monto"] = round(datos_calculadora[0], 2)
             response["monto_cuota"] = datos_calculadora[1]
             response["cuota"] = datos_calculadora[2]
             response["refinancimiento"] = datos_refinanciamiento,
-            response["monto_original"] = round(credito.monto, 2)
+            response["monto_original"] = round(datos_refinanciamiento['DeudaActual'] + datos_refinanciamiento['SaldoActual'], 2)
             response["simulacion"] = []
 
             if request.data['primera_cuota'] != "":
                 primera_cuota = str(request.data['primera_cuota'])
                 print(primera_cuota)
                 response["simulacion"] = simular_cuotas_prestamo(regimen, cantidad_cuotas, primera_cuota)
-
-            
 
             return Response(response, status=status.HTTP_200_OK)
 
@@ -116,7 +110,6 @@ class PrestamosViewset(viewsets.ModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def crear_prestamo(self, request):
-
         try:
                 
             tasa = float(request.data['tasa'])
@@ -151,10 +144,7 @@ class PrestamosViewset(viewsets.ModelViewSet):
     def crear_prestamo_refinanciado(self, request):
 
         try:
-
-    
             string_proveedor = request.data['proveedor'].split("-")
-
             credito = Prestamos.objects.get(id = request.data["credito"])
             tasa_deuda = TasaParaCreditos.objects.get(id = request.data["tasa_deuda"]).valor_tasa
             tasa_saldo = TasaParaCreditos.objects.get(id = request.data["tasa_saldo"]).valor_tasa
@@ -186,7 +176,6 @@ class PrestamosViewset(viewsets.ModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def consulta_user(self, request):
-
         usuario = Clientes.objects.get(usuario__user__id = request.data['id'])
         prestamo = Prestamos.objects.filter(cliente = usuario).order_by("-id")
         response = {}

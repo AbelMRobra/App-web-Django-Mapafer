@@ -10,8 +10,6 @@ from administracion.models import Clientes, Empresa, UserProfile
 from rest_framework.settings import api_settings
 
 
-
-
 class ClientViewset(viewsets.ModelViewSet):
 
     queryset = Clientes.objects.all()
