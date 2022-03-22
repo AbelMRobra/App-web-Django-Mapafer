@@ -1,4 +1,6 @@
 env/
+token/
+token files/
 my_env/
 __pycache__/
 *.sqlite3
