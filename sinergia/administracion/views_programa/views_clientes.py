@@ -2,10 +2,10 @@ import datetime
 import numpy as np
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
-from .google_calendar import crear_evento
-from .google_sheet import programa_social
-from .funciones.f_estado_cliente import *
+from ..models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo
+from ..google_calendar import crear_evento
+from ..google_sheet import programa_social
+from ..funciones.f_estado_cliente import *
 
 def clientes(request):
 

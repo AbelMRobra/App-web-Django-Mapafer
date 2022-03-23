@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa, Prestamos
+from ..models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa, Prestamos
 import datetime
 from datetime import timedelta
-from .google_sheet import programa_social_empresa
+from ..google_sheet import programa_social_empresa
 
 def perfilempresa(request, id_empresa):
 
