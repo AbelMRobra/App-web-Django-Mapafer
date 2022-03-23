@@ -61,7 +61,7 @@
                             <label class="mt-2"  for="">Tasa de interes anual (%)</label>
                             <select id="tasa" class="form-control form-control" onchange="service_datos_refinanciar()">
                                 {% for tasa in tasas %}
-                                <option value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
+                                <option value="{{tasa.id}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
                                 {% endfor %}
                             </select>
                             
@@ -71,7 +71,7 @@
 
                             <label class="mt-2" for="">Monto extra</label>
                             <input  id="monto_extra" type="number" class="form-control form-control"
-                                step="any" value="0">
+                                step="any" value="0" onblur="service_datos_refinanciar()">
 
                             <label class="mt-2" for="">Cuotas</label>
                             <input  id="cuotas" type="number" class="form-control form-control"

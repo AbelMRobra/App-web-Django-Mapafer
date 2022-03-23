@@ -77,8 +77,8 @@ class PrestamosViewset(viewsets.ModelViewSet):
                 credito = False
                 datos_refinanciamiento = False
 
-            tasa = float(request.data['tasa'])
-            monto_inicial = float(request.data['monto_incial'])
+            tasa = float(TasaParaCreditos.objects.get(id = request.data["tasa"]).valor_tasa)
+            monto_inicial = float(request.data['monto_incial']) + float(request.data['monto_extra'])
             periodo_gracia = int(request.data['peridos_gracia'])
             regimen = request.data['regimen']
             cantidad_cuotas = int(request.data['cantidad_cuotas'])
@@ -98,7 +98,6 @@ class PrestamosViewset(viewsets.ModelViewSet):
 
             if request.data['primera_cuota'] != "":
                 primera_cuota = str(request.data['primera_cuota'])
-                print(primera_cuota)
                 response["simulacion"] = simular_cuotas_prestamo(regimen, cantidad_cuotas, primera_cuota)
 
             return Response(response, status=status.HTTP_200_OK)
@@ -143,36 +142,38 @@ class PrestamosViewset(viewsets.ModelViewSet):
     @action(methods=['POST'], detail=False)
     def crear_prestamo_refinanciado(self, request):
 
-        try:
+        # try:
             string_proveedor = request.data['proveedor'].split("-")
             credito = Prestamos.objects.get(id = request.data["credito"])
             tasa_deuda = TasaParaCreditos.objects.get(id = request.data["tasa_deuda"]).valor_tasa
             tasa_saldo = TasaParaCreditos.objects.get(id = request.data["tasa_saldo"]).valor_tasa
-            tasa = TasaParaCreditos.objects.get(id = request.data["tasa"]).valor_tasa
+            tasa = float(TasaParaCreditos.objects.get(id = request.data["tasa"]).valor_tasa)
             cliente = credito.cliente
             proveedor = Proveedor.objects.get(id = string_proveedor[0])
             fecha = request.data['fecha']
             primera_cuota = request.data['primera_cuota']
-            monto_inicial = float(request.data['monto_incial'])
+            monto_valor_actual = float(request.data['monto_inicial'])
+            monto_extra = float(request.data['monto_extra'])
+            monto_total = monto_valor_actual + monto_extra
             presupuesto_cliente = float(request.data['presupuesto_cliente'])
             periodo_gracia = int(request.data['peridos_gracia'])
             regimen = request.data['regimen']
             cantidad_cuotas = int(request.data['cantidad_cuotas'])
-            monto = prestamos_calculadora(tasa, monto_inicial, periodo_gracia, regimen, cantidad_cuotas)[0]
+            monto_interes = prestamos_calculadora(tasa, monto_total, periodo_gracia, regimen, cantidad_cuotas)[0]
             
             old_prestamo = prestamos_cancelar_refinanciamiento(credito.id, tasa_deuda, tasa_saldo)
             nuevo_prestamo = prestamos_agregar_credito(cliente, proveedor, fecha, 
-                primera_cuota, monto_inicial, presupuesto_cliente, 
-                monto, cantidad_cuotas, regimen)
+                primera_cuota, monto_total, presupuesto_cliente, 
+                monto_interes, cantidad_cuotas, regimen, monto_valor_actual=monto_valor_actual)
                 
             response = {"message": "success"}
 
             return Response(response, status=status.HTTP_200_OK)
 
-        except:
+        # except:
 
-            response = {"mensaje": "No encontrado"}
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        #     response = {"mensaje": "No encontrado"}
+        #     return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=False)
     def consulta_user(self, request):

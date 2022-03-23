@@ -187,6 +187,7 @@ def prestamos_refinanciar(request):
     context["paso_1"] = False
     context['creditos'] = Prestamos.objects.all().order_by("cliente__apellido")
     context["tasas"] = TasaParaCreditos.objects.all()
+    context["proveedores"] = Proveedor.objects.all()
 
     if request.method == 'POST':
 

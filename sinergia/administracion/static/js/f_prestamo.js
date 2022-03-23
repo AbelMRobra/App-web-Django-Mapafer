@@ -28,7 +28,6 @@ async function service_crear_prestamo(){
 
     sweet_alert("Procesando ..", "warning")
 
-
     const url = `${document.getElementById("host").value}api/api_prestamos/crear_prestamo/`;
     var respuesta = await fetch(url ,{
         method: "POST",
@@ -73,6 +72,7 @@ async function service_datos_refinanciar(){
             'tasa_saldo' : document.getElementById("tasa_saldo").value,
             'tasa' : document.getElementById("tasa").value,
             'monto_incial' : document.getElementById("monto_inicial").value,
+            'monto_extra' : document.getElementById("monto_extra").value,
             'peridos_gracia' : document.getElementById("periodo_gracia").value,
             'regimen' : document.getElementById("regimen").value,
             'cantidad_cuotas' : document.getElementById("cuotas").value,
@@ -90,8 +90,6 @@ async function service_crear_prestamo_refinanciado(){
     var loader = document.getElementById("loader_mapafer")
     loader.style = ' ';
 
-    var monto_total = document.getElementById("monto_inicial").value + document.getElementById("monto_extra").value
-
     const url = `${document.getElementById("host").value}api/api_prestamos/crear_prestamo_refinanciado/`;
     var respuesta = await fetch(url ,{
         method: "POST",
@@ -105,7 +103,8 @@ async function service_crear_prestamo_refinanciado(){
             'tasa_deuda': document.getElementById("tasa_deuda").value,
             'tasa_saldo': document.getElementById("tasa_saldo").value,
             'tasa': document.getElementById("tasa").value,
-            'monto_incial': monto_total,
+            'monto_inicial': document.getElementById("monto_inicial").value,
+            'monto_extra': document.getElementById("monto_extra").value,
             'peridos_gracia': document.getElementById("periodo_gracia").value,
             'regimen': document.getElementById("regimen").value,
             'cantidad_cuotas': document.getElementById("cuotas").value,
@@ -130,6 +129,9 @@ function validar_respuesta_creacion_refinanciada(response, status){
 
         var contenedor_prestamo = document.getElementById("contenedor_prestamo")
         contenedor_prestamo.style = 'display: none;';
+
+        var boton_crear = document.getElementById("add2")
+        boton_crear.style = 'display: none;';
 
         var contenedor_success = document.getElementById("contenedor_success")
         contenedor_success.style = ' ';
@@ -201,13 +203,11 @@ function validar_respuesta_consulta_datos(response, status){
 function validar_creacion(response, status){
 
     if (status >= 200 && status <300){
-
         sweet_alert("Prestamo creado", "success")
 
     } else {
-
         sweet_alert("No aceptado", "warning")
- 
+
     }
 }
 function mostrar_plan_cuotas(){
@@ -217,6 +217,7 @@ function mostrar_plan_cuotas(){
     var contendor_cuotas = document.getElementById("contenedor_detalle")
     contendor_cuotas.style = "display: none;"
 }
+
 function mostrar_detalles(){
     var contendor_cuotas = document.getElementById("contenedor_plan_cuotas")
     contendor_cuotas.style = "display: none;"

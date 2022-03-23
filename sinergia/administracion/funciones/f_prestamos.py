@@ -35,7 +35,9 @@ def prestamos_cuotas_pagos(id_prestamo):
         
         cuota.save()
 
-def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, valor_original, presupuesto_cliente, monto, cuotas, regimen):
+def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, 
+    valor_original, presupuesto_cliente, monto, cuotas, 
+    regimen, monto_valor_actual=0):
 
     try:
         prestamo_nuevo = Prestamos(
@@ -44,6 +46,7 @@ def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, valor_or
             fecha = fecha,
             primera_cuota = primera_cuota,
             valor_original = valor_original,
+            valor_actual_ar = monto_valor_actual,
             presupuesto_cliente = presupuesto_cliente,
             monto = monto,
             cuotas = cuotas,
@@ -51,13 +54,10 @@ def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, valor_or
         )
         prestamo_nuevo.save()
 
-        # estado_cliente(prestamo_nuevo.cliente)
         crear_cuotas_prestamo(prestamo_nuevo)
-
         return ([1, "Prestamo agregado correctamente"], prestamo_nuevo.id)
 
     except:
-
         return ([0, "Ocurrio un error inesperado"],)
 
 def prestamos_adjuntar_archivo(id_prestamo, adjunto):
@@ -116,29 +116,22 @@ def prestamos_borrar_prestamo(id_prestamo):
         return [0, "Ocurrio un error inesperado"]
 
 def prestamos_calculadora(tasa, monto_inicial, periodo_gracia, regimen, cantidad_cuotas):
-
     tasa_anual = float(tasa)/100
 
     if regimen == "QUINCENAL":
-
         tasa_ajustada = (1 + tasa_anual)**(1/24) - 1
 
     else:
-
         tasa_ajustada = (1 + tasa_anual)**(1/12) - 1
 
     if periodo_gracia > 0:
-
         monto_ajustado = -monto_inicial*(1+tasa_ajustada)**(periodo_gracia)
 
     else:
         monto_ajustado = -monto_inicial
 
-
     importe_cuota = npf.pmt(tasa_ajustada, cantidad_cuotas, monto_ajustado,)
-    
     monto_prestamo = importe_cuota*cantidad_cuotas
-
     return [round(monto_prestamo, 2), round(importe_cuota, 2), int(cantidad_cuotas)]
 
 def prestamos_refinanciaminto_calculo(id_prestamo, tasa_deuda, tasa_saldo):
