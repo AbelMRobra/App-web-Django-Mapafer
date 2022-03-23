@@ -27,11 +27,14 @@ class ClientViewset(viewsets.ModelViewSet):
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
         
-        except:
-            if len(Clientes.objects.filter(usuario__user__cuil = request.data['cuil'])) > 0:
-                response = {'message': 'El cuil se encuentra en uso'}
-            else:
-                response = {'message': 'No se pudo crear el cliente, revise los datos completados'}
+        except Exception as error:
+            message = ""
+            for key, value in error.args[0].items():
+                error_causa = value[0]
+                message += str(key).capitalize() + ": " + error_causa + "" +"\n"
+            
+            response = {'message': message}
+            
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         try:

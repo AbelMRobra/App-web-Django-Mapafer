@@ -3,9 +3,8 @@ from django.urls import path
 from django.conf.urls import url
 from django.urls.conf import include
 from . import views
-from .views_programa import views_proveedores, views_prestamos, views_pagos, views_usuarios
-from . import views_empresa
-from . import views_clientes
+from .views_programa import views_proveedores, views_prestamos, views_pagos, \
+    views_usuarios, views_clientes, views_empresa, views_caja
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
 from administracion.viewsets import viewsets_tasas, viewsets_empresa, viewsets_pagos, viewsets_prestamos, \
@@ -68,6 +67,9 @@ urlpatterns = [
     # URL de Info
     url(r'^infoaclaraciones$', login_required(views.aclaraciones), name = 'Aclaraciones'),
 
+    # URL de caja
+    url(r'^caja-principal$', login_required(views_caja.principal_caja), name = 'Principal caja'),
+
     # URL de proveedores
     url(r'^proveedoragregar/$', login_required(views_proveedores.proveedor_agregar), name = 'Nuevo proveedor'),
     url(r'^proveedoreditar/(?P<id_proveedor>\d+)/$', login_required(views_proveedores.proveedor_editar), name = 'Editar proveedor'),
@@ -76,3 +78,4 @@ urlpatterns = [
     
 
 ]
+
