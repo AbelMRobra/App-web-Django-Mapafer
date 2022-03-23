@@ -58,67 +58,81 @@ async function service_crear_prestamo(){
     return validar_creacion(response, status)
 }
 async function service_datos_refinanciar(){
-    const url = `${document.getElementById("host").value}api/api_prestamos/consulta_datos_refinanciar_prestamo/`;
-    var respuesta = await fetch(url ,{
-        method: "POST",
-        headers: {
-            'X-CSRFToken' : `${document.getElementById("token").value}`,
-            'Content-Type': 'application/json',
-        },
 
-        body: JSON.stringify({
-            'credito' : document.getElementById("credito").value,
-            'tasa_deuda' : document.getElementById("tasa_deuda").value,
-            'tasa_saldo' : document.getElementById("tasa_saldo").value,
-            'tasa' : document.getElementById("tasa").value,
-            'monto_incial' : document.getElementById("monto_inicial").value,
-            'monto_extra' : document.getElementById("monto_extra").value,
-            'peridos_gracia' : document.getElementById("periodo_gracia").value,
-            'regimen' : document.getElementById("regimen").value,
-            'cantidad_cuotas' : document.getElementById("cuotas").value,
-            'primera_cuota' : document.getElementById("primera_cuota").value
-        })
+    try {
+        sweet_alert("Consultando", "info")
+        const url = `${document.getElementById("host").value}api/api_prestamos/consulta_datos_refinanciar_prestamo/`;
+        var respuesta = await fetch(url ,{
+            method: "POST",
+            headers: {
+                'X-CSRFToken' : `${document.getElementById("token").value}`,
+                'Content-Type': 'application/json',
+            },
 
-    });
+            body: JSON.stringify({
+                'credito' : document.getElementById("credito").value,
+                'tasa_deuda' : document.getElementById("tasa_deuda").value,
+                'tasa_saldo' : document.getElementById("tasa_saldo").value,
+                'tasa' : document.getElementById("tasa").value,
+                'monto_incial' : document.getElementById("monto_inicial").value,
+                'monto_extra' : document.getElementById("monto_extra").value,
+                'peridos_gracia' : document.getElementById("periodo_gracia").value,
+                'regimen' : document.getElementById("regimen").value,
+                'cantidad_cuotas' : document.getElementById("cuotas").value,
+                'primera_cuota' : document.getElementById("primera_cuota").value
+            })
 
-    var response = await respuesta.json();
-    var status = await respuesta.status;
-    return validar_respuesta_refinanciamiento(response, status)
+        });
+
+        var response = await respuesta.json();
+        var status = await respuesta.status;
+        return validar_respuesta_refinanciamiento(response, status)
+
+    } catch (e) {
+        console.log(e)
+        sweet_alert("Error de Front", "error")
+    }
+    
 }
 async function service_crear_prestamo_refinanciado(){
 
-    var loader = document.getElementById("loader_mapafer")
-    loader.style = ' ';
+    try {
+        var loader = document.getElementById("loader_mapafer")
+        loader.style = ' ';
 
-    const url = `${document.getElementById("host").value}api/api_prestamos/crear_prestamo_refinanciado/`;
-    var respuesta = await fetch(url ,{
-        method: "POST",
-        headers: {
-            'X-CSRFToken' : `${document.getElementById("token").value}`,
-            'Content-Type': 'application/json',
-        },
+        const url = `${document.getElementById("host").value}api/api_prestamos/crear_prestamo_refinanciado/`;
+        var respuesta = await fetch(url ,{
+            method: "POST",
+            headers: {
+                'X-CSRFToken' : `${document.getElementById("token").value}`,
+                'Content-Type': 'application/json',
+            },
 
-        body: JSON.stringify({
-            'credito': document.getElementById("credito").value,
-            'tasa_deuda': document.getElementById("tasa_deuda").value,
-            'tasa_saldo': document.getElementById("tasa_saldo").value,
-            'tasa': document.getElementById("tasa").value,
-            'monto_inicial': document.getElementById("monto_inicial").value,
-            'monto_extra': document.getElementById("monto_extra").value,
-            'peridos_gracia': document.getElementById("periodo_gracia").value,
-            'regimen': document.getElementById("regimen").value,
-            'cantidad_cuotas': document.getElementById("cuotas").value,
-            'primera_cuota': document.getElementById("primera_cuota").value,
-            'fecha': document.getElementById("fecha").value,
-            'presupuesto_cliente': document.getElementById("presupuesto_cliente").value,
-            'proveedor': document.getElementById("proveedor").value
-        })
+            body: JSON.stringify({
+                'credito': document.getElementById("credito").value,
+                'tasa_deuda': document.getElementById("tasa_deuda").value,
+                'tasa_saldo': document.getElementById("tasa_saldo").value,
+                'tasa': document.getElementById("tasa").value,
+                'monto_inicial': document.getElementById("monto_inicial").value,
+                'monto_extra': document.getElementById("monto_extra").value,
+                'peridos_gracia': document.getElementById("periodo_gracia").value,
+                'regimen': document.getElementById("regimen").value,
+                'cantidad_cuotas': document.getElementById("cuotas").value,
+                'primera_cuota': document.getElementById("primera_cuota").value,
+                'fecha': document.getElementById("fecha").value,
+                'presupuesto_cliente': document.getElementById("presupuesto_cliente").value,
+                'proveedor': document.getElementById("proveedor").value
+            })
 
-    });
+        });
 
-    var response = await respuesta.json();
-    var status = await respuesta.status;
-    return validar_respuesta_creacion_refinanciada(response, status)
+        var response = await respuesta.json();
+        var status = await respuesta.status;
+        return validar_respuesta_creacion_refinanciada(response, status)
+    } catch (e) {
+        console.log(e)
+        sweet_alert("Error de Front", "error")
+    }
 }
 function validar_respuesta_creacion_refinanciada(response, status){
 
@@ -146,7 +160,7 @@ function validar_respuesta_creacion_refinanciada(response, status){
 }
 function validar_respuesta_refinanciamiento(response, status){
     if (status >= 200 && status <300){
-
+        sweet_alert("Calculado", "success")
         var monto_original = document.getElementById("monto_original")
         monto_original.innerHTML = `$ ${Intl.NumberFormat().format(response.monto_original)}`
 
@@ -162,6 +176,8 @@ function validar_respuesta_refinanciamiento(response, status){
         monto_minimo.value = valor_actual
         
         validar_respuesta_consulta_datos(response, status);
+    } else {
+        sweet_alert("Mala respuesta de la API", "error")
     }
 
 }
