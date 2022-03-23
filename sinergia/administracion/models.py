@@ -73,6 +73,7 @@ class Empresa(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class ContactosEmpresa(models.Model):
 
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa", on_delete=CASCADE)
@@ -172,6 +173,7 @@ class Clientes(models.Model):
     def __str__(self):
         return self.apellido
 
+
 class Citas(models.Model):
 
     cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE, verbose_name = "Cliente")
@@ -199,6 +201,7 @@ class Prestamos(models.Model):
     fecha = models.DateTimeField(verbose_name="Fecha del prestamo")
     primera_cuota = models.DateTimeField(verbose_name="Primera cuota")
     valor_original = models.FloatField(verbose_name="Valor original", blank=True, null=True)
+    valor_actual_ar = models.FloatField(verbose_name="Valor actual antes de refinanciar", default=0, blank=True, null=True)
     presupuesto_cliente = models.FloatField(verbose_name="Presupuesto cliente", blank=True, null=True)
     monto = models.FloatField(verbose_name="Monto")
     cuotas = models.IntegerField(verbose_name="Cuotas")
@@ -290,3 +293,18 @@ class PagosProveedores(models.Model):
 
     def __str__(self):
         return self.proveedor.fantasia
+
+
+class MovimientoContable(models.Model):
+
+    ingreso = models.BooleanField(default=True)
+    concepto = models.CharField(verbose_name="Concepto", max_length=100, default="")
+    fecha = models.DateField(verbose_name="Fecha del pago")
+    monto = models.FloatField(verbose_name="Monto")
+
+    class Meta:
+        verbose_name="Movimiento contable"
+        verbose_name_plural="Movimientos contables"
+
+    def __str__(self):
+        return self.concepto

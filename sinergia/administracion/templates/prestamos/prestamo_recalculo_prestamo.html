@@ -64,9 +64,15 @@
                                 <option value="{{tasa.valor_tasa}}">{{tasa.nombre}} ({{tasa.valor_tasa}}%)</option>
                                 {% endfor %}
                             </select>
+                            
                             <label class="mt-2" for="">Monto inicial</label>
                             <input  id="monto_inicial" type="number" class="form-control form-control"
                                 step="any" value="0" onblur="service_datos_refinanciar()">
+
+                            <label class="mt-2" for="">Monto extra</label>
+                            <input  id="monto_extra" type="number" class="form-control form-control"
+                                step="any" value="0">
+
                             <label class="mt-2" for="">Cuotas</label>
                             <input  id="cuotas" type="number" class="form-control form-control"
                                 step="any" value="24" onblur="service_datos_refinanciar()">

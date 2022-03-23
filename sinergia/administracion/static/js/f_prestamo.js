@@ -90,6 +90,8 @@ async function service_crear_prestamo_refinanciado(){
     var loader = document.getElementById("loader_mapafer")
     loader.style = ' ';
 
+    var monto_total = document.getElementById("monto_inicial").value + document.getElementById("monto_extra").value
+
     const url = `${document.getElementById("host").value}api/api_prestamos/crear_prestamo_refinanciado/`;
     var respuesta = await fetch(url ,{
         method: "POST",
@@ -103,7 +105,7 @@ async function service_crear_prestamo_refinanciado(){
             'tasa_deuda': document.getElementById("tasa_deuda").value,
             'tasa_saldo': document.getElementById("tasa_saldo").value,
             'tasa': document.getElementById("tasa").value,
-            'monto_incial': document.getElementById("monto_inicial").value,
+            'monto_incial': monto_total,
             'peridos_gracia': document.getElementById("periodo_gracia").value,
             'regimen': document.getElementById("regimen").value,
             'cantidad_cuotas': document.getElementById("cuotas").value,
@@ -155,13 +157,7 @@ function validar_respuesta_refinanciamiento(response, status){
         var monto_minimo = document.getElementById("monto_inicial")
         console.log(monto_minimo.value)
         let valor_actual = response.refinancimiento[0].SaldoActual + response.refinancimiento[0].DeudaActual
-        if (monto_minimo.value < valor_actual){
-            monto_minimo.value = valor_actual
-        }
-        
-        // if (monto_minimo.value == 0) {
-        //     monto_minimo.value = response.refinancimiento[0].SaldoActual + response.refinancimiento[0].DeudaActual
-        // } 
+        monto_minimo.value = valor_actual
         
         validar_respuesta_consulta_datos(response, status);
     }
