@@ -154,7 +154,11 @@ function validar_respuesta_refinanciamiento(response, status){
     
         var monto_minimo = document.getElementById("monto_inicial")
         console.log(monto_minimo.value)
-        monto_minimo.value = response.refinancimiento[0].SaldoActual + response.refinancimiento[0].DeudaActual
+        let valor_actual = response.refinancimiento[0].SaldoActual + response.refinancimiento[0].DeudaActual
+        if (monto_minimo.value < valor_actual){
+            monto_minimo.value = valor_actual
+        }
+        
         // if (monto_minimo.value == 0) {
         //     monto_minimo.value = response.refinancimiento[0].SaldoActual + response.refinancimiento[0].DeudaActual
         // } 
