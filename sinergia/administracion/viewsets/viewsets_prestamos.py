@@ -102,8 +102,8 @@ class PrestamosViewset(viewsets.ModelViewSet):
 
             return Response(response, status=status.HTTP_200_OK)
 
-        except:
-
+        except Exception as error:
+            print(error.args)
             response = {"mensaje": "No encontrado"}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
@@ -142,7 +142,7 @@ class PrestamosViewset(viewsets.ModelViewSet):
     @action(methods=['POST'], detail=False)
     def crear_prestamo_refinanciado(self, request):
 
-        # try:
+        try:
             string_proveedor = request.data['proveedor'].split("-")
             credito = Prestamos.objects.get(id = request.data["credito"])
             tasa_deuda = TasaParaCreditos.objects.get(id = request.data["tasa_deuda"]).valor_tasa
@@ -170,10 +170,10 @@ class PrestamosViewset(viewsets.ModelViewSet):
 
             return Response(response, status=status.HTTP_200_OK)
 
-        # except:
+        except:
 
-        #     response = {"mensaje": "No encontrado"}
-        #     return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            response = {"mensaje": "No encontrado"}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=False)
     def consulta_user(self, request):
