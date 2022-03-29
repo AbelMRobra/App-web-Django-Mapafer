@@ -298,6 +298,7 @@ class PagosProveedores(models.Model):
 class MovimientoContable(models.Model):
 
     ingreso = models.BooleanField(default=True)
+    cuenta = models.CharField(verbose_name="Cuenta", max_length=100, default="")
     concepto = models.CharField(verbose_name="Concepto", max_length=100, default="")
     fecha = models.DateField(verbose_name="Fecha del pago")
     monto = models.FloatField(verbose_name="Monto")

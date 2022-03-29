@@ -1,0 +1,121 @@
+{% extends "home.html" %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-themecolor">Caja de la empresa</h3>
+    </div>
+
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+            <li class="breadcrumb-item">Caja</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-12 justify-content-center">
+
+                    <div class="d-flex">
+                        <h4 class="card-title"><span class="lstick m-r-20"></span><b>Registros</b></h4>                    
+                    </div>
+
+                    <h6 class="card-subtitle">Ingresos y salidas</h6>
+
+                    <div class="table-responsive">
+
+                        <table id="example" class="table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th class='notexport'>Cuenta</th>
+                                    <th class='notexport'>Concepto</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 14px; font-weight: 450;">
+                                {% for pago in pagos %}
+                                <tr>
+                                    <td>Cuotas cobradas</td>
+                                    <td>Ingreso por cuotas</td>
+                                    <td>{{pago.fecha}}</td>
+                                    <td class="text-success font-bold">INGRESO</td>
+                                    <td>${{pago.total_monto|floatformat:0|intcomma}}</td>
+                                </tr>
+                                {% endfor %}
+
+                                {% for pago in pagos_proveedores %}
+                                <tr>
+                                    <td>Pagos a proveedores</td>
+                                    <td>Monto por prestamos</td>
+                                    <td>{{pago.fecha}}</td>
+                                    <td class="text-danger font-bold">SALIDA</td>
+                                    <td>-${{pago.total_monto|floatformat:0|intcomma}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a id="add" href="{% url 'Nuevo cliente' %}"
+    data-toggle="tooltip" data-placement="left" title="Agregar un registro"
+    class="btn btn-primary btn-circle fa fa-plus"></a>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+    #add{
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        z-index: 10;
+    }
+
+
+</style>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
+<script src="{% static 'js/f_client.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+                "language": {
+                    "search": "Buscar"
+                },
+
+            "info": false,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'BBDD clientes',
+                className: "btn btn-primary",
+                exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
+
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button buttons-excel buttons-html5')
+                    }
+            },
+            ]   
+        });
+    });
+</script>
+
+
+{% endblock %}
