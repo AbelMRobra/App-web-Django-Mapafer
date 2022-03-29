@@ -31,7 +31,7 @@
 
                     <div class="table-responsive">
 
-                        <table id="example" class="table" style="width:100%">
+                        <table id="balance" class="table" style="width:100%">
                             <thead>
                                 <tr>
                                     <th class='notexport'>Cuenta</th>
@@ -46,7 +46,7 @@
                                 <tr>
                                     <td>Cuotas cobradas</td>
                                     <td>Ingreso por cuotas</td>
-                                    <td>{{pago.fecha}}</td>
+                                    <td>{{pago.fecha|date:"Y-m-d"}}</td>
                                     <td class="text-success font-bold">INGRESO</td>
                                     <td>${{pago.total_monto|floatformat:0|intcomma}}</td>
                                 </tr>
@@ -56,7 +56,7 @@
                                 <tr>
                                     <td>Pagos a proveedores</td>
                                     <td>Monto por prestamos</td>
-                                    <td>{{pago.fecha}}</td>
+                                    <td>{{pago.fecha|date:"Y-m-d"}}</td>
                                     <td class="text-danger font-bold">SALIDA</td>
                                     <td>-${{pago.total_monto|floatformat:0|intcomma}}</td>
                                 </tr>
@@ -92,12 +92,13 @@
 <script src="{% static 'js/f_client.js' %}"></script>
 <script>
     $(document).ready(function () {
-        $('#example').DataTable({
+        $('#balance').DataTable({
                 "language": {
                     "search": "Buscar"
                 },
 
             "info": false,
+            "order": [[ 2, "desc" ]],
             dom: 'Bfrtip',
             buttons: [
             {
