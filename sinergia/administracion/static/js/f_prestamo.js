@@ -233,7 +233,6 @@ function mostrar_plan_cuotas(){
     var contendor_cuotas = document.getElementById("contenedor_detalle")
     contendor_cuotas.style = "display: none;"
 }
-
 function mostrar_detalles(){
     var contendor_cuotas = document.getElementById("contenedor_plan_cuotas")
     contendor_cuotas.style = "display: none;"

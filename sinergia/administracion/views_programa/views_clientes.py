@@ -114,11 +114,9 @@ def profileclient(request, id_cliente):
     context['empresas'] = Empresa.objects.all()
      
     prestamos = Prestamos.objects.filter(cliente = context['data'])
-
     data_credite_complete = []
 
     for prestamo in prestamos:
-
         pagos = sum(Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat=True))
 
         try:

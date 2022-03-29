@@ -89,11 +89,11 @@ class PrestamosViewset(viewsets.ModelViewSet):
                 datos_calculadora = ["", "", ""]
 
             response = {}
-            response["monto"] = round(datos_calculadora[0], 2)
-            response["monto_cuota"] = datos_calculadora[1]
+            response["monto"] = round(datos_calculadora[0], 0)
+            response["monto_cuota"] = round(datos_calculadora[1], 0)
             response["cuota"] = datos_calculadora[2]
             response["refinancimiento"] = datos_refinanciamiento,
-            response["monto_original"] = round(datos_refinanciamiento['DeudaActual'] + datos_refinanciamiento['SaldoActual'], 2)
+            response["monto_original"] = round(datos_refinanciamiento['DeudaActual'] + datos_refinanciamiento['SaldoActual'], 0)
             response["simulacion"] = []
 
             if request.data['primera_cuota'] != "":

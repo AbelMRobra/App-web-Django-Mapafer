@@ -172,7 +172,7 @@ def prestamos_refinanciaminto_calculo(id_prestamo, tasa_deuda, tasa_saldo):
             monto_saldo_actual += monto_ajustado
             cuotas_saldo += 1
 
-    return {"DeudaHistorica": round(monto_deuda_historica, 2), "SaldoHistorica": round(monto_saldo_historica, 2), "DeudaActual": round(monto_deuda_actual, 2), "SaldoActual": round(monto_saldo_actual, 2), "CantidadDeuda": cuotas_deuda, "CantidadSaldo": cuotas_saldo}
+    return {"DeudaHistorica": round(monto_deuda_historica, 0), "SaldoHistorica": round(monto_saldo_historica, 0), "DeudaActual": round(monto_deuda_actual, 0), "SaldoActual": round(monto_saldo_actual, 0), "CantidadDeuda": cuotas_deuda, "CantidadSaldo": cuotas_saldo}
 
 def prestamos_cancelar_refinanciamiento(id_prestamo, tasa_deuda, tasa_saldo):
 

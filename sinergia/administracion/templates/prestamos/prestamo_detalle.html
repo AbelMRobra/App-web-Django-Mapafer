@@ -86,10 +86,10 @@
                         <p>Fecha: {{credito.fecha|date:"d/m/Y"}}</p>
                         <p>Regimen: {{credito.regimen}} - </p>
                         <p>Base: $ {{credito.valor_original|floatformat:2|intcomma}}</p>
-                        <p>Prestado: $ {{credito.monto|floatformat:2|intcomma}}</p>
+                        <p class="font-bold">Prestado: $ {{credito.monto|floatformat:2|intcomma}}</p>
                         <p>Intereses: $ {{intereses|floatformat:2|intcomma}}</p>
                         <p>Bonificaciones: $ {{bonificacion|floatformat:2|intcomma}}</p>
-                        <p>Pagado: $ {{total_pagado|floatformat:2|intcomma}}</p>
+                        <p class="font-bold">Pagado: $ {{total_pagado|floatformat:2|intcomma}}</p>
                         <p class="box text-primary font-bold" onclick="mostrar_plan_cuotas()">Cuotas: {{credito.cuotas}}</p>
     
                     </div>
