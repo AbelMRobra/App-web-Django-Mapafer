@@ -18,8 +18,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 
-
-  <link rel="stylesheet" href="{% static 'css/registro_contable.css' %}">
   <link href="{% static 'adminpro/assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
   <link href="{% static 'adminpro/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'adminpro/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet">
@@ -871,8 +869,11 @@ border-radius: 100px;
   }
 </style>
 
-    <!-- PRUEBA IMPORTACIONES -->
 
+
+    <!-- PRUEBA IMPORTACIONES -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/f_alert.js' %}"></script>
 <script src="{% static 'js/f_home.js' %}"></script>
 {% if request.user|has_rol:"USER" %}
 <script src="{% static 'js/f_home_user.js' %}"></script>

@@ -1,5 +1,127 @@
+var ServiceLogs = window.ServiceLogs || {};
+var UtilsTemplate = window.UtilsTemplate || {};
+
+(function service_logs() {
+    var host = document.getElementById('host').value
+    var token = document.getElementById('token').value
+    var url_acciones_sistema = `${host}api/api-acciones`
+
+    var headers = {
+        'X-CSRFToken' : token,
+        'Content-Type': 'application/json',
+    }
+
+    ServiceLogs.consulta_del_dia = async function(){
+        try {
+            
+            var method = "GET"
+            var url_especifica = `${url_acciones_sistema}/consulta_dia`
+            var response = await fetch(url_especifica, {
+                method: method,
+                headers: headers,
+            })
+            var status_code = await response.status
+            var response = await response.json()
+            console.log(response)
+            if (status_code >= 200 && status_code <300){
+                if(response.message == 'Pendiente'){
+                    await ServiceLogs.revisar_clientes()
+                }
+                
+            }
+
+        } catch(e) {
+            console.log(e)
+            sweet_alert("Problemas de servidor!", "error");
+        }
+    }
+
+    ServiceLogs.revisar_clientes = async function(){
+        try {
+            console.log("Estoy en el segundo")
+
+            var inicia_revision = Swal.fire({
+                title: 'Iniciando revisión',
+                allowOutsideClick: false,
+                text: 'Por favor espere mientras una revisión diaria de sincronización se realiza',
+                imageUrl: 'https://picsum.photos/id/635/400/200',
+                imageWidth: 400,
+                imageHeight: 200,
+                imageAlt: 'Custom image',
+                }).then(function() {
+
+            });
+
+            var method = "GET"
+            var url_especifica = `${url_acciones_sistema}/revisar_clientes`
+            var response = await fetch(url_especifica, {
+                method: method,
+                headers: headers,
+            })
+            var status_code = await response.status
+            var response = await response.json()
+
+            console.log(response)
+            if (status_code >= 200 && status_code <300){
+                
+                var revision_finalizada = Swal.fire({
+                    title: 'Revisión finalizada',
+                    allowOutsideClick: false,
+                    text: 'Por favor refresque esta pagina',
+                    imageUrl: 'https://picsum.photos/id/1/400/200',
+                    imageWidth: 400,
+                    imageHeight: 200,
+                    imageAlt: 'Custom image',
+                    }).then(function() {
+                    window.location = "home";
+                });
+            
+            } else {
+
+                var revision_finalizada = Swal.fire({
+                    title: 'Error en la sincronización',
+                    allowOutsideClick: false,
+                    text: 'Por favor comuniquese con soporte',
+                    imageUrl: 'https://picsum.photos/id/635/400/200',
+                    imageWidth: 400,
+                    imageHeight: 200,
+                    imageAlt: 'Custom image',
+                    }).then(function() {
+
+                });
+            }
+
+        } catch(e) {
+            console.log(e)
+            sweet_alert("Prolemas de conexión", "error");
+        }
+    }
+
+
+}());
+
+(function template_utils() {
+
+    UtilsTemplate.validar_respuesta_service = function(status_code){
+        if (status_code >= 200 && status_code <300){
+            sweet_alert("Realizado!", "success");
+        } else {
+            sweet_alert("Hubo un problema en el servicio", "error")
+        }
+    }
+
+}());
+
+ServiceLogs.consulta_del_dia()
+
+
+
+
+
+
 
 window.onload = service_consulta_usuarios()
+
 
 document.getElementById("usuarios").addEventListener("click", function(event){
     event.preventDefault()
@@ -42,7 +164,6 @@ function validar_consulta_usuarios(response, status){
             } 
         } else {
             if (response.length > 0) {
-                sweet_alert("Conexión exitosa a la BBDD", "info");
                 modificar_listado_usuarios(response)
             } 
         }
@@ -229,7 +350,6 @@ function validar_upload_user(status){
     }
 }
     
-
 // Validar contraseña
 
 function validar_password(){
@@ -329,3 +449,6 @@ function validar_delete_user(status){
         sweet_alert("Error inesperado", "warning");
     }
 }
+
+
+

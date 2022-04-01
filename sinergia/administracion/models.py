@@ -309,3 +309,18 @@ class MovimientoContable(models.Model):
 
     def __str__(self):
         return self.concepto
+
+
+class LogsAcciones(models.Model):
+
+    fecha = models.DateTimeField(verbose_name="Fecha")
+    dia = models.DateField(verbose_name="Dia", default=datetime.date.today())
+    accion = models.CharField(verbose_name="Accion", max_length=200)
+    resultado = models.CharField(verbose_name="Accion", max_length=200)
+
+    class Meta:
+        verbose_name="Log de acciones del sistema"
+        verbose_name_plural="Logs de acciones del sistema"
+
+    def __str__(self):
+        return self.accion

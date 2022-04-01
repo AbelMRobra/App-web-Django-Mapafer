@@ -1,15 +1,16 @@
+import numpy as np
+import numpy_financial as npf
+import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as do_login
-from .models import Citas, Clientes, Prestamos, Pagos, Proveedor, Empresa, CuotasPrestamo, UserProfile
-import numpy as np
-import numpy_financial as npf
-import datetime
+from .models import Clientes, Prestamos, Pagos,  Empresa, UserProfile
 from .funciones.f_estado_cliente import *
 from administracion.variables import *
 from .functions_home import montos_situaciones, cantidad_situaciones
+
 
 
 # Create your views here.
@@ -599,3 +600,15 @@ def cashflow(request):
 
 def aclaraciones(request):
     return render(request, "info/aclaraciones.html")
+
+#404: página no encontrada
+def pag_404_not_found(request, exception):
+    response = render(request, "error/page_error_404.html")
+    response.status_code=404
+    return response
+ 
+# #500: error en el servidor
+def pag_500_error_server(request, *args, **argv):
+    response = render(request, "error/page_error_500.html")
+    response.status_code=500
+    return response

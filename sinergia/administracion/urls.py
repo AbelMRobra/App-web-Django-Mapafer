@@ -8,7 +8,7 @@ from .views_programa import views_proveedores, views_prestamos, views_pagos, \
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
 from administracion.viewsets import viewsets_tasas, viewsets_empresa, viewsets_pagos, viewsets_prestamos, \
-    viewsets_user, viewsets_client, viewsets_proveedores
+    viewsets_user, viewsets_client, viewsets_proveedores, viewsets_acciones_sistema
 
 
 router = routers.DefaultRouter()
@@ -20,6 +20,7 @@ router.register(r'api_prestamos', viewsets_prestamos.PrestamosViewset)
 router.register(r'api_users', viewsets_user.UserViewset)
 router.register(r'api_clientes', viewsets_client.ClientViewset)
 router.register(r'api_proveedores', viewsets_proveedores.ProveedorViewset)
+router.register(r'api-acciones', viewsets_acciones_sistema.AccionesViewset)
 
 
 urlpatterns = [
