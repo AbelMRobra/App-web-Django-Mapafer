@@ -17,11 +17,16 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler404, handler500
+from administracion.views import pag_404_not_found, pag_500_error_server
 
 urlpatterns = [
     path('', include('administracion.urls')),
     path('admin/', admin.site.urls),
 ]
+
+handler404 = pag_404_not_found
+handler500 = pag_500_error_server
 
 from django.conf.urls.static import static
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
