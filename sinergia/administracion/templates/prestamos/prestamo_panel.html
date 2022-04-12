@@ -78,8 +78,8 @@
                                     <td style="display: none;">{{i.0.cliente.cuil}}</td>
                                     <td>{{i.0.primera_cuota|date:"d/m/Y"}}</td>
                                     <td>${{i.0.monto|floatformat:0|intcomma}}</td>
-                                    <td>{{i.0.cuotas}} - {{i.0.regimen|lower|capfirst}}</td>
-                                    <td style="display: none;">{{i.0.cuotas}}</td>
+                                    <td>{{i.7}}/{{i.0.cuotas}} - {{i.0.regimen.0|capfirst}}</td>
+                                    <td style="display: none;">{{i.7}}/{{i.0.cuotas}}</td>
                                     <td style="display: none;">{{i.0.regimen|lower|capfirst}}</td>
                                     <td>${{i.1|floatformat:0|intcomma}}
                                         <div class="progress" style="height: 6px;">

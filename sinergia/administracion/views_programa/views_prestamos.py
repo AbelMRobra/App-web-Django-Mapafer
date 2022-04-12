@@ -27,23 +27,24 @@ def prestamos_panel(request):
 
     data = []
     data_aux = Prestamos.objects.all()
+    query_pagos = Pagos.objects.all()
+    query_cuotas = CuotasPrestamo.objects.all()
 
     for d in data_aux:
         today = datetime.date.today()
-        pagos_list = Pagos.objects.filter(prestamo = d).values_list("monto", flat = True)
+        pagos_list = query_pagos.filter(prestamo = d).values_list("monto", flat = True)
+        query_cuotas_prestamo = query_cuotas.filter(prestamo = d)
 
         if d.monto != 0:
-            avance = sum(np.array(pagos_list))/(d.monto + sum(CuotasPrestamo.objects.filter(prestamo = d).values_list("monto_interes", flat=True)) + sum(CuotasPrestamo.objects.filter(prestamo = d).values_list("monto_bonificado", flat=True)))*100
+            avance = sum(np.array(pagos_list))/(d.monto + sum(query_cuotas_prestamo.values_list("monto_interes", flat=True)) + sum(query_cuotas_prestamo.values_list("monto_bonificado", flat=True)))*100
         else:
             avance = 100
 
         cant = len(pagos_list)
-        
+        cuotas_pagas = len(query_cuotas_prestamo.filter(estado = 'SI'))
         pagos = sum(pagos_list)
         saldo = d.saldo_credito()   
-        
         fecha_prestamo = datetime.date(d.fecha.year, d.fecha.month, d.fecha.day)
-        
         fecha_primer_pago = datetime.date(d.primera_cuota.year, d.primera_cuota.month, d.primera_cuota.day)
         
         if d.regimen == "QUINCENAL":
@@ -72,10 +73,9 @@ def prestamos_panel(request):
                     else:
                         fecha_aux = datetime.date(fecha_aux.year + 1, 1, fecha_aux.day)
             mora = cuotas_pasadas*(d.monto/d.cuotas) - pagos
-
             prox_vencimiento = fecha_aux 
         
-        data.append((d, pagos, saldo, prox_vencimiento, mora, avance, int(d.monto/d.cuotas)))
+        data.append((d, pagos, saldo, prox_vencimiento, mora, avance, int(d.monto/d.cuotas), cuotas_pagas))
 
     context["data"] = data
     return render(request, "prestamos/prestamo_panel.html", context)
