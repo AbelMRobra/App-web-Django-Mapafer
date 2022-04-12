@@ -1,5 +1,5 @@
 {% extends "home.html" %}
-
+{% load apptags_extras %}
 {% load static %}
 {% load humanize %}
 {% block content %}
@@ -31,11 +31,11 @@
 
                     <div class="table-responsive">
 
-                        <table id="balance" class="table" style="width:100%">
+                        <table id="balance" class="table table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class='notexport'>Cuenta</th>
-                                    <th class='notexport'>Concepto</th>
+                                    <th>Cuenta</th>
+                                    <th>Concepto</th>
                                     <th>Fecha</th>
                                     <th>Tipo</th>
                                     <th>Monto</th>
@@ -61,6 +61,22 @@
                                     <td>-${{pago.total_monto|floatformat:0|intcomma}}</td>
                                 </tr>
                                 {% endfor %}
+
+                                {% for movimiento in movimientos %}
+                                <tr id = "mov_{{movimiento.id}}">
+                                    <td><b class="text-info table_row" 
+                                        onClick="service.open_modal({{movimiento.id}})" 
+                                        data-toggle="modal" data-target="#ModalEditarRegistros">{{movimiento.cuenta}}</b></td>
+                                    <td>{{movimiento.concepto}}</td>
+                                    <td>{{movimiento.fecha|date:"Y-m-d"}}</td>
+                                    <td class="{% if movimiento.ingreso %} text-success {% else %} text-danger {% endif %} font-bold">
+                                        {% if movimiento.ingreso %} INGRESO {% else %} SALIDA {% endif %}</td>
+                                    <td>{% if movimiento.ingreso %} ${{movimiento.monto|floatformat:0|intcomma}} 
+                                        {% else %} -${{movimiento.monto|floatformat:0|intcomma}} {% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
                             </tbody>
                         </table>
                     </div>
@@ -70,11 +86,159 @@
     </div>
 </div>
 
-<a id="add" href="{% url 'Nuevo cliente' %}"
-    data-toggle="tooltip" data-placement="left" title="Agregar un registro"
+<div class="modal fade" id="ModalRegistros" tabindex="-1" role="dialog" aria-labelledby="ModalRegistros"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Agregar un registro</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+   
+                    <div style="text-align: left;">
+                        <h3>Ingese los datos</h3>
+
+                        <p class="my-2">Cuenta</p>
+                        <div class="mb-3">
+                            <input id="nr_cuenta" 
+                            required type="text"  
+                            placeholder="Ej: Tarjetas" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Concepto</p>
+                        <div class="mb-3">
+                            <input id="nr_concepto"
+                            required type="text"   placeholder="Ej: Banco Frances" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Fecha</p>
+                        <div class="mb-3">
+                            <input id="nr_fecha" 
+                            required type="date" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Monto</p>
+                        <div class="mb-3">
+                            <input id="nr_monto" 
+                            required type="number" step="any" n
+                            ame="valor" placeholder="Valor del registro" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <input type="checkbox" id="nr_ingreso" 
+                            class="filled-in chk-col-blue" checked  />
+                        <label for="nr_ingreso">Es un ingreso</label>
+
+
+                        <div class="text-right">
+                            <button class="btn btn-success btn-circle fa fa-paper-plane" 
+                            data-toggle="tooltip" data-placement="left" title="Agregar registro"
+                            onclick="service.add_record()"
+                            style="margin-top: 10px;"></button>
+
+                        </div>
+                    </div>
+
+  
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="ModalEditarRegistros" tabindex="-1" role="dialog" aria-labelledby="ModalEditarRegistros"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="background-color: #2a3e52;">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Editar registro</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+   
+                    <div style="text-align: left;">
+                        <h3>Modifique los datos</h3>
+
+                        <p class="my-2">Cuenta</p>
+                        <div class="mb-3">
+                            <input id="up_cuenta" 
+                            required type="text"  
+                            placeholder="Ej: Tarjetas" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Concepto</p>
+                        <div class="mb-3">
+                            <input id="up_concepto"
+                            required type="text"   placeholder="Ej: Banco Frances" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Fecha</p>
+                        <div class="mb-3">
+                            <input id="up_fecha" 
+                            required type="date" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <p class="my-2">Monto</p>
+                        <div class="mb-3">
+                            <input id="up_monto" 
+                            required type="number" step="any" n
+                            ame="valor" placeholder="Valor del registro" 
+                            class="form-control form-control-line">
+
+                        </div>
+
+                        <input type="checkbox" id="up_ingreso" 
+                            class="filled-in chk-col-blue" checked  />
+                        <label for="up_ingreso">Es un ingreso</label>
+
+
+                        <div class="text-right">
+                            <button id="delete_boton" class="btn btn-danger btn-circle fa fa-trash" 
+                            data-toggle="tooltip" data-placement="left" title="Borrar registro"
+                            onclick="service.delete_data()"
+                            style="margin-top: 10px;"></button>
+                            <button id="editar_boton" class="btn btn-success btn-circle fa fa-paper-plane" 
+                            data-toggle="tooltip" data-placement="left" title="Agregar registro"
+                            onclick="service.agregar_registro()"
+                            style="margin-top: 10px;"></button>
+
+                        </div>
+                    </div>
+
+  
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<a id="add" href="#" data-toggle="modal" data-target="#ModalRegistros"
     class="btn btn-primary btn-circle fa fa-plus"></a>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<input id="token" type="text" value="{{ csrf_token }}" style="display: none;"></input>
+<input id="host" type="text" value="{% host %}" style="display: none;"></input>
 
 <style>
     #add{
@@ -84,12 +248,18 @@
         z-index: 10;
     }
 
+    .table_row:hover {
+        cursor: pointer;
+    }
+
 
 </style>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{% static 'js/f_alert.js' %}"></script>
-<script src="{% static 'js/f_client.js' %}"></script>
+<script src="{% static 'js/f_caja.js' %}"></script>
 <script>
     $(document).ready(function () {
         $('#balance').DataTable({
