@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
-from ..models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa, Prestamos
 import datetime
 from datetime import timedelta
+from django.shortcuts import render, redirect
+from django.db.models.functions import Lower
 from ..google_sheet import programa_social_empresa
+from ..models import Empresa, Clientes, Pagos, CuotasPrestamo, ContactosEmpresa, Prestamos
 
 def perfilempresa(request, id_empresa):
 
@@ -106,7 +107,7 @@ def panel_pagos(request, id_empresa):
     total_periodo = 0
     data_cuotas = []
     prestamos = Prestamos.objects.all()
-    cuotas = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by("prestamo__cliente__apellido").exclude(estado = "SI")
+    cuotas = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by(Lower("prestamo__cliente__apellido"))
     
     for cuota in cuotas:
         total_periodo += cuota.monto
