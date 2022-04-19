@@ -32,6 +32,9 @@ def prestamos_cuotas_pagos(id_prestamo):
     monto_prestamo = sum(np.array(cuotas.values_list('monto', flat=True)) + np.array(cuotas.values_list('monto_interes', flat=True)) - np.array(cuotas.values_list('monto_bonificado', flat=True)))
     saldo = monto_prestamo - pagos
 
+    print(prestamo.id)
+    print(saldo)
+
     for cuota in cuotas:
         if saldo < 20:
             cuota.estado = "SI"
