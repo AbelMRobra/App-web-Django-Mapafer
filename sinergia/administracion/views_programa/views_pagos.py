@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from administracion.models import Pagos, Prestamos
 from ..funciones.f_estado_cliente import *
+from ..funciones.f_prestamos import prestamos_cuotas_pagos
 
 def pagos_panel(request):
     if request.method == 'POST':
@@ -16,13 +17,14 @@ def pagos_panel(request):
 def pagos_agregar(request, id_prestamo):
 
     if request.method == 'POST':
+        prestamo = Prestamos.objects.get(id = int(request.POST['prestamo'].split("-")[0]))
         new_pago = Pagos(
-            prestamo = Prestamos.objects.get(id = int(request.POST['prestamo'].split("-")[0])),
+            prestamo = prestamo,
             monto = request.POST['monto'],
             fecha = request.POST['fecha']
         )
         new_pago.save()
-        
+        prestamos_cuotas_pagos(prestamo.id)
         return redirect('Panel de pagos')
 
     context = {}
@@ -41,14 +43,13 @@ def pagos_editar(request, id_pago):
     pago = Pagos.objects.get(id = id_pago)
 
     if request.method == 'POST':
-        pago.prestamo = Prestamos.objects.get(id = int(request.POST['prestamo'].split("-")[0]))
+        prestamo = Prestamos.objects.get(id = int(request.POST['prestamo'].split("-")[0]))
+        pago.prestamo = prestamo
         pago.monto = request.POST['monto']
         pago.fecha = request.POST['fecha']
         pago.save()
 
-        # cliente = pago.prestamo.cliente
-        # cliente.estado = estado_cliente(cliente)
-        # cliente.save()
+        prestamos_cuotas_pagos(prestamo.id)
         
         return redirect('Panel de pagos')
 

@@ -16,6 +16,15 @@ def prestamos_validacion_cuotas():
             cuota.monto_bonificado = 0
             cuota.save()
 
+def prestamos_validar_anomalias():
+    query_prestamos = Prestamos.objects.all()
+    query_cuotas = CuotasPrestamo.objects.all()
+    query_pagos = Pagos.objects.all()
+
+    for prestamo in query_prestamos:
+        print(prestamo)
+
+
 def prestamos_cuotas_pagos(id_prestamo):
     prestamo = Prestamos.objects.get(id = id_prestamo)
     cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo)
@@ -26,7 +35,7 @@ def prestamos_cuotas_pagos(id_prestamo):
 
         if pagos > int(monto_cuota):
             cuota.estado = "SI"
-            pagos -= monto_cuota
+            pagos -= int(monto_cuota)
         elif pagos > 0 and pagos > 1:
             cuota.estado = "PARCIAL"
             pagos = 0
