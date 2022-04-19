@@ -36,9 +36,15 @@ def prestamos_cuotas_pagos(id_prestamo):
         if pagos > int(monto_cuota):
             cuota.estado = "SI"
             pagos -= int(monto_cuota)
-        elif pagos > 0 and pagos > 1:
+
+        elif (int(monto_cuota) - pagos) < 5:
+            cuota.estado = "SI"
+            pagos = 0
+
+        elif pagos > 5:
             cuota.estado = "PARCIAL"
             pagos = 0
+        
         else:
             cuota.estado = "NO"
         
