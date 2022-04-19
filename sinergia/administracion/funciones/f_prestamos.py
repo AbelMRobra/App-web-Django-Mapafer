@@ -29,25 +29,30 @@ def prestamos_cuotas_pagos(id_prestamo):
     prestamo = Prestamos.objects.get(id = id_prestamo)
     cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo)
     pagos = sum(np.array(Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat=True)))
+    monto_prestamo = sum(np.array(cuotas.monto) + np.array(cuotas.monto_interes) - np.array(cuotas.monto_bonificado))
+    saldo = monto_prestamo - pagos
 
     for cuota in cuotas:
-        monto_cuota = cuota.monto + cuota.monto_interes - cuota.monto_bonificado
-
-        if pagos > int(monto_cuota):
+        if saldo < 20:
             cuota.estado = "SI"
-            pagos -= int(monto_cuota)
-
-        elif (int(monto_cuota) - pagos) < 5:
-            cuota.estado = "SI"
-            pagos = 0
-
-        elif pagos > 5:
-            cuota.estado = "PARCIAL"
-            pagos = 0
-        
         else:
-            cuota.estado = "NO"
-        
+            monto_cuota = cuota.monto + cuota.monto_interes - cuota.monto_bonificado
+
+            if pagos > int(monto_cuota):
+                cuota.estado = "SI"
+                pagos -= int(monto_cuota)
+
+            elif (int(monto_cuota) - pagos) < 5:
+                cuota.estado = "SI"
+                pagos = 0
+
+            elif pagos > 5:
+                cuota.estado = "PARCIAL"
+                pagos = 0
+            
+            else:
+                cuota.estado = "NO"
+            
         cuota.save()
 
 def prestamos_agregar_credito(cliente, proveedor, fecha, primera_cuota, 
