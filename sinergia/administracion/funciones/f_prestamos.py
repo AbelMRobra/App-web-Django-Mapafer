@@ -29,7 +29,7 @@ def prestamos_cuotas_pagos(id_prestamo):
     prestamo = Prestamos.objects.get(id = id_prestamo)
     cuotas = CuotasPrestamo.objects.filter(prestamo = prestamo)
     pagos = sum(np.array(Pagos.objects.filter(prestamo = prestamo).values_list("monto", flat=True)))
-    monto_prestamo = sum(np.array(cuotas.monto) + np.array(cuotas.monto_interes) - np.array(cuotas.monto_bonificado))
+    monto_prestamo = sum(np.array(cuotas.values_list('monto', flat=True) + np.array(cuotas.values_list('monto_interes', flat=True)) - np.array(cuotas.values_list('monto_bonificado', flat=True)))
     saldo = monto_prestamo - pagos
 
     for cuota in cuotas:
