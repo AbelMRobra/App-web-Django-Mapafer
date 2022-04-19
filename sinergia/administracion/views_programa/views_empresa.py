@@ -86,8 +86,6 @@ def panel_pagos(request, id_empresa):
             dia_auxiliar_3 = request.POST["fecha_hasta"]
 
         except:
-
-
             data = request.POST.items()
 
             for d in data:
@@ -107,7 +105,7 @@ def panel_pagos(request, id_empresa):
     total_periodo = 0
     data_cuotas = []
     prestamos = Prestamos.objects.all()
-    cuotas = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by(Lower("prestamo__cliente__apellido"))
+    cuotas = CuotasPrestamo.objects.filter(prestamo__cliente__empresa__id = id_empresa, fecha__range = (dia_auxiliar_2, dia_auxiliar_3)).order_by(Lower("prestamo__cliente__apellido")).exclude(estado = 'SI')
     
     for cuota in cuotas:
         total_periodo += cuota.monto
